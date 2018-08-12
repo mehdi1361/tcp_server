@@ -933,8 +933,8 @@ class Battle(object):
             end_battle_log.delay(self.id)
 
         time.sleep(2)
-        if winner:
+        if not winner.is_bot:
             winner.player_client.transport.loseConnection()
 
-        if loser:
+        if not loser.is_bot:
             loser.player_client.transport.loseConnection()
