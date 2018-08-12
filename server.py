@@ -256,7 +256,7 @@ class ServerFactory(protocol.Factory):
                 end_battle_log.delay(client.battle.id)
 
 
-log.startLogging(open('server.log', 'w'))
+# log.startLogging(open('server.log', 'w'))
 game_factory = ServerFactory()
 reactor.listenTCP(settings.PORT, game_factory)
 reactor.run()

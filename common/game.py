@@ -111,15 +111,14 @@ class Battle(object):
         player_2_mid_list = [troop['id'] for troop in player2_troops_info if troop['dexterity'] == 'MIDDLE']
         player_2_late_list = [troop['id'] for troop in player2_troops_info if troop['dexterity'] == 'LATE']
 
-        for troop in player2_troops_info:
-            if troop['dexterity'] == 'EARLY':
-                player_2_early_list.append(troop['id'])
+        if player2_info['hero']['dexterity'] == 'EARLY':
+            player_2_early_list.append(player1_info['hero']['id'])
 
-            if troop['dexterity'] == 'MIDDLE':
-                player_2_mid_list.append(troop['id'])
+        if player2_info['hero']['dexterity'] == 'MIDDLE':
+            player_2_mid_list.append(player1_info['hero']['id'])
 
-            if troop['dexterity'] == 'LATE':
-                player_2_late_list.append(troop['id'])
+        if player2_info['hero']['dexterity'] == 'LATE':
+            player_2_late_list.append(player1_info['hero']['id'])
 
         shuffle(player_1_early_list)
         shuffle(player_1_mid_list)
@@ -145,7 +144,6 @@ class Battle(object):
         late_list = [k['item'] for k in temp_late_list]
 
         result = early_list + mid_list + late_list
-        result = set(result)
         print "turn_sequence:", result
         return result
 
