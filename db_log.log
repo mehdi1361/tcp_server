@@ -1,0 +1,7 @@
+[2018-05-20 15:14:58,172: INFO/MainProcess] Connected to amqp://guest:**@127.0.0.1:5672//
+[2018-05-20 15:14:58,195: INFO/MainProcess] mingle: searching for neighbors
+[2018-05-20 15:14:59,225: INFO/MainProcess] mingle: all alone
+[2018-05-20 15:14:59,242: INFO/MainProcess] celery@mehdi-pc ready.
+[2018-05-20 15:15:27,172: INFO/MainProcess] Received task: tasks.battle_log[bcbfc7ea-8609-46e4-84fc-1478379530d6]  
+[2018-05-20 15:15:27,205: WARNING/ForkPoolWorker-2] date:2018-05-20 15:15:27.205505, id:891083a1-ec32-4e5f-bcd5-a72978d4f947, state:turn_change
+[2018-05-20 15:15:27,206: INFO/ForkPoolWorker-2] Task tasks.battle_log[bcbfc7ea-8609-46e4-84fc-1478379530d6] succeeded in 0.0318899180002s: None

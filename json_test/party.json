@@ -1,0 +1,377 @@
+{
+  "t": "BattleData",
+  "v": {
+    "bot_ai": 0.1,
+    "is_bot": "True",
+    "turn": [
+      "706421392100598058",
+      "122068113368003582",
+      "580727131813856505",
+      "385013683819933018"
+    ],
+    "turnTime": 15,
+    "scene_type": "Hell",
+    "party": [
+      {
+        "trophy": 0,
+        "name": "mehdi",
+        "troop": [
+          {
+            "dexterity": "LATE",
+            "flag": [],
+            "moniker": "Cleric",
+            "shield": 9,
+            "level": 0,
+            "maxShield": 9,
+            "items": [
+              {
+                "id": 9,
+                "name": "Knight"
+              },
+              {
+                "id": 10,
+                "name": "Horn"
+              },
+              {
+                "id": 11,
+                "name": "Guerrilla"
+              }
+            ],
+            "spell": [
+              {
+                "index": 0,
+                "name": "Cleric_spell_A",
+                "type": "Magic",
+                "params": null,
+                "need_ap": 0,
+                "gen_ap": 0,
+                "id": 6
+              },
+              {
+                "index": 1,
+                "name": "Cleric_spell_B",
+                "type": "Magic",
+                "params": null,
+                "need_ap": 2,
+                "gen_ap": 0,
+                "id": 7
+              },
+              {
+                "index": 2,
+                "name": "Cleric_spell_C",
+                "type": "Magic",
+                "params": null,
+                "need_ap": 2,
+                "gen_ap": 0,
+                "id": 8
+              },
+              {
+                "index": 3,
+                "name": "Cleric_spell_D",
+                "type": "Magic",
+                "params": {
+                  "increase_dmg": 0.2,
+                  "decrease_health": 0.3
+                },
+                "need_ap": 3,
+                "gen_ap": 0,
+                "id": 9
+              },
+              {
+                "index": 4,
+                "name": "Cleric_chakra",
+                "type": "Magic",
+                "params": null,
+                "need_ap": 5,
+                "gen_ap": 0,
+                "id": 10
+              }
+            ],
+            "is_active": "True",
+            "maxHealth": 20,
+            "m_chn": 0.02,
+            "attack": 12,
+            "health": 20,
+            "crt_c": 0.13,
+            "params": null,
+            "d_chn": 0.08,
+            "id": "580727131813856505",
+            "crt_r": 2.0
+          },
+          {
+            "dexterity": "MIDDLE",
+            "flag": [],
+            "moniker": "Orc",
+            "shield": 0,
+            "level": 1,
+            "maxShield": 0,
+            "items": [],
+            "spell": [
+              {
+                "index": 0,
+                "name": "Orc_spell_A",
+                "type": "Magic",
+                "params": null,
+                "need_ap": 0,
+                "gen_ap": 0,
+                "id": 6
+              },
+              {
+                "index": 1,
+                "name": "Orc_spell_B",
+                "type": "Magic",
+                "params": {
+                  "multi_damage": [
+                    0.4,
+                    0.6
+                  ]
+                },
+                "need_ap": 2,
+                "gen_ap": 0,
+                "id": 7
+              }
+            ],
+            "is_active": "True",
+            "maxHealth": 100,
+            "m_chn": 0.03,
+            "attack": 10,
+            "health": 100,
+            "crt_c": 0.05,
+            "params": null,
+            "d_chn": 0.03,
+            "id": "706421392100598058",
+            "crt_r": 1.5
+          },
+          {
+            "flag": [],
+            "moniker": "ClericChakra",
+            "shield": 0,
+            "level": 0,
+            "maxShield": 0,
+            "items": [],
+            "spell": [
+              {
+                "index": 0,
+                "name": "ClericChakra_spell_A",
+                "type": "Magic",
+                "params": null,
+                "need_ap": 0,
+                "gen_ap": 0,
+                "id": 4
+              },
+              {
+                "index": 1,
+                "name": "ClericChakra_spell_B",
+                "type": "Magic",
+                "params": null,
+                "need_ap": 2,
+                "gen_ap": 0,
+                "id": 5
+              },
+              {
+                "index": 2,
+                "name": "ClericChakra_spell_C",
+                "type": "Magic",
+                "params": null,
+                "need_ap": 4,
+                "gen_ap": 0,
+                "id": 6
+              }
+            ],
+            "is_active": "False",
+            "maxHealth": 100,
+            "m_chn": 0.02,
+            "attack": 10,
+            "health": 100,
+            "baseAttack": 10,
+            "crt_c": 0.13,
+            "params": null,
+            "d_chn": 0.08,
+            "id": "181132043302644139",
+            "crt_r": 2.0
+          }
+        ]
+      },
+      {
+        "trophy": 0,
+        "name": "ثریا",
+        "troop": [
+          {
+            "dexterity": "LATE",
+            "flag": [],
+            "moniker": "Cleric",
+            "shield": 9,
+            "level": 1,
+            "maxShield": 9,
+            "items": [
+              {
+                "id": 12,
+                "name": "Knight"
+              },
+              {
+                "id": 15,
+                "name": "Knight"
+              },
+              {
+                "id": 10,
+                "name": "Horn"
+              }
+            ],
+            "spell": [
+              {
+                "index": 0,
+                "name": "Cleric_spell_A",
+                "type": "Magic",
+                "params": null,
+                "need_ap": 0,
+                "gen_ap": 0,
+                "id": 6
+              },
+              {
+                "index": 1,
+                "name": "Cleric_spell_B",
+                "type": "Magic",
+                "params": null,
+                "need_ap": 2,
+                "gen_ap": 0,
+                "id": 7
+              },
+              {
+                "index": 2,
+                "name": "Cleric_spell_C",
+                "type": "Magic",
+                "params": null,
+                "need_ap": 2,
+                "gen_ap": 0,
+                "id": 8
+              },
+              {
+                "index": 3,
+                "name": "Cleric_spell_D",
+                "type": "Magic",
+                "params": {
+                  "increase_dmg": 0.2,
+                  "decrease_health": 0.3
+                },
+                "need_ap": 3,
+                "gen_ap": 0,
+                "id": 9
+              },
+              {
+                "index": 4,
+                "name": "Cleric_chakra",
+                "type": "Magic",
+                "params": null,
+                "need_ap": 5,
+                "gen_ap": 0,
+                "id": 10
+              }
+            ],
+            "is_active": "True",
+            "maxHealth": 20,
+            "m_chn": 0.02,
+            "attack": 12,
+            "health": 20,
+            "crt_c": 0.13,
+            "params": null,
+            "d_chn": 0.08,
+            "id": "385013683819933018",
+            "crt_r": 2.0
+          },
+          {
+            "dexterity": "MIDDLE",
+            "flag": [],
+            "moniker": "Orc",
+            "shield": 0,
+            "level": 2,
+            "maxShield": 0,
+            "items": [],
+            "spell": [
+              {
+                "index": 0,
+                "name": "Orc_spell_A",
+                "type": "Magic",
+                "params": null,
+                "need_ap": 0,
+                "gen_ap": 0,
+                "id": 6
+              },
+              {
+                "index": 1,
+                "name": "Orc_spell_B",
+                "type": "Magic",
+                "params": {
+                  "multi_damage": [
+                    0.4,
+                    0.6
+                  ]
+                },
+                "need_ap": 2,
+                "gen_ap": 0,
+                "id": 7
+              }
+            ],
+            "is_active": "True",
+            "maxHealth": 110,
+            "m_chn": 0.03,
+            "attack": 11,
+            "health": 110,
+            "crt_c": 0.05,
+            "params": null,
+            "d_chn": 0.03,
+            "id": "122068113368003582",
+            "crt_r": 1.5
+          },
+          {
+            "flag": [],
+            "moniker": "ClericChakra",
+            "shield": 0,
+            "level": 1,
+            "maxShield": 0,
+            "items": [],
+            "spell": [
+              {
+                "index": 0,
+                "name": "ClericChakra_spell_A",
+                "type": "Magic",
+                "params": null,
+                "need_ap": 0,
+                "gen_ap": 0,
+                "id": 4
+              },
+              {
+                "index": 1,
+                "name": "ClericChakra_spell_B",
+                "type": "Magic",
+                "params": null,
+                "need_ap": 2,
+                "gen_ap": 0,
+                "id": 5
+              },
+              {
+                "index": 2,
+                "name": "ClericChakra_spell_C",
+                "type": "Magic",
+                "params": null,
+                "need_ap": 4,
+                "gen_ap": 0,
+                "id": 6
+              }
+            ],
+            "is_active": "False",
+            "maxHealth": 100,
+            "m_chn": 0.02,
+            "attack": 10,
+            "health": 100,
+            "baseAttack": 10,
+            "crt_c": 0.13,
+            "params": null,
+            "d_chn": 0.08,
+            "id": "174886872131597272",
+            "crt_r": 2.0
+          }
+        ]
+      }
+    ]
+  }
+}

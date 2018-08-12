@@ -1,0 +1,7 @@
+2018-08-12 11:16:42+0430 [-] Log opened.
+2018-08-12 11:16:42+0430 [-] ServerFactory starting on 9095
+2018-08-12 11:16:42+0430 [-] Starting factory <__main__.ServerFactory instance at 0x7f37af8cd878>
+2018-08-12 11:21:34+0430 [-] Received SIGINT, shutting down.
+2018-08-12 11:21:34+0430 [__main__.ServerFactory] (TCP Port 9095 Closed)
+2018-08-12 11:21:34+0430 [-] Stopping factory <__main__.ServerFactory instance at 0x7f37af8cd878>
+2018-08-12 11:21:34+0430 [-] Main loop terminated.

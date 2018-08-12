@@ -1,0 +1,35 @@
+{
+  "t": "FightAction",
+  "v": {
+    "f_acts": [
+      {
+        "spell_type": "Magic",
+        "gen_ap": 1,
+        "con_ap": 0,
+        "spell_effect_info": [
+          {
+            "final_character_stats": {
+              "moniker": "Cleric",
+              "shield": 26,
+              "hp": 70,
+              "damage": 12,
+              "flag": 0,
+              "max_shield": 36,
+              "max_hp": 70
+            },
+            "target_character_id": "621705496911825416",
+            "single_stat_changes": [
+              {
+                "int_val": -10,
+                "character_stat_change_type": "curShieldValChange"
+              }
+            ],
+            "effect_on_character": "NormalDamage"
+          }
+        ],
+        "spell_index": 0,
+        "owner_id": "785997483040140830"
+      }
+    ]
+  }
+}

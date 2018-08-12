@@ -1,0 +1,441 @@
+2018-05-09T11:57:36+0430 [-] Loading service.tac...
+2018-05-09T11:57:37+0430 [-] Loaded.
+2018-05-09T11:57:37+0430 [twisted.scripts._twistd_unix.UnixAppLogger#info] twistd 17.9.0 (/home/mehdi/python-project/twisted_test/venv/bin/python2.7 2.7.12) starting up.
+2018-05-09T11:57:37+0430 [twisted.scripts._twistd_unix.UnixAppLogger#info] reactor class: twisted.internet.epollreactor.EPollReactor.
+2018-05-09T11:57:37+0430 [-] ServerFactory starting on 9092
+2018-05-09T11:57:37+0430 [__builtin__.ServerFactory#info] Starting factory <__builtin__.ServerFactory instance at 0x7f7d350ca680>
+2018-05-09T11:57:37+0430 [-] failed to set uid/gid 1/1 (are you root?) -- exiting.
+2018-05-09T11:57:58+0430 [stderr#error] Traceback (most recent call last):
+2018-05-09T11:57:58+0430 [stderr#error]   File "/home/mehdi/python-project/twisted_test/venv/bin/twistd", line 11, in <module>
+2018-05-09T11:57:58+0430 [stderr#error]     sys.exit(run())
+2018-05-09T11:57:58+0430 [stderr#error]   File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/scripts/twistd.py", line 29, in run
+2018-05-09T11:57:58+0430 [stderr#error]     app.run(runApp, ServerOptions)
+2018-05-09T11:57:58+0430 [stderr#error]   File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/application/app.py", line 662, in run
+2018-05-09T11:57:58+0430 [stderr#error]     runApp(config)
+2018-05-09T11:57:58+0430 [stderr#error]   File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/scripts/twistd.py", line 25, in runApp
+2018-05-09T11:57:58+0430 [stderr#error]     _SomeApplicationRunner(config).run()
+2018-05-09T11:57:58+0430 [stderr#error]   File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/application/app.py", line 384, in run
+2018-05-09T11:57:58+0430 [stderr#error]     self.postApplication()
+2018-05-09T11:57:58+0430 [stderr#error]   File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/scripts/_twistd_unix.py", line 248, in postApplication
+2018-05-09T11:57:58+0430 [stderr#error]     self.startApplication(self.application)
+2018-05-09T11:57:58+0430 [stderr#error]   File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/scripts/_twistd_unix.py", line 433, in startApplication
+2018-05-09T11:57:58+0430 [stderr#error]     self.config['pidfile'])
+2018-05-09T11:57:58+0430 [stderr#error]   File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/scripts/_twistd_unix.py", line 322, in setupEnvironment
+2018-05-09T11:57:58+0430 [stderr#error]     self.config["statusPipe"] = self.daemonize(reactor)
+2018-05-09T11:57:58+0430 [stderr#error]   File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/scripts/_twistd_unix.py", line 352, in daemonize
+2018-05-09T11:57:58+0430 [stderr#error]     code = self._waitForStart(r)
+2018-05-09T11:57:58+0430 [stderr#error]   File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/scripts/_twistd_unix.py", line 383, in _waitForStart
+2018-05-09T11:57:58+0430 [stderr#error]     data = untilConcludes(os.read, readPipe, 100)
+2018-05-09T11:57:58+0430 [stderr#error]   File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/python/util.py", line 815, in untilConcludes
+2018-05-09T11:57:58+0430 [stderr#error]     return f(*a, **kw)
+2018-05-09T11:57:58+0430 [stderr#error] KeyboardInterrupt
+2018-05-09T12:03:19+0430 [-] Removing stale pidfile /home/mehdi/python-project/twisted_test/twistd.pid
+2018-05-09T12:03:19+0430 [-] Loading service.tac...
+2018-05-09T12:03:19+0430 [-] Loaded.
+2018-05-09T12:03:19+0430 [twisted.scripts._twistd_unix.UnixAppLogger#info] twistd 17.9.0 (/home/mehdi/python-project/twisted_test/venv/bin/python2.7 2.7.12) starting up.
+2018-05-09T12:03:19+0430 [twisted.scripts._twistd_unix.UnixAppLogger#info] reactor class: twisted.internet.epollreactor.EPollReactor.
+2018-05-09T12:03:19+0430 [-] ServerFactory starting on 9092
+2018-05-09T12:03:19+0430 [__builtin__.ServerFactory#info] Starting factory <__builtin__.ServerFactory instance at 0x7fd837db05a8>
+2018-05-09T12:03:19+0430 [-] set uid/gid 1/1
+2018-05-09T12:03:31+0430 [stdout#info] clean data:{u'username': u'mehdi', u'password': u'Mehdi#1361', u'troops_id': [18, 14, 10, 22]}
+2018-05-09T12:03:41+0430 [twisted.internet.defer#critical] Unhandled error in Deferred:
+2018-05-09T12:03:41+0430 [twisted.internet.defer#critical] 
+	Traceback (most recent call last):
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/base.py", line 1243, in run
+	    self.mainLoop()
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/base.py", line 1252, in mainLoop
+	    self.runUntilCurrent()
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/base.py", line 878, in runUntilCurrent
+	    call.func(*call.args, **call.kw)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/task.py", line 239, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/defer.py", line 150, in maybeDeferred
+	    result = f(*args, **kw)
+	  File "service.tac", line 153, in announce
+	    battle_finder(client, client, bot=True)
+	exceptions.TypeError: battle_finder() got multiple values for keyword argument 'bot'
+	
+2018-05-09T12:22:49+0430 [-] Removing stale pidfile /home/mehdi/python-project/twisted_test/twistd.pid
+2018-05-09T12:22:49+0430 [-] Loading service.tac...
+2018-05-09T12:22:50+0430 [-] Loaded.
+2018-05-09T12:22:50+0430 [twisted.scripts._twistd_unix.UnixAppLogger#info] twistd 17.9.0 (/home/mehdi/python-project/twisted_test/venv/bin/python2.7 2.7.12) starting up.
+2018-05-09T12:22:50+0430 [twisted.scripts._twistd_unix.UnixAppLogger#info] reactor class: twisted.internet.epollreactor.EPollReactor.
+2018-05-09T12:22:50+0430 [-] ServerFactory starting on 9092
+2018-05-09T12:22:50+0430 [__builtin__.ServerFactory#info] Starting factory <__builtin__.ServerFactory instance at 0x7fbc8a3665a8>
+2018-05-09T12:22:50+0430 [-] set uid/gid 1/1
+2018-05-09T12:23:04+0430 [stdout#info] value error-No JSON object could be decoded
+2018-05-09T12:23:04+0430 [stdout#info] value error-No JSON object could be decoded
+2018-05-09T12:23:04+0430 [stdout#info] value error-No JSON object could be decoded
+2018-05-09T12:23:04+0430 [stdout#info] value error-No JSON object could be decoded
+2018-05-09T12:23:04+0430 [stdout#info] value error-No JSON object could be decoded
+2018-05-09T12:23:08+0430 [stdout#info] value error-No JSON object could be decoded
+2018-05-09T12:23:13+0430 [stdout#info] value error-No JSON object could be decoded
+2018-05-09T12:23:13+0430 [stdout#info] value error-No JSON object could be decoded
+2018-05-09T12:23:13+0430 [stdout#info] value error-No JSON object could be decoded
+2018-05-09T12:23:13+0430 [stdout#info] value error-No JSON object could be decoded
+2018-05-09T12:23:13+0430 [stdout#info] value error-No JSON object could be decoded
+2018-05-09T12:23:13+0430 [stdout#info] value error-No JSON object could be decoded
+2018-05-09T12:23:14+0430 [twisted.internet.defer#critical] Unhandled error in Deferred:
+2018-05-09T12:23:14+0430 [twisted.internet.defer#critical] 
+	Traceback (most recent call last):
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/base.py", line 1243, in run
+	    self.mainLoop()
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/base.py", line 1252, in mainLoop
+	    self.runUntilCurrent()
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/base.py", line 878, in runUntilCurrent
+	    call.func(*call.args, **call.kw)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/task.py", line 239, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/defer.py", line 150, in maybeDeferred
+	    result = f(*args, **kw)
+	  File "service.tac", line 153, in announce
+	    battle_finder(client, bot=True)
+	  File "service.tac", line 22, in battle_finder
+	    enemy.user = get_random_user(player.user.username)
+	exceptions.AttributeError: 'set' object has no attribute 'username'
+	
+2018-05-09T12:23:16+0430 [stdout#info] value error-No JSON object could be decoded
+2018-05-09T12:23:19+0430 [GameProtocol,0,127.0.0.1] Unhandled Error
+	Traceback (most recent call last):
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/application/app.py", line 311, in runReactorWithLogging
+	    reactor.run()
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/base.py", line 1243, in run
+	    self.mainLoop()
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/base.py", line 1255, in mainLoop
+	    self.doIteration(t)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/epollreactor.py", line 235, in doPoll
+	    log.callWithLogger(selectable, _drdw, selectable, fd, event)
+	--- <exception caught here> ---
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/python/log.py", line 103, in callWithLogger
+	    return callWithContext({"system": lp}, func, *args, **kw)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/python/log.py", line 86, in callWithContext
+	    return context.call({ILogContext: newCtx}, func, *args, **kw)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/python/context.py", line 122, in callWithContext
+	    return self.currentContext().callWithContext(ctx, func, *args, **kw)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/python/context.py", line 85, in callWithContext
+	    return func(*args,**kw)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/posixbase.py", line 627, in _doReadOrWrite
+	    self._disconnectSelectable(selectable, why, inRead)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/posixbase.py", line 252, in _disconnectSelectable
+	    selectable.readConnectionLost(f)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/tcp.py", line 269, in readConnectionLost
+	    self.connectionLost(reason)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/tcp.py", line 289, in connectionLost
+	    protocol.connectionLost(reason)
+	  File "service.tac", line 60, in connectionLost
+	    self.factory.clientConnectionLost(self)
+	  File "service.tac", line 169, in clientConnectionLost
+	    if not client.battle.battle_end:
+	exceptions.AttributeError: 'NoneType' object has no attribute 'battle_end'
+	
+2018-05-09T12:23:23+0430 [stdout#info] value error-No JSON object could be decoded
+2018-05-09T12:23:23+0430 [stdout#info] value error-No JSON object could be decoded
+2018-05-09T12:23:23+0430 [stdout#info] value error-No JSON object could be decoded
+2018-05-09T12:23:23+0430 [stdout#info] value error-No JSON object could be decoded
+2018-05-09T12:23:23+0430 [stdout#info] value error-No JSON object could be decoded
+2018-05-09T12:23:23+0430 [stdout#info] value error-No JSON object could be decoded
+2018-05-09T12:23:26+0430 [stdout#info] value error-No JSON object could be decoded
+2018-05-09T12:23:28+0430 [stdout#info] value error-No JSON object could be decoded
+2018-05-09T12:23:33+0430 [GameProtocol,1,127.0.0.1] Unhandled Error
+	Traceback (most recent call last):
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/application/app.py", line 311, in runReactorWithLogging
+	    reactor.run()
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/base.py", line 1243, in run
+	    self.mainLoop()
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/base.py", line 1255, in mainLoop
+	    self.doIteration(t)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/epollreactor.py", line 235, in doPoll
+	    log.callWithLogger(selectable, _drdw, selectable, fd, event)
+	--- <exception caught here> ---
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/python/log.py", line 103, in callWithLogger
+	    return callWithContext({"system": lp}, func, *args, **kw)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/python/log.py", line 86, in callWithContext
+	    return context.call({ILogContext: newCtx}, func, *args, **kw)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/python/context.py", line 122, in callWithContext
+	    return self.currentContext().callWithContext(ctx, func, *args, **kw)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/python/context.py", line 85, in callWithContext
+	    return func(*args,**kw)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/posixbase.py", line 627, in _doReadOrWrite
+	    self._disconnectSelectable(selectable, why, inRead)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/posixbase.py", line 252, in _disconnectSelectable
+	    selectable.readConnectionLost(f)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/tcp.py", line 269, in readConnectionLost
+	    self.connectionLost(reason)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/tcp.py", line 289, in connectionLost
+	    protocol.connectionLost(reason)
+	  File "service.tac", line 60, in connectionLost
+	    self.factory.clientConnectionLost(self)
+	  File "service.tac", line 169, in clientConnectionLost
+	    if not client.battle.battle_end:
+	exceptions.AttributeError: 'NoneType' object has no attribute 'battle_end'
+	
+2018-05-09T12:23:52+0430 [stdout#info] clean data:{u'username': u'mehdi', u'password': u'Mehdi#1361', u'troops_id': [18, 14, 10, 22]}
+2018-05-09T12:24:22+0430 [GameProtocol,2,127.0.0.1] Unhandled Error
+	Traceback (most recent call last):
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/application/app.py", line 311, in runReactorWithLogging
+	    reactor.run()
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/base.py", line 1243, in run
+	    self.mainLoop()
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/base.py", line 1255, in mainLoop
+	    self.doIteration(t)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/epollreactor.py", line 235, in doPoll
+	    log.callWithLogger(selectable, _drdw, selectable, fd, event)
+	--- <exception caught here> ---
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/python/log.py", line 103, in callWithLogger
+	    return callWithContext({"system": lp}, func, *args, **kw)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/python/log.py", line 86, in callWithContext
+	    return context.call({ILogContext: newCtx}, func, *args, **kw)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/python/context.py", line 122, in callWithContext
+	    return self.currentContext().callWithContext(ctx, func, *args, **kw)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/python/context.py", line 85, in callWithContext
+	    return func(*args,**kw)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/posixbase.py", line 627, in _doReadOrWrite
+	    self._disconnectSelectable(selectable, why, inRead)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/posixbase.py", line 252, in _disconnectSelectable
+	    selectable.readConnectionLost(f)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/tcp.py", line 269, in readConnectionLost
+	    self.connectionLost(reason)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/tcp.py", line 289, in connectionLost
+	    protocol.connectionLost(reason)
+	  File "service.tac", line 60, in connectionLost
+	    self.factory.clientConnectionLost(self)
+	  File "service.tac", line 169, in clientConnectionLost
+	    if not client.battle.battle_end:
+	exceptions.AttributeError: 'NoneType' object has no attribute 'battle_end'
+	
+2018-05-09T12:24:29+0430 [stdout#info] clean data:{u'username': u'mehdi', u'password': u'Mehdi#1361', u'troops_id': [18, 14, 10, 22]}
+2018-05-09T12:24:46+0430 [stdout#info] clean data:{u'username': u'sam', u'password': u'Mehdi#1361', u'troops_id': [3, 11, 22, 17]}
+2018-05-09T12:24:46+0430 [stdout#info] turn_sequence: ['110341286122825492', '133997576952054602', '287799390185014448', '957240530741993876', '430104446833991850', '145491914435211600', '138690323004550201', '334782814579191246', '178756702988151223', '159036579501026354']
+2018-05-09T12:26:29+0430 [-] Removing stale pidfile /home/mehdi/python-project/twisted_test/twistd.pid
+2018-05-09T12:26:29+0430 [-] Loading service.tac...
+2018-05-09T12:26:30+0430 [-] Loaded.
+2018-05-09T12:26:30+0430 [twisted.scripts._twistd_unix.UnixAppLogger#info] twistd 17.9.0 (/home/mehdi/python-project/twisted_test/venv/bin/python2.7 2.7.12) starting up.
+2018-05-09T12:26:30+0430 [twisted.scripts._twistd_unix.UnixAppLogger#info] reactor class: twisted.internet.epollreactor.EPollReactor.
+2018-05-09T12:26:30+0430 [-] ServerFactory starting on 9092
+2018-05-09T12:26:30+0430 [__builtin__.ServerFactory#info] Starting factory <__builtin__.ServerFactory instance at 0x7f82a57e75a8>
+2018-05-09T12:26:30+0430 [-] set uid/gid 1/1
+2018-05-09T12:27:32+0430 [-] Removing stale pidfile /home/mehdi/python-project/twisted_test/twistd.pid
+2018-05-09T12:27:32+0430 [-] Loading service.tac...
+2018-05-09T12:27:32+0430 [-] Loaded.
+2018-05-09T12:27:32+0430 [twisted.scripts._twistd_unix.UnixAppLogger#info] twistd 17.9.0 (/home/mehdi/python-project/twisted_test/venv/bin/python2.7 2.7.12) starting up.
+2018-05-09T12:27:32+0430 [twisted.scripts._twistd_unix.UnixAppLogger#info] reactor class: twisted.internet.epollreactor.EPollReactor.
+2018-05-09T12:27:32+0430 [-] ServerFactory starting on 9092
+2018-05-09T12:27:32+0430 [__builtin__.ServerFactory#info] Starting factory <__builtin__.ServerFactory instance at 0x7f3fa80685a8>
+2018-05-09T12:27:32+0430 [-] set uid/gid 1/1
+2018-05-09T12:27:40+0430 [stdout#info] clean data:{u'username': u'mehdi', u'password': u'Mehdi#1361', u'troops_id': [18, 14, 10, 22]}
+2018-05-09T12:27:49+0430 [stdout#info] turn_sequence: ['181591305524785488', '179390334388383452', '579057576966378594', '283158791208994679', '958067790993177351', '721094840847809104', '133532314157768575', '122791416454908665', '913700855755916917', '945206870297505234']
+2018-05-09T12:28:51+0430 [stdout#info] value error-No JSON object could be decoded
+2018-05-09T12:29:07+0430 [stdout#info] clean data:{u'username': u'mehdi', u'password': u'Mehdi#1361', u'troops_id': [18, 14, 10, 22]}
+2018-05-09T12:29:17+0430 [stdout#info] turn_sequence: ['160445219109705013', '921360365008724296', '146302881058477226', '101716988647341603', '964641643949891708', '186108313900569491', '299148176562194130', '341048839356339333', '957975840608952552', '112749749144944844']
+2018-05-09T12:51:28+0430 [stdout#info] value error-No JSON object could be decoded
+2018-05-09T12:51:28+0430 [stdout#info] value error-No JSON object could be decoded
+2018-05-09T12:51:28+0430 [stdout#info] value error-No JSON object could be decoded
+2018-05-09T12:51:28+0430 [stdout#info] value error-No JSON object could be decoded
+2018-05-09T12:51:28+0430 [twisted.internet.defer#critical] Unhandled error in Deferred:
+2018-05-09T12:51:28+0430 [twisted.internet.defer#critical] 
+	Traceback (most recent call last):
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/base.py", line 1243, in run
+	    self.mainLoop()
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/base.py", line 1252, in mainLoop
+	    self.runUntilCurrent()
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/base.py", line 878, in runUntilCurrent
+	    call.func(*call.args, **call.kw)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/task.py", line 239, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/defer.py", line 150, in maybeDeferred
+	    result = f(*args, **kw)
+	  File "service.tac", line 153, in announce
+	    battle_finder(client, bot=True)
+	  File "service.tac", line 22, in battle_finder
+	    enemy.user = get_random_user(player.user.username)
+	exceptions.AttributeError: 'set' object has no attribute 'username'
+	
+2018-05-09T12:51:33+0430 [GameProtocol,2,127.0.0.1] Unhandled Error
+	Traceback (most recent call last):
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/application/app.py", line 311, in runReactorWithLogging
+	    reactor.run()
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/base.py", line 1243, in run
+	    self.mainLoop()
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/base.py", line 1255, in mainLoop
+	    self.doIteration(t)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/epollreactor.py", line 235, in doPoll
+	    log.callWithLogger(selectable, _drdw, selectable, fd, event)
+	--- <exception caught here> ---
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/python/log.py", line 103, in callWithLogger
+	    return callWithContext({"system": lp}, func, *args, **kw)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/python/log.py", line 86, in callWithContext
+	    return context.call({ILogContext: newCtx}, func, *args, **kw)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/python/context.py", line 122, in callWithContext
+	    return self.currentContext().callWithContext(ctx, func, *args, **kw)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/python/context.py", line 85, in callWithContext
+	    return func(*args,**kw)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/posixbase.py", line 627, in _doReadOrWrite
+	    self._disconnectSelectable(selectable, why, inRead)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/posixbase.py", line 252, in _disconnectSelectable
+	    selectable.readConnectionLost(f)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/tcp.py", line 269, in readConnectionLost
+	    self.connectionLost(reason)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/tcp.py", line 289, in connectionLost
+	    protocol.connectionLost(reason)
+	  File "service.tac", line 60, in connectionLost
+	    self.factory.clientConnectionLost(self)
+	  File "service.tac", line 169, in clientConnectionLost
+	    if not client.battle.battle_end:
+	exceptions.AttributeError: 'NoneType' object has no attribute 'battle_end'
+	
+2018-05-09T12:51:56+0430 [stdout#info] clean data:{u'username': u'mehdi', u'password': u'Mehdi#1361', u'troops_id': [18, 14, 10, 22]}
+2018-05-09T12:51:57+0430 [stdout#info] clean data:{u'username': u'sam', u'password': u'Mehdi#1361', u'troops_id': [3, 11, 22, 17]}
+2018-05-09T12:51:57+0430 [stdout#info] turn_sequence: ['600863639912646501', '314765713141362013', '603264062608043388', '202046148247199850', '179184148196088400', '165214165982443116', '180162007198201451', '712404473435378828', '120426446424587180', '127929244427545676']
+2018-05-09T12:54:54+0430 [-] Removing stale pidfile /home/mehdi/python-project/twisted_test/twistd.pid
+2018-05-09T12:54:54+0430 [-] Loading service.tac...
+2018-05-09T12:54:55+0430 [-] Loaded.
+2018-05-09T12:54:55+0430 [twisted.scripts._twistd_unix.UnixAppLogger#info] twistd 17.9.0 (/home/mehdi/python-project/twisted_test/venv/bin/python2.7 2.7.12) starting up.
+2018-05-09T12:54:55+0430 [twisted.scripts._twistd_unix.UnixAppLogger#info] reactor class: twisted.internet.epollreactor.EPollReactor.
+2018-05-09T12:54:55+0430 [-] ServerFactory starting on 9092
+2018-05-09T12:54:55+0430 [__builtin__.ServerFactory#info] Starting factory <__builtin__.ServerFactory instance at 0x7f565fb39560>
+2018-05-09T12:54:55+0430 [-] set uid/gid 1/1
+2018-05-09T12:55:34+0430 [twisted.internet.defer#critical] Unhandled error in Deferred:
+2018-05-09T12:55:34+0430 [twisted.internet.defer#critical] 
+	Traceback (most recent call last):
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/base.py", line 1243, in run
+	    self.mainLoop()
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/base.py", line 1252, in mainLoop
+	    self.runUntilCurrent()
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/base.py", line 878, in runUntilCurrent
+	    call.func(*call.args, **call.kw)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/task.py", line 239, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/defer.py", line 150, in maybeDeferred
+	    result = f(*args, **kw)
+	  File "service.tac", line 153, in announce
+	    battle_finder(client, bot=True)
+	  File "service.tac", line 22, in battle_finder
+	    enemy.user = get_random_user(player.user.username)
+	exceptions.AttributeError: 'set' object has no attribute 'username'
+	
+2018-05-09T12:55:45+0430 [stdout#info] clean data:{u'username': u'sam', u'password': u'Mehdi#1361', u'troops_id': [3, 11, 22, 17]}
+2018-05-09T12:55:46+0430 [stdout#info] clean data:{u'username': u'mehdi', u'password': u'Mehdi#1361', u'troops_id': [18, 14, 10, 22]}
+2018-05-09T12:55:46+0430 [stdout#info] turn_sequence: ['180228406172070229', '685289716999109030', '159205554442123839', '122080844655090254', '161417531096606499', '752702404352064243', '136112127957512528', '149043348414176461', '459626444211272205', '658453076265092406']
+2018-05-09T12:56:42+0430 [stdout#info] clean data:{u'username': u'mehdi', u'password': u'Mehdi#1361', u'troops_id': [18, 14, 10, 22]}
+2018-05-09T12:57:10+0430 [GameProtocol,2,127.0.0.1] Unhandled Error
+	Traceback (most recent call last):
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/application/app.py", line 311, in runReactorWithLogging
+	    reactor.run()
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/base.py", line 1243, in run
+	    self.mainLoop()
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/base.py", line 1255, in mainLoop
+	    self.doIteration(t)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/epollreactor.py", line 235, in doPoll
+	    log.callWithLogger(selectable, _drdw, selectable, fd, event)
+	--- <exception caught here> ---
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/python/log.py", line 103, in callWithLogger
+	    return callWithContext({"system": lp}, func, *args, **kw)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/python/log.py", line 86, in callWithContext
+	    return context.call({ILogContext: newCtx}, func, *args, **kw)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/python/context.py", line 122, in callWithContext
+	    return self.currentContext().callWithContext(ctx, func, *args, **kw)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/python/context.py", line 85, in callWithContext
+	    return func(*args,**kw)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/posixbase.py", line 627, in _doReadOrWrite
+	    self._disconnectSelectable(selectable, why, inRead)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/posixbase.py", line 252, in _disconnectSelectable
+	    selectable.readConnectionLost(f)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/tcp.py", line 269, in readConnectionLost
+	    self.connectionLost(reason)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/tcp.py", line 289, in connectionLost
+	    protocol.connectionLost(reason)
+	  File "service.tac", line 60, in connectionLost
+	    self.factory.clientConnectionLost(self)
+	  File "service.tac", line 169, in clientConnectionLost
+	    if not client.battle.battle_end:
+	exceptions.AttributeError: 'NoneType' object has no attribute 'battle_end'
+	
+2018-05-09T12:57:34+0430 [stdout#info] value error-No JSON object could be decoded
+2018-05-09T12:57:37+0430 [GameProtocol,3,127.0.0.1] Unhandled Error
+	Traceback (most recent call last):
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/application/app.py", line 311, in runReactorWithLogging
+	    reactor.run()
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/base.py", line 1243, in run
+	    self.mainLoop()
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/base.py", line 1255, in mainLoop
+	    self.doIteration(t)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/epollreactor.py", line 235, in doPoll
+	    log.callWithLogger(selectable, _drdw, selectable, fd, event)
+	--- <exception caught here> ---
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/python/log.py", line 103, in callWithLogger
+	    return callWithContext({"system": lp}, func, *args, **kw)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/python/log.py", line 86, in callWithContext
+	    return context.call({ILogContext: newCtx}, func, *args, **kw)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/python/context.py", line 122, in callWithContext
+	    return self.currentContext().callWithContext(ctx, func, *args, **kw)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/python/context.py", line 85, in callWithContext
+	    return func(*args,**kw)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/posixbase.py", line 627, in _doReadOrWrite
+	    self._disconnectSelectable(selectable, why, inRead)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/posixbase.py", line 252, in _disconnectSelectable
+	    selectable.readConnectionLost(f)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/tcp.py", line 269, in readConnectionLost
+	    self.connectionLost(reason)
+	  File "/home/mehdi/python-project/twisted_test/venv/local/lib/python2.7/site-packages/twisted/internet/tcp.py", line 289, in connectionLost
+	    protocol.connectionLost(reason)
+	  File "service.tac", line 60, in connectionLost
+	    self.factory.clientConnectionLost(self)
+	  File "service.tac", line 169, in clientConnectionLost
+	    if not client.battle.battle_end:
+	exceptions.AttributeError: 'NoneType' object has no attribute 'battle_end'
+	
+2018-05-09T12:57:48+0430 [stdout#info] value error-No JSON object could be decoded
+2018-05-09T12:57:48+0430 [stdout#info] value error-No JSON object could be decoded
+2018-05-09T12:57:52+0430 [stdout#info] clean data:{u'username': u'mehdi', u'password': u'Mehdi#1361', u'troops_id': [18, 14, 10, 22]}
+2018-05-09T15:05:26+0430 [-] Removing stale pidfile /home/mehdi/python-project/twisted_test/twistd.pid
+2018-05-09T15:05:26+0430 [-] Loading service.tac...
+2018-05-09T15:05:26+0430 [-] Loaded.
+2018-05-09T15:05:26+0430 [twisted.scripts._twistd_unix.UnixAppLogger#info] twistd 17.9.0 (/home/mehdi/python-project/twisted_test/venv/bin/python2.7 2.7.12) starting up.
+2018-05-09T15:05:26+0430 [twisted.scripts._twistd_unix.UnixAppLogger#info] reactor class: twisted.internet.epollreactor.EPollReactor.
+2018-05-09T15:05:26+0430 [-] ServerFactory starting on 9092
+2018-05-09T15:05:26+0430 [__builtin__.ServerFactory#info] Starting factory <__builtin__.ServerFactory instance at 0x7f714d87c680>
+2018-05-09T15:05:26+0430 [-] set uid/gid 1/1
+2018-05-09T15:05:45+0430 [stdout#info] no battle
+2018-05-09T15:05:46+0430 [stdout#info] no battle
+2018-05-09T15:05:47+0430 [stdout#info] no battle
+2018-05-09T15:05:48+0430 [stdout#info] no battle
+2018-05-09T15:05:49+0430 [stdout#info] no battle
+2018-05-09T15:05:50+0430 [stdout#info] no battle
+2018-05-09T15:05:51+0430 [stdout#info] no battle
+2018-05-09T15:05:52+0430 [stdout#info] no battle
+2018-05-09T15:05:53+0430 [stdout#info] no battle
+2018-05-09T15:05:54+0430 [stdout#info] no battle
+2018-05-09T15:05:55+0430 [stdout#info] no battle
+2018-05-09T15:05:56+0430 [stdout#info] no battle
+2018-05-09T15:05:57+0430 [stdout#info] no battle
+2018-05-09T15:05:58+0430 [stdout#info] no battle
+2018-05-09T15:05:59+0430 [stdout#info] no battle
+2018-05-09T15:06:00+0430 [stdout#info] clean data:{u'username': u'mehdi', u'password': u'Mehdi#1361', u'troops_id': [18, 14, 10, 22]}
+2018-05-09T15:06:00+0430 [stdout#info] in user
+2018-05-09T15:06:00+0430 [stdout#info] no battle
+2018-05-09T15:06:00+0430 [stdout#info] battle finder
+2018-05-09T15:06:00+0430 [stdout#info] in bot
+2018-05-09T15:06:01+0430 [stdout#info] turn_sequence: ['119742515476205572', '896951931489290078', '740552897871264440', '177325782382670169', '652847214383498873', '144354592317587648', '119937372563794995', '558586453638553832', '111709515847869591', '472981285705687341']
+2018-05-09T15:06:01+0430 [stdout#info] after battle finder
+2018-05-09T15:09:32+0430 [stdout#info] no battle
+2018-05-09T15:09:33+0430 [stdout#info] no battle
+2018-05-09T15:09:34+0430 [stdout#info] no battle
+2018-05-09T15:09:35+0430 [stdout#info] clean data:{u'username': u'mehdi', u'password': u'Mehdi#1361', u'troops_id': [18, 14, 10, 22]}
+2018-05-09T15:09:35+0430 [stdout#info] in user
+2018-05-09T15:09:35+0430 [stdout#info] no battle
+2018-05-09T15:09:36+0430 [stdout#info] no battle
+2018-05-09T15:09:37+0430 [stdout#info] no battle
+2018-05-09T15:09:38+0430 [stdout#info] no battle
+2018-05-09T15:09:39+0430 [stdout#info] no battle
+2018-05-09T15:09:40+0430 [stdout#info] no battle
+2018-05-09T15:09:41+0430 [stdout#info] no battle
+2018-05-09T15:09:42+0430 [stdout#info] no battle
+2018-05-09T15:09:43+0430 [stdout#info] no battle
+2018-05-09T15:09:43+0430 [stdout#info] battle finder
+2018-05-09T15:09:43+0430 [stdout#info] in bot
+2018-05-09T15:09:44+0430 [stdout#info] turn_sequence: ['147988394941048602', '150118906481282453', '827600610104366151', '672421064266562189', '101213802513466189', '502600080732686147', '118153484531738401', '111695509645407210', '775081521436788337', '159616019052140488']
+2018-05-09T15:09:44+0430 [stdout#info] after battle finder

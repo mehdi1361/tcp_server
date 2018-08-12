@@ -1,0 +1,8 @@
+venv/
+venv/*
+/venv/
+/venv/*
+/venv
+
+local_settings.py
+*.pyc

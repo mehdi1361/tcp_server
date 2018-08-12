@@ -1,0 +1,3 @@
+Host dev-server
+    HostName ancientsrevival.ir
+    User revival-dev
