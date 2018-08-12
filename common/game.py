@@ -149,17 +149,12 @@ class Battle(object):
 
     def turn_sequence(self, player1_info, player1_troops_info, player2_info, player2_troops_info):
         player_1_list = [troop['id'] for troop in player1_troops_info]
+        player_1_list.append(player1_info['hero']['id'])
 
-        if player1_info['hero']['dexterity'] == 'EARLY':
-            player_1_list.append(player1_info['hero']['id'])
-
-        player_2_list = [troop['id'] for troop in player2_troops_info ]
-
-        if player2_info['hero']['dexterity'] == 'EARLY':
-            player_2_list.append(player1_info['hero']['id'])
+        player_2_list = [troop['id'] for troop in player2_troops_info]
+        player_2_list.append(player2_info['hero']['id'])
 
         shuffle(player_1_list)
-
         shuffle(player_2_list)
 
         temp_player_list = create_list_with_key(player_1_list)
