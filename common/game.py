@@ -145,6 +145,7 @@ class Battle(object):
         late_list = [k['item'] for k in temp_late_list]
 
         result = early_list + mid_list + late_list
+        result = set(result)
         print "turn_sequence:", result
         return result
 
