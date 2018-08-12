@@ -9,7 +9,7 @@ from common.objects import StatusUpdateData, SceneType, BattleObject, SpellSingl
     SpellSingleStatChangeType, BattleFlags, SpellEffectInfo, SpellEffectOnChar, cool_down_troop
 from dal.views import get_player_info, get_troops_info, ProfileUpdateViewer, get_bot
 from random import shuffle
-from common.utils import normal_length, random_list
+from common.utils import normal_length, random_list, create_list_with_key
 from common.spell import Factory
 from common.objects import clients, CtmChestGenerate
 from tasks import playoff_log, troop_record
@@ -67,6 +67,7 @@ def level_creator(user_level_lst, is_beginner=False):
         return 1, lst_level
 
     return 1, [1, 1, 1, 1, 1]
+
 
 class Battle(object):
     def __init__(self, player1, player2):
@@ -128,9 +129,20 @@ class Battle(object):
         shuffle(player_2_mid_list)
         shuffle(player_2_late_list)
 
-        early_list = [response for ab in zip(player_1_early_list, player_2_early_list) for response in ab]
-        mid_list = [response for ab in zip(player_1_mid_list, player_2_mid_list) for response in ab]
-        late_list = [response for ab in zip(player_1_late_list, player_2_late_list) for response in ab]
+        temp_early_list = create_list_with_key(player_1_early_list)
+        temp_early_list.extend(create_list_with_key(player_2_early_list, 'odd'))
+        temp_early_list = sorted(temp_early_list, key=lambda k: k['index'])
+        early_list = [k['item'] for k in temp_early_list]
+
+        temp_mid_list = create_list_with_key(player_1_mid_list)
+        temp_mid_list.extend(create_list_with_key(player_2_mid_list, 'odd'))
+        temp_mid_list = sorted(temp_mid_list, key=lambda k: k['index'])
+        mid_list = [k['item'] for k in temp_mid_list]
+
+        temp_late_list = create_list_with_key(player_1_late_list)
+        temp_late_list.extend(create_list_with_key(player_2_late_list, 'odd'))
+        temp_late_list = sorted(temp_late_list, key=lambda k: k['index'])
+        late_list = [k['item'] for k in temp_late_list]
 
         result = early_list + mid_list + late_list
         print "turn_sequence:", result
@@ -492,7 +504,8 @@ class Battle(object):
                             if BattleFlags.Confuse.value in troop['flag']:
                                 troop['flag'].remove(BattleFlags.Confuse.value)
 
-                        if lst_spells[i]['action'] == 'damage_reduction' and BattleFlags.DamageReduction.value in troop['flag']:
+                        if lst_spells[i]['action'] == 'damage_reduction' and BattleFlags.DamageReduction.value in troop[
+                            'flag']:
                             lst_spells[i]['troop'][0]['flag'].remove(BattleFlags.DamageReduction.value)
 
                             if BattleFlags.DamageReduction.value in troop['flag']:

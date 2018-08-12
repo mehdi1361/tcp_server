@@ -25,3 +25,12 @@ def random_list(start, end, num):
         res.append(random.randint(start, end))
 
     return res
+
+def create_list_with_key(lst, item_type='even'):
+    temp_early_list = []
+    index = 0 if item_type == 'even' else 1
+    for item in lst:
+        temp_early_list.append({"index": index, "item": item})
+        index += 2
+
+    return temp_early_list
