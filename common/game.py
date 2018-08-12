@@ -933,5 +933,8 @@ class Battle(object):
             end_battle_log.delay(self.id)
 
         time.sleep(2)
-        winner.player_client.transport.loseConnection()
-        loser.player_client.transport.loseConnection()
+        if winner:
+            winner.player_client.transport.loseConnection()
+
+        if loser:
+            loser.player_client.transport.loseConnection()
