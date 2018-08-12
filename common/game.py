@@ -93,43 +93,45 @@ class Battle(object):
             }
 
     def turn_sequence(self, player1_info, player1_troops_info, player2_info, player2_troops_info):
-        early_list = [troop['id'] for troop in player1_troops_info if troop['dexterity'] == 'EARLY']
-        mid_list = [troop['id'] for troop in player1_troops_info if troop['dexterity'] == 'MIDDLE']
-        late_list = [troop['id'] for troop in player1_troops_info if troop['dexterity'] == 'LATE']
+        player_1_early_list = [troop['id'] for troop in player1_troops_info if troop['dexterity'] == 'EARLY']
+        player_1_mid_list = [troop['id'] for troop in player1_troops_info if troop['dexterity'] == 'MIDDLE']
+        player_1_late_list = [troop['id'] for troop in player1_troops_info if troop['dexterity'] == 'LATE']
 
         if player1_info['hero']['dexterity'] == 'EARLY':
-            early_list.append(player1_info['hero']['id'])
+            player_1_early_list.append(player1_info['hero']['id'])
 
         if player1_info['hero']['dexterity'] == 'MIDDLE':
-            mid_list.append(player1_info['hero']['id'])
+            player_1_mid_list.append(player1_info['hero']['id'])
 
         if player1_info['hero']['dexterity'] == 'LATE':
-            late_list.append(player1_info['hero']['id'])
+            player_1_late_list.append(player1_info['hero']['id'])
 
-        if player2_info['hero']['dexterity'] == 'EARLY':
-            early_list.append(player2_info['hero']['id'])
-
-        if player2_info['hero']['dexterity'] == 'MIDDLE':
-            mid_list.append(player2_info['hero']['id'])
-
-        if player2_info['hero']['dexterity'] == 'LATE':
-            late_list.append(player2_info['hero']['id'])
+        player_2_early_list = [troop['id'] for troop in player2_troops_info if troop['dexterity'] == 'EARLY']
+        player_2_mid_list = [troop['id'] for troop in player2_troops_info if troop['dexterity'] == 'MIDDLE']
+        player_2_late_list = [troop['id'] for troop in player2_troops_info if troop['dexterity'] == 'LATE']
 
         for troop in player2_troops_info:
             if troop['dexterity'] == 'EARLY':
-                early_list.append(troop['id'])
+                player_2_early_list.append(troop['id'])
 
             if troop['dexterity'] == 'MIDDLE':
-                mid_list.append(troop['id'])
+                player_2_mid_list.append(troop['id'])
 
             if troop['dexterity'] == 'LATE':
-                mid_list.append(troop['id'])
+                player_2_late_list.append(troop['id'])
 
-        shuffle(early_list)
-        shuffle(mid_list)
-        shuffle(late_list)
-        # result = list(itertools.chain(early_list, mid_list, late_list))
-        # print(early_list, mid_list, shuffle)
+        shuffle(player_1_early_list)
+        shuffle(player_1_mid_list)
+        shuffle(player_1_late_list)
+
+        shuffle(player_2_early_list)
+        shuffle(player_2_mid_list)
+        shuffle(player_2_late_list)
+
+        early_list = [response for ab in zip(player_1_early_list, player_2_early_list) for response in ab]
+        mid_list = [response for ab in zip(player_1_mid_list, player_2_mid_list) for response in ab]
+        late_list = [response for ab in zip(player_1_late_list, player_2_late_list) for response in ab]
+
         result = early_list + mid_list + late_list
         print "turn_sequence:", result
         return result
