@@ -5,7 +5,7 @@ import settings
 from .models import User, Profile, UserHero, Hero, UserCard, Unit, \
     HeroSpell, UnitSpell, ChakraSpell, Item, UserChest, Chest, Battle, Bot, Leagues, \
     LeagueUser, CreatedLeagues, PlayOff, Claim, CTM, \
-    CTMHero, CTMUnit, Fakes, FakeDetail
+    CTMHero, CTMUnit, Fakes, FakeDetail, BotMatchMaking
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import func
 from datetime import datetime, timedelta
@@ -755,3 +755,9 @@ def fetch_first_league():
     query = session.query(Leagues)
     league = query.filter(Leagues.league_name == settings.FIRST_LEAGUE_NAME).first()
     return league
+
+
+def fetch_bot_match_making(strike):
+    query = session.query(BotMatchMaking)
+    bot_match_making = query.filter(BotMatchMaking.strike_number == strike).first()
+    return bot_match_making

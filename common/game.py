@@ -7,7 +7,7 @@ import time
 
 from common.objects import StatusUpdateData, SceneType, BattleObject, SpellSingleStatChangeInfo, \
     SpellSingleStatChangeType, BattleFlags, SpellEffectInfo, SpellEffectOnChar, cool_down_troop
-from dal.views import get_player_info, get_troops_info, ProfileUpdateViewer, get_bot
+from dal.views import get_player_info, get_troops_info, ProfileUpdateViewer, get_bot_match_making
 from random import shuffle
 from common.utils import normal_length, random_list, create_list_with_key
 from common.spell import Factory
@@ -58,15 +58,24 @@ from tasks import battle_log, create_battle_log, end_battle_log, playoff_log, pr
 #
 #     return 1, lst_level
 
-def level_creator(user_level_lst, is_beginner=False):
-    if not is_beginner:
+def level_creator(user_level_lst, strike, is_beginner=False):
+    bot_match_making = get_bot_match_making(strike)
+    if bot_match_making is None:
+        if not is_beginner:
+            lst_level = []
+            for item in user_level_lst:
+                lst_level.append(item + random.randint(0, 1))
+
+            return 1, lst_level
+
+        return 1, [1, 1, 1, 1, 1], 1, 1
+
+    else:
         lst_level = []
         for item in user_level_lst:
-            lst_level.append(item + random.randint(0, 1))
+            lst_level.append(item + random.randint(bot_match_making.min_level, bot_match_making.max_level))
 
-        return 1, lst_level
-
-    return 1, [1, 1, 1, 1, 1]
+        return float(bot_match_making.bot_ai) / 100, lst_level, bot_match_making.step_forward, bot_match_making.step_backward
 
 
 class Battle(object):
@@ -236,7 +245,11 @@ class Battle(object):
             for item in party_player_1['party'][0]['troop'][:-1]:
                 user_level_lst.append(item['level'])
 
-            bot_ai, lst_level = level_creator(user_level_lst, self.player1.is_beginner)
+            bot_ai, lst_level, self.player1.step_forward, self.player1.step_backward = level_creator(
+                user_level_lst,
+                self.player1.player_client.profile.strike,
+                self.player1.is_beginner
+            )
             party_player_1["bot_ai"] = bot_ai
             idx = 0
 
@@ -874,7 +887,7 @@ class Battle(object):
             troop_record(winner.troops)
 
             chest = CtmChestGenerate(winner.player_client.user)
-            profile_log(winner.player_client.user, 'win')
+            profile_log(winner, 'win')
 
             print "winner playoff:", winner.is_playoff
             if winner.is_playoff:
@@ -908,7 +921,7 @@ class Battle(object):
             loser_data = loser_profile.generate()
             troop_record(loser.troops, type_fight='loser')
 
-            profile_log(loser.player_client.user, 'lose')
+            profile_log(loser, 'lose')
 
             print "loser playoff:", loser.is_playoff
             if loser.is_playoff:

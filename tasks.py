@@ -85,16 +85,18 @@ def playoff_log(user, battle_result):
         print "play off log failed"
 
 
-def profile_log(user, battle_result='lose'):
+def profile_log(player, battle_result='lose'):
     try:
         query = session.query(Profile)
-        profile = query.filter(Profile.user_id == user.id).first()
+        profile = query.filter(Profile.user_id == player.player_client.user.id).first()
 
         if battle_result == 'win':
             profile.win_count += 1
+            profile.strike += player.step_forward
 
         else:
             profile.lose_count += 1
+            profile.strike -= player.step_backward
 
         session.commit()
 

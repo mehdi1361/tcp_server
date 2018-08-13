@@ -81,6 +81,8 @@ class Player(object):
         self.troops = troops
         self.is_bot = False
         self.is_playoff = is_playoff
+        self.__step_forward = 0
+        self.__step_backward = 0
 
     @property
     def player_client(self):
@@ -121,6 +123,22 @@ class Player(object):
     @property
     def is_beginner(self):
         return False if self.player_client.profile.lose_count + self.player_client.profile.win_count >= 3 else True
+
+    @property
+    def step_forward(self):
+        return self.__step_forward
+
+    @step_forward.setter
+    def step_forward(self, value):
+        self.__step_forward = value
+
+    @property
+    def step_backward(self):
+        return self.__step_backward
+
+    @step_backward.setter
+    def step_backward(self, value):
+        self.__step_backward = value
 
 
 class Turn(object):

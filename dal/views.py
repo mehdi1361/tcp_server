@@ -224,3 +224,6 @@ def get_hero_moniker(character_id):
 
 def get_first_league():
     return fetch_first_league()
+
+def get_bot_match_making(strike):
+    return fetch_bot_match_making(strike)
