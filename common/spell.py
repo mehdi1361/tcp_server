@@ -915,7 +915,6 @@ class Spell(Factory):
 
         return spell_effect_info.serializer
 
-
 class GeneralSpell(Spell):
     def run(self):
         player = self.find_player()
@@ -945,7 +944,7 @@ class GeneralSpell(Spell):
         ]
 
         if isinstance(self.troop['params'], dict) and 'return_damage' in self.troop['params'].keys()\
-                and self.troop['health'] > 0:
+                and self.troop['health'] > 0 and not miss:
             f_acts.append(
                 self.return_damage(
                     owner=self.troop, troop=self.owner,
@@ -2573,7 +2572,7 @@ class OrcSpellB(Spell):
             ]
 
             if isinstance(self.troop['params'], dict) and 'return_damage' in self.troop['params'].keys() \
-                    and self.troop['health'] > 0:
+                    and self.troop['health'] > 0 and not miss:
                 f_acts.append(
                     self.return_damage(
                         owner=self.troop, troop=self.owner,

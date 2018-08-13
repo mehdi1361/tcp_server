@@ -758,6 +758,11 @@ def fetch_first_league():
 
 
 def fetch_bot_match_making(strike):
-    query = session.query(BotMatchMaking)
-    bot_match_making = query.filter(BotMatchMaking.strike_number == strike).first()
-    return bot_match_making
+    try:
+        query = session.query(BotMatchMaking)
+        bot_match_making = query.filter(BotMatchMaking.strike_number == strike).first()
+        return bot_match_making
+
+    except:
+        session.rollback()
+        return None
