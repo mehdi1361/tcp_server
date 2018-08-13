@@ -1,6 +1,9 @@
 # coding=utf-8
 import random
 
+from twisted.internet.defer import Deferred
+from twisted.internet import reactor
+
 import settings
 
 def normal_length(length):
@@ -34,3 +37,9 @@ def create_list_with_key(lst, item_type='even'):
         index += 2
 
     return temp_early_list
+
+
+def sleep(secs):
+    d = Deferred()
+    reactor.callLater(secs, d.callback, None)
+    return d

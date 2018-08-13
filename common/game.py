@@ -1,9 +1,9 @@
 import random
 import json
 import uuid
+
 import settings
 import copy
-import time
 
 from common.objects import StatusUpdateData, SceneType, BattleObject, SpellSingleStatChangeInfo, \
     SpellSingleStatChangeType, BattleFlags, SpellEffectInfo, SpellEffectOnChar, cool_down_troop
@@ -13,9 +13,11 @@ from common.utils import normal_length, random_list, create_list_with_key
 from common.spell import Factory
 from common.objects import clients, CtmChestGenerate
 from tasks import playoff_log, troop_record
+from common.utils import sleep
 # from common.objects import clients
 
 from tasks import battle_log, create_battle_log, end_battle_log, playoff_log, profile_log
+
 
 
 # def level_creator(trophy):
@@ -949,7 +951,7 @@ class Battle(object):
         if settings.ACTIVE_LOG:
             end_battle_log.delay(self.id)
 
-        time.sleep(2)
+        sleep(5)
         if not winner.is_bot:
             winner.player_client.transport.loseConnection()
 

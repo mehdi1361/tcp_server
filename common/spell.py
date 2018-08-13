@@ -562,7 +562,7 @@ class Spell(Factory):
         else:
             return self.enemy.party['party'][idx]['troop'][-1]
 
-    def new_attack(self):
+    def new_attack(self, troop=None):
         if self.troop['health'] > 0:
             critical, troop_spell_effect_info = self.normal_damage(self.troop)
             troop_message = {
@@ -575,11 +575,14 @@ class Spell(Factory):
                 "is_critical": "True" if critical else "False"
             }
 
-            return troop_message
+            return troop_message, self.troop
 
         else:
+            if troop is None:
+                find, troop = self.enemy_random_troop(self.troop)
 
-            find, troop = self.enemy_random_troop(self.troop)
+            else:
+                find = True
 
             if find:
                 critical, troop_spell_effect_info = self.normal_damage(troop)
@@ -593,7 +596,7 @@ class Spell(Factory):
                     "is_critical": "True" if critical else "False"
                 }
 
-                return troop_message
+                return troop_message, troop
         return None
 
     def life_steal(self, troop):
@@ -1363,28 +1366,38 @@ class FeriSpellA(Spell):
         }
 
         second_chance = random.randint(1, 100)
+        troop = None
         if second_chance < int(self.spell['params']['second_attack_chance']):
-            attack = self.new_attack()
+            attack, troop = self.new_attack()
             sum_damage += self.damage_value
             if attack is not None:
                 message["v"]["f_acts"].append(attack)
 
             last_chance = random.randint(1, 100)
             if last_chance < int(self.spell['params']['third_attack_chance']):
-                attack = self.new_attack()
+                attack, troop = self.new_attack(troop)
                 sum_damage += self.damage_value
 
                 if attack is not None:
                     message["v"]["f_acts"].append(attack)
 
-        if isinstance(self.troop['params'], dict) \
-                and 'return_damage' in self.troop['params'].keys() and self.troop['health'] > 0:
-            message["v"]["f_acts"].append(
-                self.return_damage(
-                    owner=self.troop, troop=self.owner,
-                    damage=int(sum_damage * self.troop['params']['return_damage'])
+        if self.troop['health'] > 0:
+            if isinstance(self.troop['params'], dict) and 'return_damage' in self.troop['params'].keys():
+                message["v"]["f_acts"].append(
+                    self.return_damage(
+                        owner=self.troop, troop=self.owner,
+                        damage=int(sum_damage * self.troop['params']['return_damage'])
+                    )
                 )
-            )
+        else:
+            if isinstance(troop['params'], dict) and 'return_damage' in troop['params'].keys():
+                sum_damage -= self.damage_value
+                message["v"]["f_acts"].append(
+                    self.return_damage(
+                        owner=troop, troop=self.owner,
+                        damage=int(sum_damage * troop['params']['return_damage'])
+                    )
+                )
 
         val = self.chakra_check()
         if val is not None:
