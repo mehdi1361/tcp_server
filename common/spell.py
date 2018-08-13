@@ -194,7 +194,8 @@ class Spell(Factory):
             player = self.find_player()
 
             if player.party['party'][0]['troop'][0]['shield'] <= 0 and \
-                    player.party['party'][0]['troop'][0]['id'] in player.party['turn']:
+                    player.party['party'][0]['troop'][0]['id'] in player.party['turn'] \
+                    and player.party['party'][0]['troop'][0]['health'] > 0:
                 selected_hero = player.party['party'][0]['troop']
 
                 chakra = selected_hero[-1]
@@ -232,7 +233,8 @@ class Spell(Factory):
                 })
 
             if player.party['party'][1]['troop'][0]['shield'] <= 0 and \
-                    player.party['party'][1]['troop'][0]['id'] in player.party['turn']:
+                    player.party['party'][1]['troop'][0]['id'] in player.party['turn'] \
+                    and player.party['party'][1]['troop'][0]['health'] > 0:
                 selected_hero = player.party['party'][1]['troop']
 
                 chakra = selected_hero[-1]
