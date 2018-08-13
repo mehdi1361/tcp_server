@@ -67,7 +67,7 @@ def level_creator(user_level_lst, strike, is_beginner=False):
             for item in user_level_lst:
                 lst_level.append(item + random.randint(0, 1))
 
-            return 1, lst_level
+            return 1, lst_level, 1, 1
 
         return 1, [1, 1, 1, 1, 1], 1, 1
 
