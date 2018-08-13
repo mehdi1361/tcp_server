@@ -25,7 +25,7 @@ def battle_finder(player, bot=False):
         if client.user and \
                 client.user != player.user and \
                 client.battle is None and \
-                abs(player.profile.trophy - client.profile.trophy) <= 30:
+                abs(player.profile.trophy - client.profile.trophy) <= 150:
             player1 = Player(client=player, troops=player.troops, is_playoff=player.is_playoff)
             player2 = Player(client=client, troops=client.troops, is_playoff=client.is_playoff)
             battle = Battle(player1, player2)
