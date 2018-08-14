@@ -172,7 +172,6 @@ class ProfileUpdateViewer:
         data = self.calculate()
         update_profile(user=data['user'], coin=data['coin'], gem=0, trophy=data['trophy'])
         score = update_score(user=data['user'], score=data['trophy'])
-        data['trophy'] = score if score > 0 else data['trophy']
         return data
 
     def join_to_league(self):

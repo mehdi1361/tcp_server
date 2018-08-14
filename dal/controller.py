@@ -38,7 +38,7 @@ def generate_fake_user_league(league):
 
             fake_user_lst.append({
                 "name": selected_name,
-                "score": 0,
+                "score": random.randint(5, 30),
                 "win_rate": random.randint(item.win_rate_min, item.win_rate_max),
                 "min_rate": item.win_rate_min,
                 "max_rate": item.win_rate_max
@@ -474,7 +474,7 @@ def promoted(user):
             new_league_user.league_id = new_league_id
             new_league_user.player_id = profile.id
             new_league_user.close_league = False
-            new_league_user.score = 50
+            new_league_user.score = 0
             new_league_user.play_off_count = 0
             new_league_user.play_off_status = 'disable'
             new_league_user.match_count = 0
@@ -541,7 +541,7 @@ def create_or_join_league(user):
         new_league_user.league_id = new_league_id
         new_league_user.player_id = profile.id
         new_league_user.close_league = False
-        new_league_user.score = 50
+        new_league_user.score = 0
         new_league_user.play_off_count = 0
         new_league_user.play_off_status = 'disable'
         new_league_user.match_count = 0
