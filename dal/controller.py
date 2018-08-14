@@ -44,7 +44,7 @@ def generate_fake_user_league(league):
                 "max_rate": item.win_rate_max
             })
 
-    return {"fake_user": json.dumps(fake_user_lst)}
+    return {"fake_user": fake_user_lst}
 
 
 def fetch_user(user_name):
