@@ -33,7 +33,7 @@ def generate_fake_user_league(league):
 
                 if random_number not in result:
                     result.append(random_number)
-                    selected_name = str(settings.FAKE_NAME[random_number]).encode('utf8')
+                    selected_name = str(settings.FAKE_NAME[random_number])
                     enable = False
 
             fake_user_lst.append({
