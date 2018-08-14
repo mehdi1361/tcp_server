@@ -1255,7 +1255,7 @@ class TrueDamageSpell(Spell):
             if val is not None:
                 message["v"]["f_acts"].extend(val)
 
-            self.player.action_point -= self.spell['need_ap']
+            player.action_point -= self.spell['need_ap']
 
             self.gen_action_point()
             self.check_troop_death(self.troop)
