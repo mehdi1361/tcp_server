@@ -1210,39 +1210,6 @@ class TrueDamageSpell(Spell):
     def run(self):
         player = self.find_player()
 
-        # if next((index for (index, d) in enumerate(self.player.party['party'][0]['troop'])
-        #          if d["id"] == self.troop['id']), None):
-        #
-        #     if player.action_point >= self.spell['need_ap']:
-        #
-        #         if self.check_confuse():
-        #             self.different_troop(self.enemy, self.troop, enemy=True)
-        #
-        #         message = self.true_damage(troop=self.troop)
-        #         val = self.chakra_check()
-        #         if val is not None:
-        #             message["v"]["f_acts"].extend(val)
-        #
-        #         player.action_point -= self.spell['need_ap']
-        #
-        #         self.gen_action_point()
-        #         self.check_troop_death(self.troop)
-        #
-        #         if isinstance(self.troop['params'], dict) and \
-        #                 'return_damage' in self.troop['params'].keys() and self.troop['health'] > 0:
-        #             message["v"]["f_acts"].append(
-        #                 self.return_damage(
-        #                     owner=self.troop, troop=self.owner,
-        #                     damage=int(self.damage_value * self.troop['params']['return_damage'])
-        #                 )
-        #             )
-        #
-        #         return message
-        #
-        #     raise Exception('not enough action point for TrueDamageSpell')
-        #
-        # else:
-
         if player.action_point >= self.spell['need_ap']:
             if self.check_confuse():
                 self.different_troop(self.player, self.troop, enemy=True)
