@@ -761,6 +761,12 @@ def fetch_bot_match_making(strike):
     try:
         query = session.query(BotMatchMaking)
         bot_match_making = query.filter(BotMatchMaking.strike_number == strike).first()
+
+        if bot_match_making is None:
+            last_bot_match_making = query.order_by(BotMatchMaking.strike_number.desc()).first()
+            if last_bot_match_making.strike_number < strike:
+                return last_bot_match_making
+
         return bot_match_making
 
     except:
