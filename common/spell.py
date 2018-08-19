@@ -9,93 +9,94 @@ from .objects import SpellEffectInfo, SpellEffectOnChar, BattleObject, BattleFla
 class Factory(object):
     @staticmethod
     def create(owner, spell, troop, player, enemy):
+        if settings.PRODUCTION_MODE == 'production':
+            if spell['name'] in ['Wizard_chakra', 'Cleric_chakra', 'Warrior_chakra']:
+                return ChakraSpell(owner, spell, troop, player, enemy)
 
-        if spell['name'] in ['Wizard_chakra', 'Cleric_chakra', 'Warrior_chakra']:
-            return ChakraSpell(owner, spell, troop, player, enemy)
+            if spell['name'] == 'Healer_spell_B':
+                return HealerSpellB(owner, spell, troop, player, enemy)
 
-        if spell['name'] == 'Healer_spell_B':
-            return HealerSpellB(owner, spell, troop, player, enemy)
+            if spell['name'] == 'HealerAll_spell_B':
+                return HealerAllSpellB(owner, spell, troop, player, enemy)
 
-        if spell['name'] == 'HealerAll_spell_B':
-            return HealerAllSpellB(owner, spell, troop, player, enemy)
+            if spell['name'] in ['Hanzo_spell_A', 'Hanzo_spell_B']:
+                return TrueDamageSpell(owner, spell, troop, player, enemy)
 
-        if spell['name'] in ['Hanzo_spell_A', 'Hanzo_spell_B']:
-            return TrueDamageSpell(owner, spell, troop, player, enemy)
+            if spell['name'] in [
+                'Archer_spell_B',
+                'ClericChakra_spell_C',
+                'WarriorChakra_spell_C',
+                'Wizard_spell_D'
+            ]:
+                return SplashSpell(owner, spell, troop, player, enemy)
 
-        if spell['name'] in [
-            'Archer_spell_B',
-            'ClericChakra_spell_C',
-            'WarriorChakra_spell_C',
-            'Wizard_spell_D'
-        ]:
-            return SplashSpell(owner, spell, troop, player, enemy)
+            if spell['name'] == 'Feri_spell_A':
+                return FeriSpellA(owner, spell, troop, player, enemy)
 
-        if spell['name'] == 'Feri_spell_A':
-            return FeriSpellA(owner, spell, troop, player, enemy)
+            if spell['name'] == 'Sagittarius_spell_A':
+                return SagittariusSpellA(owner, spell, troop, player, enemy)
 
-        if spell['name'] == 'Sagittarius_spell_A':
-            return SagittariusSpellA(owner, spell, troop, player, enemy)
+            if spell['name'] == 'Cleric_spell_B':
+                return ClericSpellB(owner, spell, troop, player, enemy)
 
-        if spell['name'] == 'Cleric_spell_B':
-            return ClericSpellB(owner, spell, troop, player, enemy)
+            if spell['name'] in [
+                'ClericChakra_spell_A',
+                'Cleric_spell_A'
+            ]:
+                return LifeSteal(owner, spell, troop, player, enemy)
 
-        if spell['name'] in [
-            'ClericChakra_spell_A',
-            'Cleric_spell_A'
-        ]:
-            return LifeSteal(owner, spell, troop, player, enemy)
+            if spell['name'] in [
+                'Tiny_spell_B',
+                'Sumo_spell_B'
+            ]:
+                return SelfTaunt(owner, spell, troop, player, enemy)
 
-        if spell['name'] in [
-            'Tiny_spell_B',
-            'Sumo_spell_B'
-        ]:
-            return SelfTaunt(owner, spell, troop, player, enemy)
+            if spell['name'] in [
+                'JellyMage_spell_A',
+                'WizardChakra_spell_A',
+                'Wizard_spell_A'
+            ]:
+                return BurnSpell(owner, spell, troop, player, enemy)
 
-        if spell['name'] in [
-            'JellyMage_spell_A',
-            'WizardChakra_spell_A',
-            'Wizard_spell_A'
-        ]:
-            return BurnSpell(owner, spell, troop, player, enemy)
+            if spell['name'] == 'WizardChakra_spell_C':
+                return WizardChakraSpellC(owner, spell, troop, player, enemy)
 
-        if spell['name'] == 'WizardChakra_spell_C':
-            return WizardChakraSpellC(owner, spell, troop, player, enemy)
+            if spell['name'] == 'Wizard_spell_C':
+                return TroopTaunt(owner, spell, troop, player, enemy)
 
-        if spell['name'] == 'Wizard_spell_C':
-            return TroopTaunt(owner, spell, troop, player, enemy)
+            if spell['name'] in ['Warrior_spell_D', 'WarriorChakra_spell_B']:
+                return WarriorSpellD(owner, spell, troop, player, enemy)
 
-        if spell['name'] in ['Warrior_spell_D', 'WarriorChakra_spell_B']:
-            return WarriorSpellD(owner, spell, troop, player, enemy)
+            if spell['name'] == 'Cleric_spell_D':
+                return ClericSpellD(owner, spell, troop, player, enemy)
 
-        if spell['name'] == 'Cleric_spell_D':
-            return ClericSpellD(owner, spell, troop, player, enemy)
+            if spell['name'] == 'ClericChakra_spell_B':
+                return ClericChakraSpellB(owner, spell, troop, player, enemy)
 
-        if spell['name'] == 'ClericChakra_spell_B':
-            return ClericChakraSpellB(owner, spell, troop, player, enemy)
+            if spell['name'] == 'JellyMage_spell_B':
+                return JellyMageSpellB(owner, spell, troop, player, enemy)
 
-        if spell['name'] == 'JellyMage_spell_B':
-            return JellyMageSpellB(owner, spell, troop, player, enemy)
+            if spell['name'] == 'Goolakh_spell_A':
+                return WildlingSpellA(owner, spell, troop, player, enemy)
 
-        if spell['name'] == 'Goolakh_spell_A':
-            return WildlingSpellA(owner, spell, troop, player, enemy)
+            if spell['name'] == 'FireSpirit_spell_A':
+                return FireSpiritSpellA(owner, spell, troop, player, enemy)
 
-        if spell['name'] == 'FireSpirit_spell_A':
-            return FireSpiritSpellA(owner, spell, troop, player, enemy)
+            if spell['name'] == 'HeadRock_spell_B':
+                return HeadRockSpellB(owner, spell, troop, player, enemy)
 
-        if spell['name'] == 'HeadRock_spell_B':
-            return HeadRockSpellB(owner, spell, troop, player, enemy)
+            if spell['name'] == 'HeadRock_spell_A':
+                return ConfuseSpell(owner, spell, troop, player, enemy)
 
-        if spell['name'] == 'HeadRock_spell_A':
+            if spell['name'] == 'Orc_spell_B':
+                return OrcSpellB(owner, spell, troop, player, enemy)
+
+            if spell['name'] == 'Blind_spell_A':
+                return BlindSpellA(owner, spell, troop, player, enemy)
+
+            return GeneralSpell(owner, spell, troop, player, enemy)
+        if settings.PRODUCTION_MODE == 'develop':
             return ConfuseSpell(owner, spell, troop, player, enemy)
-
-        if spell['name'] == 'Orc_spell_B':
-            return OrcSpellB(owner, spell, troop, player, enemy)
-
-        if spell['name'] == 'Blind_spell_A':
-            return BlindSpellA(owner, spell, troop, player, enemy)
-
-        return GeneralSpell(owner, spell, troop, player, enemy)
-        # return SelfTaunt(owner, spell, troop, player, enemy)
 
 
 class Spell(Factory):
@@ -1359,7 +1360,8 @@ class FeriSpellA(Spell):
                     )
                 )
         else:
-            if isinstance(troop['params'], dict) and 'return_damage' in troop['params'].keys():
+            if isinstance(troop['params'], dict) and 'return_damage' in troop['params'].keys() \
+                    and troop['health'] > 0:
                 sum_damage -= self.damage_value
                 message["v"]["f_acts"].append(
                     self.return_damage(
