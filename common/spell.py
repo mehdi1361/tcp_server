@@ -581,8 +581,8 @@ class Spell(Factory):
             return troop_message, self.troop
 
         else:
-            if troop['health'] <= 0:
-                find, troop = self.enemy_random_troop(troop)
+            if troop is None or troop['health'] <= 0:
+                find, troop = self.enemy_random_troop(self.troop)
 
             else:
                 find = True
