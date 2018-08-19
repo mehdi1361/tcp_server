@@ -600,7 +600,7 @@ class Spell(Factory):
                 }
 
                 return troop_message, troop
-        return None
+        return None, None
 
     def life_steal(self, troop):
         spell_effect_info_list = []
