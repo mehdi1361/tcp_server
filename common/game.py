@@ -5,60 +5,16 @@ import uuid
 import settings
 import copy
 
-from common.objects import StatusUpdateData, SceneType, BattleObject, SpellSingleStatChangeInfo, \
+from common.objects import SceneType, BattleObject, SpellSingleStatChangeInfo, \
     SpellSingleStatChangeType, BattleFlags, SpellEffectInfo, SpellEffectOnChar, cool_down_troop
 from dal.views import get_player_info, get_troops_info, ProfileUpdateViewer, get_bot_match_making
 from random import shuffle
-from common.utils import normal_length, random_list, create_list_with_key
+from common.utils import normal_length, create_list_with_key
 from common.spell import Factory
 from common.objects import clients, CtmChestGenerate
-from tasks import playoff_log, troop_record
-from common.utils import sleep
-# from common.objects import clients
 
-from tasks import battle_log, create_battle_log, end_battle_log, playoff_log, profile_log
+from tasks import battle_log, create_battle_log, end_battle_log, playoff_log, profile_log, troop_record
 
-
-
-# def level_creator(trophy):
-#     bot = get_bot(trophy)
-#     lst_level = [1, 1, 1, 1, 1]
-#     sum_level = 5
-#
-#     for idx, level in enumerate(lst_level):
-#         if bot.sum_levels > sum_level:
-#             if idx == 0:
-#                 find_level = random.randint(bot.min_level_hero - 1, bot.max_level_hero - 1)
-#
-#             else:
-#                 remain = bot.sum_levels - sum_level
-#
-#                 if remain > bot.max_levels - 1:
-#                     find_level = random.randint(bot.min_levels, bot.max_levels - 1)
-#
-#                 else:
-#                     # find_level = random.randint(bot.min_levels, remain)
-#                     find_level = remain
-#
-#             sum_level += find_level
-#             lst_level[idx] += find_level
-#
-#     return bot.bot_ai, lst_level
-
-# def level_creator(bot_sum_level):
-#     lst_level = random_list(1, 3, 5)
-#     sum_level = sum(lst_level)
-#
-#     if bot_sum_level > sum_level:
-#         bot_sum_level -= sum_level
-#
-#         for idx, level in enumerate(lst_level):
-#             find_level = random.randint(0, 1)
-#
-#             sum_level += find_level
-#             lst_level[idx] += find_level
-#
-#     return 1, lst_level
 
 def level_creator(user_level_lst, strike, is_beginner=False):
     bot_match_making = get_bot_match_making(strike)
@@ -105,60 +61,6 @@ class Battle(object):
             turn_dict = {
                 "turn": self.player1
             }
-
-    # def turn_sequence(self, player1_info, player1_troops_info, player2_info, player2_troops_info):
-    #     player_1_early_list = [troop['id'] for troop in player1_troops_info if troop['dexterity'] == 'EARLY']
-    #     player_1_mid_list = [troop['id'] for troop in player1_troops_info if troop['dexterity'] == 'MIDDLE']
-    #     player_1_late_list = [troop['id'] for troop in player1_troops_info if troop['dexterity'] == 'LATE']
-    #
-    #     if player1_info['hero']['dexterity'] == 'EARLY':
-    #         player_1_early_list.append(player1_info['hero']['id'])
-    #
-    #     if player1_info['hero']['dexterity'] == 'MIDDLE':
-    #         player_1_mid_list.append(player1_info['hero']['id'])
-    #
-    #     if player1_info['hero']['dexterity'] == 'LATE':
-    #         player_1_late_list.append(player1_info['hero']['id'])
-    #
-    #     player_2_early_list = [troop['id'] for troop in player2_troops_info if troop['dexterity'] == 'EARLY']
-    #     player_2_mid_list = [troop['id'] for troop in player2_troops_info if troop['dexterity'] == 'MIDDLE']
-    #     player_2_late_list = [troop['id'] for troop in player2_troops_info if troop['dexterity'] == 'LATE']
-    #
-    #     if player2_info['hero']['dexterity'] == 'EARLY':
-    #         player_2_early_list.append(player1_info['hero']['id'])
-    #
-    #     if player2_info['hero']['dexterity'] == 'MIDDLE':
-    #         player_2_mid_list.append(player1_info['hero']['id'])
-    #
-    #     if player2_info['hero']['dexterity'] == 'LATE':
-    #         player_2_late_list.append(player1_info['hero']['id'])
-    #
-    #     shuffle(player_1_early_list)
-    #     shuffle(player_1_mid_list)
-    #     shuffle(player_1_late_list)
-    #
-    #     shuffle(player_2_early_list)
-    #     shuffle(player_2_mid_list)
-    #     shuffle(player_2_late_list)
-    #
-    #     temp_early_list = create_list_with_key(player_1_early_list)
-    #     temp_early_list.extend(create_list_with_key(player_2_early_list, 'odd'))
-    #     temp_early_list = sorted(temp_early_list, key=lambda k: k['index'])
-    #     early_list = [k['item'] for k in temp_early_list]
-    #
-    #     temp_mid_list = create_list_with_key(player_1_mid_list)
-    #     temp_mid_list.extend(create_list_with_key(player_2_mid_list, 'odd'))
-    #     temp_mid_list = sorted(temp_mid_list, key=lambda k: k['index'])
-    #     mid_list = [k['item'] for k in temp_mid_list]
-    #
-    #     temp_late_list = create_list_with_key(player_1_late_list)
-    #     temp_late_list.extend(create_list_with_key(player_2_late_list, 'odd'))
-    #     temp_late_list = sorted(temp_late_list, key=lambda k: k['index'])
-    #     late_list = [k['item'] for k in temp_late_list]
-    #
-    #     result = early_list + mid_list + late_list
-    #     print "turn_sequence:", result
-    #     return result
 
     def turn_sequence(self, player1_info, player1_troops_info, player2_info, player2_troops_info):
         player_1_list = [troop['id'] for troop in player1_troops_info]
@@ -466,7 +368,6 @@ class Battle(object):
         lst_status_update_data = []
         lst_index_delete = []
         lst_spells = player.player_client.battle.live_spells
-        print "lst_spells", lst_spells
         for i in range(0, len(lst_spells)):
             troop = self.find_troop(lst_spells[i])
 
@@ -537,15 +438,9 @@ class Battle(object):
                         if lst_spells[i]['action'] == 'confuse' and BattleFlags.Confuse.value in troop['flag']:
                             lst_spells[i]['troop'][0]['flag'].remove(BattleFlags.Confuse.value)
 
-                            if BattleFlags.Confuse.value in troop['flag']:
-                                troop['flag'].remove(BattleFlags.Confuse.value)
-
-                        if lst_spells[i]['action'] == 'damage_reduction' and BattleFlags.DamageReduction.value in troop[
-                            'flag']:
+                        if lst_spells[i]['action'] == 'damage_reduction' and \
+                                BattleFlags.DamageReduction.value in troop['flag']:
                             lst_spells[i]['troop'][0]['flag'].remove(BattleFlags.DamageReduction.value)
-
-                            if BattleFlags.DamageReduction.value in troop['flag']:
-                                troop['flag'].remove(BattleFlags.DamageReduction.value)
 
                         lst_status_update_data.append(
                             self.live_spell_stat(
@@ -887,13 +782,13 @@ class Battle(object):
             clients.remove(loser.player_client)
 
         if not winner.is_bot:
+            profile_log(winner, 'win')
             winner_profile = ProfileUpdateViewer(winner)
             winner_profile.join_to_league()
             winner_data = winner_profile.generate()
             troop_record(winner.troops)
 
             chest = CtmChestGenerate(winner.player_client.user)
-            profile_log(winner, 'win')
 
             print "winner playoff:", winner.is_playoff
             if winner.is_playoff:
@@ -922,12 +817,11 @@ class Battle(object):
             self.send("{}{}".format(normal_length(len(str(winner_message))), winner_message), winner)
 
         if not loser.is_bot:
+            profile_log(loser, 'lose')
             loser_profile = ProfileUpdateViewer(loser)
             loser_profile.join_to_league()
             loser_data = loser_profile.generate()
             troop_record(loser.troops, type_fight='loser')
-
-            profile_log(loser, 'lose')
 
             print "loser playoff:", loser.is_playoff
             if loser.is_playoff:
