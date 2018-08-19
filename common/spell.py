@@ -204,7 +204,9 @@ class Spell(Factory):
                 lst_index = self.player.player_client.battle.turns_sequence.index(selected_hero[0]['id'])
 
                 self.player.player_client.battle.turns_sequence[lst_index] = chakra['id']
-                chakra['health'] = chakra['health'] * selected_hero[0]['health'] / selected_hero[0]['maxHealth']
+
+                dec_z = int(int(round(selected_hero[0]['health'])) / int(round(selected_hero[0]['maxHealth'])))
+                chakra['health'] = chakra['health'] * dec_z
 
                 battle_object = BattleObject(
                     hp=chakra['health'],
@@ -243,7 +245,9 @@ class Spell(Factory):
                 lst_index = self.player.player_client.battle.turns_sequence.index(selected_hero[0]['id'])
 
                 self.player.player_client.battle.turns_sequence[lst_index] = chakra['id']
-                chakra['health'] = chakra['health'] * selected_hero[0]['health'] / selected_hero[0]['maxHealth']
+
+                dec_z = int(int(round(selected_hero[0]['health'])) / int(round(selected_hero[0]['maxHealth'])))
+                chakra['health'] = chakra['health'] * dec_z
 
                 battle_object = BattleObject(
                     hp=chakra['health'],
@@ -993,7 +997,9 @@ class ChakraSpell(Spell):
             chakra = selected_hero[-1]
 
             player.player_client.battle.turns_sequence[lst_index] = chakra['id']
-            chakra['health'] = chakra['health'] * selected_hero[0]['health'] / selected_hero[0]['maxHealth']
+
+            dec_z = int(int(round(selected_hero[0]['health'])) / int(round(selected_hero[0]['maxHealth'])))
+            chakra['health'] = chakra['health'] * dec_z
             chakra['flag'] = selected_hero[0]['flag']
 
             battle_object = BattleObject(

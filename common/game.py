@@ -610,7 +610,9 @@ class Battle(object):
                 lst_index = self.turns_sequence.index(selected_hero[0]['id'])
 
                 self.turns_sequence[lst_index] = chakra['id']
-                chakra['health'] = chakra['health'] * selected_hero[0]['health'] / selected_hero[0]['maxHealth']
+
+                dec_z = int(int(round(selected_hero[0]['health'])) / int(round(selected_hero[0]['maxHealth'])))
+                chakra['health'] = chakra['health'] * dec_z
 
                 for spell in self.live_spells:
                     if spell['troop'][0]['id'] == selected_hero[0]['id']:
