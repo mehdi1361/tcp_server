@@ -12,7 +12,7 @@ from common.objects import Player, clients, CtmChestGenerate
 from common.utils import normal_length
 from twisted.application import service, internet
 from dal.views import ProfileUpdateViewer, get_user, get_random_user, get_troop_list, get_profile
-from tasks import end_battle_log, playoff_log, troop_record
+from tasks import end_battle_log, playoff_log, troop_record, profile_log
 from common.objects import cool_down_troop
 from twisted.python import log
 
@@ -215,6 +215,7 @@ class ServerFactory(protocol.Factory):
                 chest = CtmChestGenerate(winner.player_client.user)
                 chest = chest.generate_chest()
                 troop_record(winner.troops)
+                profile_log(winner, 'win')
 
                 if winner.is_playoff:
                     playoff_log(winner.player_client.user, 'win')
@@ -243,6 +244,7 @@ class ServerFactory(protocol.Factory):
             # loser_data = loser_profile.generate()
 
             if not loser.is_bot:
+                profile_log(loser)
                 loser_cooldown = cool_down_troop(loser)
                 troop_record(loser.troops, type_fight='loser')
 
