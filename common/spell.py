@@ -1360,8 +1360,11 @@ class FeriSpellA(Spell):
                     )
                 )
         else:
-            if isinstance(troop['params'], dict) and 'return_damage' in troop['params'].keys() \
+            if troop is not None and  \
+                    isinstance(troop['params'], dict) and \
+                    'return_damage' in troop['params'].keys() \
                     and troop['health'] > 0:
+
                 sum_damage -= self.damage_value
                 message["v"]["f_acts"].append(
                     self.return_damage(
