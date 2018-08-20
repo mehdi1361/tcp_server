@@ -20,7 +20,6 @@ from tasks import battle_log, create_battle_log, end_battle_log, playoff_log, pr
 def level_creator(user_level_lst, strike, is_beginner=False):
     bot_match_making = get_bot_match_making(strike)
     if bot_match_making is None:
-        print "bot not found"
         if not is_beginner:
             lst_level = []
             for item in user_level_lst:
@@ -34,7 +33,8 @@ def level_creator(user_level_lst, strike, is_beginner=False):
         print "bot found"
         lst_level = []
         for item in user_level_lst:
-            lst_level.append(item + random.randint(bot_match_making.min_level, bot_match_making.max_level))
+            data = item + random.randint(bot_match_making.min_level, bot_match_making.max_level)
+            lst_level.append(1 if data <= 0 else data)
 
         return float(bot_match_making.bot_ai) / 100, lst_level, bot_match_making.step_forward, bot_match_making.step_backward
 
