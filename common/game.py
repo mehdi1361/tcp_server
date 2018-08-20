@@ -20,6 +20,7 @@ from tasks import battle_log, create_battle_log, end_battle_log, playoff_log, pr
 def level_creator(user_level_lst, strike, is_beginner=False):
     bot_match_making = get_bot_match_making(strike)
     if bot_match_making is None:
+        print "bot not found"
         if not is_beginner:
             lst_level = []
             for item in user_level_lst:
