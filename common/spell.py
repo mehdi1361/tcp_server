@@ -1,4 +1,5 @@
 from __future__ import generators
+from decimal import Decimal
 import settings
 import random
 import pprint
@@ -205,11 +206,11 @@ class Spell(Factory):
 
                 self.player.player_client.battle.turns_sequence[lst_index] = chakra['id']
 
-                dec_z = selected_hero[0]['health'] / selected_hero[0]['maxHealth']
+                dec_z = Decimal(float(selected_hero[0]['health']) / float(selected_hero[0]['maxHealth']))
                 print 'dec_z', dec_z
                 print chakra['health']
 
-                chakra['health'] = int(chakra['health'] * dec_z)
+                chakra['health'] = int(chakra['health'] * round(dec_z, 2))
 
                 battle_object = BattleObject(
                     hp=chakra['health'],
@@ -249,11 +250,11 @@ class Spell(Factory):
 
                 self.player.player_client.battle.turns_sequence[lst_index] = chakra['id']
 
-                dec_z = selected_hero[0]['health'] / selected_hero[0]['maxHealth']
+                dec_z = Decimal(float(selected_hero[0]['health']) / float(selected_hero[0]['maxHealth']))
                 print 'dec_z', dec_z
                 print chakra['health']
 
-                chakra['health'] = int(chakra['health'] * dec_z)
+                chakra['health'] = int(chakra['health'] * round(dec_z, 2))
 
                 battle_object = BattleObject(
                     hp=chakra['health'],
