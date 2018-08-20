@@ -495,9 +495,10 @@ class CtmChestGenerate:
         if self.chest_type_index is None:
             index, chest_type = UserChestViewer.get_sequence(self.user)
             chest = UserChestViewer.get_chest(chest_type)
+            self.chest_type = chest_type
 
         else:
-            chest = UserChestViewer.get_chest(self.chest_type_index)
+            chest = UserChestViewer.get_chest(self.chest_type)
 
         data = {
             "user": self.user,
