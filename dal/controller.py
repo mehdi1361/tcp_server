@@ -416,6 +416,7 @@ def promoted(user):
             LeagueUser.close_league == False,
             PlayOff.status == 'win'
         ).count()
+        print "win count", win_count
 
         query = session.query(
             Leagues,
@@ -434,7 +435,7 @@ def promoted(user):
             LeagueUser.close_league == False,
         ).first()
 
-        if result_league.Leagues.win_promoting_count == win_count:
+        if result_league.Leagues.win_promoting_count <= win_count:
             result_league.LeagueUser.close_league = True
             session.commit()
 
@@ -445,6 +446,8 @@ def promoted(user):
                 value for value in session.query(CreatedLeagues.id)
                     .filter(CreatedLeagues.base_league_id == base_league.id).distinct()
             ]
+
+            print "candidate_league", candidate_league
 
             selected_league = session.query(
                 func.count(LeagueUser.id).label('count'),

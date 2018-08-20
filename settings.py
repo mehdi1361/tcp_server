@@ -6,6 +6,9 @@ from local_settings import *
 CHEST_SEQUENCE = ['W', 'W', 'W', 'W', 'S', 'W', 'W', 'W', 'W', 'S', 'W', 'G', 'W', 'W', 'W', 'W', 'S', 'W', 'W', 'W',
                   'W', 'S', 'W', 'G', 'W', 'W', 'W', 'C', 'W', 'W', 'W', 'S']
 
+# CHEST_SEQUENCE = ['G', 'G', 'G', 'G', 'S', 'G', 'G', 'G', 'G', 'S', 'G', 'G', 'G', 'G', 'G', 'G', 'S', 'G', 'G', 'G',
+#                   'G', 'S', 'G', 'G', 'G', 'G', 'G', 'C', 'G', 'G', 'G', 'S']
+
 CHEST_SEQUENCE_TIME = {
     'W': 4,
     'S': 8,
