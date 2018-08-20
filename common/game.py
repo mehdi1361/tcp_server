@@ -612,6 +612,8 @@ class Battle(object):
                 self.turns_sequence[lst_index] = chakra['id']
 
                 dec_z = selected_hero[0]['health'] / selected_hero[0]['maxHealth']
+                print 'dec_z', dec_z
+                print chakra['health']
                 chakra['health'] = int(chakra['health'] * dec_z)
 
                 for spell in self.live_spells:
