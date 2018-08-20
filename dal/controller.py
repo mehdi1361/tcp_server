@@ -774,6 +774,11 @@ def fetch_bot_match_making(strike):
             if last_bot_match_making.strike_number < strike:
                 return last_bot_match_making
 
+            first_bot_match_making = query.order_by(BotMatchMaking.strike_number.asc()).first()
+
+            if first_bot_match_making.strike_number > strike:
+                return first_bot_match_making
+
         return bot_match_making
 
     except:
