@@ -435,12 +435,16 @@ def promoted(user):
             LeagueUser.close_league == False,
         ).first()
 
+        print "result_league", result_league
+
         if result_league.Leagues.win_promoting_count <= win_count:
             result_league.LeagueUser.close_league = True
             session.commit()
 
             base_league = session.query(Leagues) \
                 .filter(Leagues.step_number == result_league.Leagues.step_number + 1).first()
+
+            print "base_league", base_league
 
             candidate_league = [
                 value for value in session.query(CreatedLeagues.id)

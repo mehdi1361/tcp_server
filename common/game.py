@@ -790,7 +790,6 @@ class Battle(object):
         if not winner.is_bot:
             profile_log(winner, 'win')
             winner_profile = ProfileUpdateViewer(winner)
-            winner_profile.join_to_league()
             winner_data = winner_profile.generate()
             troop_record(winner.troops)
 
@@ -799,6 +798,8 @@ class Battle(object):
             print "winner playoff:", winner.is_playoff
             if winner.is_playoff:
                 playoff_log(winner.player_client.user, 'win')
+
+            winner_profile.join_to_league()
 
             cool_down_troop_lst = cool_down_troop(winner)
 
@@ -825,13 +826,14 @@ class Battle(object):
         if not loser.is_bot:
             profile_log(loser, 'lose')
             loser_profile = ProfileUpdateViewer(loser)
-            loser_profile.join_to_league()
             loser_data = loser_profile.generate()
             troop_record(loser.troops, type_fight='loser')
 
             print "loser playoff:", loser.is_playoff
             if loser.is_playoff:
                 playoff_log(loser.player_client.user, 'lose')
+
+            loser_profile.join_to_league()
 
             loser_message = {
                 "t": "BattleResult",
