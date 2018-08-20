@@ -444,7 +444,7 @@ def promoted(user):
             base_league = session.query(Leagues) \
                 .filter(Leagues.step_number == result_league.Leagues.step_number + 1).first()
 
-            print "base_league", base_league
+            print "base_league", base_league.id
 
             candidate_league = [
                 value for value in session.query(CreatedLeagues.id)
@@ -459,7 +459,12 @@ def promoted(user):
             ).group_by(LeagueUser.league_id).filter(LeagueUser.league_id.in_(candidate_league)) \
                 .having(func.count(LeagueUser.id) <= result_league.Leagues.capacity).first()
 
+            print "selected_league", selected_league
+
             profile = session.query(Profile).filter(Profile.user_id == user.id).first()
+
+            print "profile", profile
+
             if selected_league:
                 new_league_id = selected_league[1]
 

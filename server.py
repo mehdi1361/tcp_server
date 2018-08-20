@@ -210,7 +210,6 @@ class ServerFactory(protocol.Factory):
 
             if not winner.is_bot:
                 winner_profile = ProfileUpdateViewer(winner)
-                winner_profile.join_to_league()
                 winner_data = winner_profile.generate()
                 chest = CtmChestGenerate(winner.player_client.user)
                 chest = chest.generate_chest()
@@ -219,6 +218,8 @@ class ServerFactory(protocol.Factory):
 
                 if winner.is_playoff:
                     playoff_log(winner.player_client.user, 'win')
+                    
+                winner_profile.join_to_league()
 
                 winner_message = {
                     "t": "BattleResult",
