@@ -469,6 +469,7 @@ def promoted(user):
                 new_league_id = selected_league[1]
 
             else:
+                print "in else"
                 new_league = CreatedLeagues()
                 new_league.created_date = datetime.now()
                 new_league.updated_date = datetime.now()
@@ -478,6 +479,7 @@ def promoted(user):
                 new_league.base_league_id = base_league.id
                 session.add(new_league)
                 session.commit()
+                print "new league created"
                 new_league_id = new_league.id
 
             new_league_user = LeagueUser()
