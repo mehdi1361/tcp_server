@@ -475,6 +475,7 @@ def promoted(user):
                 new_league.updated_date = datetime.now()
                 new_league.inc_count = 0
                 new_league.dec_count = 0
+                new_league.enable = True
                 new_league.params = generate_fake_user_league(base_league)
                 new_league.base_league_id = base_league.id
                 session.add(new_league)
