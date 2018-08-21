@@ -810,8 +810,7 @@ class Battle(object):
                     "victorious": str(winner.victorious),
                     "reward": {
                         "coin": winner_data['coin'],
-                        "trophy": 0 if isinstance(str, winner_league_type) and winner_league_type == 'promoted'
-                        else winner_data['trophy']
+                        "trophy": 0 if winner_league_type == 'promoted' else winner_data['trophy']
                     },
                     "cooldown_data": cool_down_troop_lst,
                     "connection_lost": "False"
