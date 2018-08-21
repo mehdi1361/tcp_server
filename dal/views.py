@@ -133,7 +133,7 @@ class UserLeague:
 class ProfileUpdateViewer:
     def __init__(self, player):
         self.__player = player
-        self.points = 20
+        self.points = 10
         self.data = None
 
     @property
@@ -176,11 +176,8 @@ class ProfileUpdateViewer:
 
     def join_to_league(self):
         joint, league = current_league(self.player.player_client.user)
-        print "in join_to_league"
         if joint:
-            print "in joint"
             if self.player.is_playoff:
-                print "in play off"
                 promote, league = promoted(self.player.player_client.user)
                 if promote:
                     return 'promoted'

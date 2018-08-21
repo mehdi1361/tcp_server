@@ -397,7 +397,7 @@ def new_claim(coin, gem, league_player_id):
 
 
 def promoted(user):
-    # try:
+    try:
         query = session.query(
             Leagues,
             CreatedLeagues,
@@ -416,7 +416,6 @@ def promoted(user):
             LeagueUser.close_league == False,
             PlayOff.status == 'win'
         ).count()
-        print "win count", win_count
 
         query = session.query(
             Leagues,
@@ -435,8 +434,6 @@ def promoted(user):
             LeagueUser.close_league == False,
         ).first()
 
-        print "result_league", result_league
-
         if result_league.Leagues.win_promoting_count <= win_count:
             result_league.LeagueUser.close_league = True
             session.commit()
@@ -444,14 +441,10 @@ def promoted(user):
             base_league = session.query(Leagues) \
                 .filter(Leagues.step_number == result_league.Leagues.step_number + 1).first()
 
-            print "base_league", base_league.id
-
             candidate_league = [
                 value for value in session.query(CreatedLeagues.id)
                     .filter(CreatedLeagues.base_league_id == base_league.id).distinct()
             ]
-
-            print "candidate_league", candidate_league
 
             selected_league = session.query(
                 func.count(LeagueUser.id).label('count'),
@@ -459,17 +452,12 @@ def promoted(user):
             ).group_by(LeagueUser.league_id).filter(LeagueUser.league_id.in_(candidate_league)) \
                 .having(func.count(LeagueUser.id) <= result_league.Leagues.capacity).first()
 
-            print "selected_league", selected_league
-
             profile = session.query(Profile).filter(Profile.user_id == user.id).first()
-
-            print "profile", profile
 
             if selected_league:
                 new_league_id = selected_league[1]
 
             else:
-                print "in else"
                 new_league = CreatedLeagues()
                 new_league.created_date = datetime.now()
                 new_league.updated_date = datetime.now()
@@ -480,7 +468,6 @@ def promoted(user):
                 new_league.base_league_id = base_league.id
                 session.add(new_league)
                 session.commit()
-                print "new league created"
                 new_league_id = new_league.id
 
             new_league_user = LeagueUser()
@@ -510,8 +497,8 @@ def promoted(user):
         else:
             return False, None
 
-    # except:
-    #     return False, None
+    except:
+        return False, None
 
 
 def create_or_join_league(user):
