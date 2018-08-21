@@ -800,7 +800,7 @@ class Battle(object):
             if winner.is_playoff:
                 playoff_log(winner.player_client.user, 'win')
 
-            winner_profile.join_to_league()
+            winner_league_type = winner_profile.join_to_league()
 
             cool_down_troop_lst = cool_down_troop(winner)
 
@@ -810,7 +810,8 @@ class Battle(object):
                     "victorious": str(winner.victorious),
                     "reward": {
                         "coin": winner_data['coin'],
-                        "trophy": winner_data['trophy']
+                        "trophy": 0 if isinstance(str, winner_league_type) and winner_league_type == 'promoted'
+                        else winner_data['trophy']
                     },
                     "cooldown_data": cool_down_troop_lst,
                     "connection_lost": "False"
