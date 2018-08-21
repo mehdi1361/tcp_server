@@ -397,7 +397,7 @@ def new_claim(coin, gem, league_player_id):
 
 
 def promoted(user):
-    try:
+    # try:
         query = session.query(
             Leagues,
             CreatedLeagues,
@@ -509,8 +509,8 @@ def promoted(user):
         else:
             return False, None
 
-    except:
-        return False, None
+    # except:
+    #     return False, None
 
 
 def create_or_join_league(user):
