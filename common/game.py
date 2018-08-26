@@ -534,30 +534,19 @@ class Battle(object):
 
     def start(self):
         self.player1.party, self.player2.party = self.party_creator()
-        party_1 = copy.deepcopy(self.player1.party)
-        for party in party_1['party']:
-            for troop in party['troop']:
-                for spell in troop['spell']:
-                    spell.pop('params')
 
         message = {
             "t": "BattleData",
-            "v": party_1
+            "v": self.player1.party
         }
         message = json.dumps(message)
 
         self.send("{}{}".format(normal_length(len(str(message))), message), self.player1)
 
         if not self.player2.is_bot:
-            party_2 = copy.deepcopy(self.player2.party)
-
-            for party in party_2['party']:
-                for troop in party['troop']:
-                    for spell in troop['spell']:
-                        spell.pop('params')
             message = {
                 "t": "BattleData",
-                "v": party_2
+                "v": self.player2.party
             }
             message = json.dumps(message)
             self.send("{}{}".format(normal_length(len(str(message))), message), self.player2)
