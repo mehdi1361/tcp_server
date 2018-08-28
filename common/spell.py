@@ -207,8 +207,6 @@ class Spell(Factory):
                 self.player.player_client.battle.turns_sequence[lst_index] = chakra['id']
 
                 dec_z = Decimal(float(selected_hero[0]['health']) / float(selected_hero[0]['maxHealth']))
-                print 'dec_z', dec_z
-                print chakra['health']
 
                 chakra['health'] = int(chakra['health'] * round(dec_z, 2))
 
@@ -1005,8 +1003,9 @@ class ChakraSpell(Spell):
 
             player.player_client.battle.turns_sequence[lst_index] = chakra['id']
 
-            dec_z = int(int(round(selected_hero[0]['health'])) / int(round(selected_hero[0]['maxHealth'])))
-            chakra['health'] = chakra['health'] * dec_z
+            dec_z = Decimal(float(selected_hero[0]['health']) / float(selected_hero[0]['maxHealth']))
+            chakra['health'] = int(chakra['health'] * round(dec_z, 2))
+
             chakra['flag'] = selected_hero[0]['flag']
 
             battle_object = BattleObject(
