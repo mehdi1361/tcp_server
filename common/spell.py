@@ -208,7 +208,7 @@ class Spell(Factory):
 
                 dec_z = Decimal(float(selected_hero[0]['health']) / float(selected_hero[0]['maxHealth']))
 
-                chakra['health'] = int(chakra['health'] * round(dec_z, 2))
+                chakra['health'] = int(chakra['maxHealth'] * round(dec_z, 2))
 
                 battle_object = BattleObject(
                     hp=chakra['health'],
@@ -1016,7 +1016,7 @@ class ChakraSpell(Spell):
             print "dec z", dec_z
             print "chakra old health", chakra['health']
 
-            chakra['health'] = int(chakra['health'] * round(dec_z, 2))
+            chakra['health'] = int(chakra['maxHealth'] * round(dec_z, 2))
             print "chakra new health", chakra['health']
 
             chakra['flag'] = selected_hero[0]['flag']
