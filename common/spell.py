@@ -256,7 +256,7 @@ class Spell(Factory):
                 print "dec z", dec_z
                 print "chakra old health", chakra['health']
 
-                chakra['health'] = int(chakra['health'] * round(dec_z, 2))
+                chakra['health'] = int(chakra['maxHealth'] * round(dec_z, 2))
                 print "chakra new health", chakra['health']
 
                 battle_object = BattleObject(
