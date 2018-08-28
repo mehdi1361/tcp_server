@@ -1475,6 +1475,15 @@ class ClericSpellB(Spell):
             spell_effect_info_list = []
             lst_troop = [self.troop, self.find_enemy_hero(self.troop)]
 
+            if isinstance(self.troop['params'], dict) \
+                    and 'return_damage' in self.troop['params'].keys() and self.troop['health'] > 0:
+                damage_return_message.append(
+                    self.return_damage(
+                        owner=self.troop, troop=self.owner,
+                        damage=int(self.damage_value * self.troop['params']['return_damage'])
+                    )
+                )
+
             for item in lst_troop:
                 if item['health'] > 0:
                     critical, result = self.normal_damage(item)
@@ -1484,15 +1493,6 @@ class ClericSpellB(Spell):
                     spell_effect_info_list.append(result)
 
                 self.check_troop_death(item)
-
-                if isinstance(item['params'], dict) \
-                        and 'return_damage' in self.troop['params'].keys() and item['health'] > 0:
-                    damage_return_message.append(
-                        self.return_damage(
-                            owner=item, troop=self.owner,
-                            damage=int(self.damage_value * item['params']['return_damage'])
-                        )
-                    )
 
             f_acts_lst = [
                 {
