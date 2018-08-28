@@ -34,6 +34,7 @@ ACTION_POINT = {
 }
 
 HERO_UPDATE = {
+    0: {'hero_cards': 1, 'coins': 0, 'increase': 0.0},
     1: {'hero_cards': 1, 'coins': 0, 'increase': 0.0},
     2: {'hero_cards': 2, 'coins': 500, 'increase': 0.1},
     3: {'hero_cards': 5, 'coins': 1000, 'increase': 0.21},
@@ -44,12 +45,14 @@ HERO_UPDATE = {
 }
 
 ITEM_UPDATE = {
+    0: {'item_cards': 1, 'coins': 0, 'increase': 0.0},
     1: {'item_cards': 1, 'coins': 0, 'increase': 0.0},
     2: {'item_cards': 10, 'coins': 2500, 'increase': 0.1},
     3: {'item_cards': 30, 'coins': 7500, 'increase': 0.21}
 }
 
 UNIT_UPDATE = {
+    0: {'unit_cards': 1, 'coins': 10, 'increase': 0.0},
     1: {'unit_cards': 1, 'coins': 10, 'increase': 0.0},
     2: {'unit_cards': 2, 'coins': 100, 'increase': 0.1},
     3: {'unit_cards': 5, 'coins': 250, 'increase': 0.21},
