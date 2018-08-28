@@ -2010,10 +2010,10 @@ class ClericSpellD(Spell):
 
                 self.owner['health'] -= int(self.owner['maxHealth'] * float(self.spell['params']['decrease_health']))
 
-                player.party['party'][0]['troop'][-1]['health'] -= int(
-                    self.player.party['party'][0]['troop'][-1]['health']
-                    * float(self.spell['params']['decrease_health'])
-                )
+                # player.party['party'][0]['troop'][-1]['health'] -= int(
+                #     self.player.party['party'][0]['troop'][-1]['health']
+                #     * float(self.spell['params']['decrease_health'])
+                # )
 
             single_stat = SpellSingleStatChangeInfo(
                 int_val=self.owner['attack'],
