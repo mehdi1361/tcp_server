@@ -249,8 +249,8 @@ class Spell(Factory):
                 self.player.player_client.battle.turns_sequence[lst_index] = chakra['id']
 
                 dec_z = Decimal(float(selected_hero[0]['health']) / float(selected_hero[0]['maxHealth']))
-                print "chakra", chakra
-                print "hero", selected_hero[0]
+                print "chakra", chakra['moniker']
+                print "hero", selected_hero[0]['moniker']
                 print "hero health", selected_hero[0]['health']
                 print "hero maxhealth", selected_hero[0]['maxHealth']
                 print "dec z", dec_z
