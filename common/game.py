@@ -17,8 +17,14 @@ from common.objects import clients, CtmChestGenerate
 from tasks import battle_log, create_battle_log, end_battle_log, playoff_log, profile_log, troop_record
 
 
-def level_creator(user_level_lst, strike, is_beginner=False):
-    bot_match_making = get_bot_match_making(strike)
+def level_creator(user_level_lst, strike, is_beginner=False, is_play_off=False):
+    if is_play_off:
+        result_strike = random.randint(3, 4)
+
+    else:
+        result_strike = strike
+
+    bot_match_making = get_bot_match_making(result_strike)
     if bot_match_making is None:
         print "bot not found"
         if not is_beginner:
@@ -603,7 +609,12 @@ class Battle(object):
                 self.turns_sequence[lst_index] = chakra['id']
 
                 dec_z = Decimal(float(selected_hero[0]['health']) / float(selected_hero[0]['maxHealth']))
+                print "hero health", selected_hero[0]['maxHealth']
+                print "dec z", dec_z
+                print "chakra old health", chakra['health']
+
                 chakra['health'] = int(chakra['health'] * round(dec_z, 2))
+                print "chakra new health", chakra['health']
 
                 for spell in self.live_spells:
                     if spell['troop'][0]['id'] == selected_hero[0]['id']:
