@@ -253,6 +253,7 @@ class ServerFactory(protocol.Factory):
                     playoff_log(loser.player_client.user, 'lose')
 
                 loser_profile = ProfileUpdateViewer(loser)
+                loser_data = loser_profile.generate()
                 loser_profile.join_to_league()
 
             if settings.ACTIVE_LOG:
