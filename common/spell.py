@@ -2149,10 +2149,10 @@ class JellyMageSpellB(Spell):
         lst_spell_effect_info = []
         spell_effect_info_list = []
 
-        self.owner['health'] -= int(self.owner['health'] * self.spell['params']['heal_percent'])
+        self.owner['health'] -= int(self.owner['health'] * self.spell['params']['decrease_health'])
 
         single_stat = SpellSingleStatChangeInfo(
-            int_val=-1 * int(self.owner['health'] * self.spell['params']['heal_percent']),
+            int_val=-1 * int(self.owner['health'] * self.spell['params']['decrease_health']),
             character_stat_change_type=SpellSingleStatChangeType.curHpValChange
         )
         spell_effect_info_list.append(single_stat.serializer)
