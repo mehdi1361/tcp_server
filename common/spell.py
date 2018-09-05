@@ -1497,15 +1497,22 @@ class ClericSpellB(Spell):
                     )
                 )
 
+            count_loop = 0
+
             for item in lst_troop:
                 if item['health'] > 0:
-                    critical, result = self.normal_damage(item)
+                    if count_loop == 0:
+                        critical, result = self.normal_damage(item)
+
+                    else:
+                        critical, result = self.normal_damage(item, 'second')
                     if not critical_result and critical:
                         critical_result = critical
 
                     spell_effect_info_list.append(result)
 
                 self.check_troop_death(item)
+                count_loop += 1
 
             f_acts_lst = [
                 {
