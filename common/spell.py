@@ -702,7 +702,7 @@ class Spell(Factory):
         )
 
         if self.owner['health'] < self.owner['maxHealth']:
-            self.owner['health'] += int(round(damage * 0.2))
+            self.owner['health'] += int(round(damage * int(self.owner['params']['life_steal_percent']) / 100))
             if self.owner['health'] > self.owner['maxHealth']:
                 self.owner['health'] = self.owner['maxHealth']
 
