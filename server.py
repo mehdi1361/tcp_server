@@ -13,7 +13,7 @@ from common.utils import normal_length
 from twisted.application import service, internet
 from dal.views import ProfileUpdateViewer, get_user, get_random_user, get_troop_list, get_profile
 from tasks import end_battle_log, playoff_log, troop_record, profile_log
-from common.objects import cool_down_troop
+from common.objects import cool_down_troop, BattleResult
 from twisted.python import log
 
 # clients = []
@@ -96,7 +96,7 @@ class GameProtocol(protocol.Protocol):
                               'msg': 'user {} already exists with id:{}'.format(user.username, user.id)}
                     }
                     self.transport.write(
-                        '{}{}'.format(normal_length(len(str(message))), str(message).replace("'", '"')))
+                        '{}{}\n'.format(normal_length(len(str(message))), str(message).replace("'", '"')))
                     return
 
                 if user:
@@ -110,7 +110,7 @@ class GameProtocol(protocol.Protocol):
                         "v": {'error_code': 500, 'msg': 'user login failed'}
                     }
                     self.transport.write(
-                        '{}{}'.format(normal_length(len(str(message))), str(message).replace("'", '"')))
+                        '{}{}\n'.format(normal_length(len(str(message))), str(message).replace("'", '"')))
 
             if not self.battle:
                 battle_finder(self)
@@ -173,18 +173,37 @@ class ServerFactory(protocol.Factory):
 
     def announce(self):
         for client in clients:
-            if client.battle:
-                if client.battle.player1.ready is True and client.battle.player2.ready is True:
-                    client.battle.tick(self.global_time)
+            if client.battle.player1.ready is True and client.battle.player2.ready is True:
+                client.battle.tick(self.global_time)
+                client.battle.player1.player_client.wait = 0
+                client.battle.player2.player_client.wait = 0
 
             else:
-                if client.troops is not None and client.wait > 10:
-                    battle_finder(client, bot=True)
-                    client.wait = 0
-                    battle_finder(client)
+                if client.battle.player1.player_client.wait > 80:
+                    winner = client.battle.player2
+                    loser = client.battle.player1
+
+                    battle_result = BattleResult(winner, loser)
+                    battle_result.create()
+
+                    clients.remove(client.battle.player1.player_client)
+                    clients.remove(client.battle.player2.player_client)
 
                 else:
-                    client.wait += 1
+                    client.battle.player1.player_client.wait += 1
+
+                    if client.battle.player2.player_client.wait > 80:
+                        winner = client.battle.player1
+                        loser = client.battle.player2
+
+                        battle_result = BattleResult(winner, loser)
+                        battle_result.create()
+
+                        clients.remove(client.battle.player1.player_client)
+                        clients.remove(client.battle.player2.player_client)
+
+                    else:
+                        client.battle.player2.player_client.wait += 1
 
         self.global_time += 1
         # print self.global_time

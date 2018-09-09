@@ -1,12 +1,16 @@
 import random
 import settings
 from enum import Enum
+
+from common.utils import normal_length
 from dal.views import UserChestViewer, set_cool_down, UserLeague, \
-    get_ctm, get_user_hero_list, get_user_card_list, get_ctm_hero_id_list,\
-    get_ctm_unit_id_list, get_troop, get_hero_moniker, get_first_league
+    get_ctm, get_user_hero_list, get_user_card_list, get_ctm_hero_id_list, \
+    get_ctm_unit_id_list, get_troop, get_hero_moniker, get_first_league, ProfileUpdateViewer
 from dal.serializers import unit_serializer, user_chest_serializer
 from datetime import datetime, timedelta
 from random import shuffle
+
+from tasks import profile_log, troop_record, playoff_log, end_battle_log
 
 clients = []
 
@@ -609,6 +613,77 @@ class CtmChestGenerate:
 
         return data
 
+
+class BattleResult(object):
+    def __init__(self, winner, loser):
+        self.__winner = winner
+        self.__loser = loser
+
+    @property
+    def winner(self):
+        return self.__loser
+
+    @property
+    def loser(self):
+        return self.__loser
+
+    def create(self):
+        self.winner.victorious = True
+        self.loser.victorious = False
+
+        if not self.winner.is_bot:
+            winner_profile = ProfileUpdateViewer(self.winner)
+            winner_data = winner_profile.generate()
+            chest = CtmChestGenerate(self.winner.player_client.user)
+            chest = chest.generate_chest()
+            troop_record(self.winner.troops)
+            profile_log(self.winner, 'win')
+
+            if self.winner.is_playoff:
+                playoff_log(self.winner.player_client.user, 'win')
+
+            winner_profile.join_to_league()
+
+            winner_message = {
+                "t": "BattleResult",
+                "v": {
+                    "victorious": str(self.winner.victorious),
+                    "reward": {
+                        "coin": winner_data['coin'],
+                        "trophy": winner_data['trophy']
+                    },
+                    "cooldown_data": cool_down_troop(self.winner),
+                    "connection_lost": "True"
+                }
+            }
+
+            if chest is not None:
+                winner_message['v']['reward']['chest_info'] = chest
+
+            winner_message = str(winner_message).replace("u'", '"')
+            self.winner.player_client.battle.send(
+                "{}{}".format(normal_length(len(str(winner_message))),
+                              winner_message),
+                self.winner
+            )
+        self.winner.player_client.transport.loseConnection()
+
+        if not self.loser.is_bot:
+            profile_log(self.loser)
+            loser_cooldown = cool_down_troop(self.loser)
+            troop_record(self.loser.troops, type_fight='loser')
+
+            if self.loser.is_playoff:
+                playoff_log(self.loser.player_client.user, 'lose')
+
+            loser_profile = ProfileUpdateViewer(self.loser)
+            loser_data = loser_profile.generate()
+            loser_profile.join_to_league()
+
+            self.loser.player_client.transport.loseConnection()
+
+        if settings.ACTIVE_LOG:
+            end_battle_log.delay(self.winner.player_client.battle.id)
 
 def cool_down_troop(player):
     cool_down_lst = []

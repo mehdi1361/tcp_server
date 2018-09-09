@@ -16,14 +16,14 @@ class EchoFactory(protocol.ClientFactory):
 
     def clientConnectionFailed(self, connector, reason):
         print "Connection failed."
-        # reactor.stop()
+        reactor.stop()
 
     def clientConnectionLost(self, connector, reason):
         print "Connection lost."
-        # reactor.stop()
+        reactor.stop()
 
 
 # lst_client = [EchoFactory(), EchoFactory()]
 # for client in lst_client:
-reactor.connectTCP("127.0.0.1", 9092, EchoFactory())
+reactor.connectTCP("127.0.0.1", 9095, EchoFactory())
 reactor.run()
