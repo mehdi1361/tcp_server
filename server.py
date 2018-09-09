@@ -173,12 +173,7 @@ class ServerFactory(protocol.Factory):
 
     def announce(self):
         for client in clients:
-            if client.battle.player1.ready is True and client.battle.player2.ready is True:
-                client.battle.tick(self.global_time)
-                client.battle.player1.player_client.wait = 0
-                client.battle.player2.player_client.wait = 0
-
-            else:
+            if client.battle:
                 if client.battle.player1.player_client.wait > 80:
                     winner = client.battle.player2
                     loser = client.battle.player1
@@ -204,6 +199,15 @@ class ServerFactory(protocol.Factory):
 
                     else:
                         client.battle.player2.player_client.wait += 1
+
+            else:
+                if client.troops is not None and client.wait > 10:
+                    battle_finder(client, bot=True)
+                    client.wait = 0
+                    battle_finder(client)
+
+                else:
+                    client.wait += 1
 
         self.global_time += 1
         # print self.global_time
