@@ -195,9 +195,8 @@ class Spell(Factory):
             result = []
             player = self.find_player()
 
-            if player.party['party'][0]['troop'][0]['shield'] <= 0 and \
-                    player.party['party'][0]['troop'][0]['id'] in player.party['turn'] \
-                    and player.party['party'][0]['troop'][0]['health'] > 0:
+            if player.party['party'][0]['troop'][0]['shield'] <= 0 and player.party['party'][0]['troop'][0]['id'] \
+                    in player.party['turn'] and player.party['party'][0]['troop'][0]['health'] > 0:
                 selected_hero = player.party['party'][0]['troop']
 
                 chakra = selected_hero[-1]
@@ -702,7 +701,7 @@ class Spell(Factory):
         )
 
         if self.owner['health'] < self.owner['maxHealth']:
-            self.owner['health'] += int(round(damage * int(self.owner['params']['life_steal_percent']) / 100))
+            self.owner['health'] += int(round(damage * int(self.spell['params']['life_steal_percent']) / 100))
             if self.owner['health'] > self.owner['maxHealth']:
                 self.owner['health'] = self.owner['maxHealth']
 
