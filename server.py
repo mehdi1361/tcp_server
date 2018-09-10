@@ -179,10 +179,20 @@ class ServerFactory(protocol.Factory):
                     client.battle.player1.player_client.wait = 0
                     client.battle.player2.player_client.wait = 0
 
+                elif client.battle.player1.player_client.wait > 30:
+                    winner = client.battle.player2
+                    loser = client.battle.player1
+
+                    battle_result = BattleResult(winner, loser)
+                    battle_result.create()
+
+                    clients.remove(client.battle.player1.player_client)
+                    clients.remove(client.battle.player2.player_client)
+
                 else:
                     client.wait += 1
 
-                    if client.battle.player2.player_client.wait > 80:
+                    if client.battle.player2.player_client.wait > 30:
                         winner = client.battle.player1
                         loser = client.battle.player2
 
