@@ -666,7 +666,7 @@ class BattleResult(object):
                               winner_message),
                 self.winner
             )
-        self.winner.player_client.transport.loseConnection()
+            self.winner.player_client.transport.loseConnection()
 
         if not self.loser.is_bot:
             profile_log(self.loser)
