@@ -615,9 +615,10 @@ class CtmChestGenerate:
 
 
 class BattleResult(object):
-    def __init__(self, winner, loser):
+    def __init__(self, winner, loser, client):
         self.__winner = winner
         self.__loser = loser
+        self.__client = client
 
     @property
     def winner(self):
@@ -626,6 +627,17 @@ class BattleResult(object):
     @property
     def loser(self):
         return self.__loser
+
+    @property
+    def client(self):
+        return self.__client
+
+    def __remove_client(self):
+        if self.client.battle.player1.player_client in clients:
+            clients.remove(self.client.battle.player1.player_client)
+
+        if self.client.battle.player2.player_client in clients:
+            clients.remove(self.client.battle.player2.player_client)
 
     def create(self):
         self.winner.victorious = True
@@ -684,6 +696,8 @@ class BattleResult(object):
 
         if settings.ACTIVE_LOG:
             end_battle_log.delay(self.winner.player_client.battle.id)
+
+        self.__remove_client()
 
 def cool_down_troop(player):
     cool_down_lst = []

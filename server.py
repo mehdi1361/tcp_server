@@ -179,37 +179,51 @@ class ServerFactory(protocol.Factory):
                     client.battle.player1.player_client.wait = 0
                     client.battle.player2.player_client.wait = 0
 
-                elif client.battle.player1.player_client.wait > 30:
-                    winner = client.battle.player2
-                    loser = client.battle.player1
+                elif client.battle.player1.ready is False and client.battle.player2.ready is True:
+                    if client.battle.player1.player_client.wait > 30:
+                        winner = client.battle.player2
+                        loser = client.battle.player1
 
-                    battle_result = BattleResult(winner, loser)
-                    battle_result.create()
+                        battle_result = BattleResult(winner, loser, client)
+                        battle_result.create()
 
-                    if client.battle.player1.player_client in clients:
-                        clients.remove(client.battle.player1.player_client)
+                    else:
+                        client.battle.player1.player_client.wait += 1
 
-                    if client.battle.player2.player_client in clients:
-                        clients.remove(client.battle.player2.player_client)
-
-                else:
-                    client.wait += 1
-
+                elif client.battle.player1.ready is True and client.battle.player2.ready is False:
                     if client.battle.player2.player_client.wait > 30:
                         winner = client.battle.player1
                         loser = client.battle.player2
 
-                        battle_result = BattleResult(winner, loser)
+                        battle_result = BattleResult(winner, loser, client)
                         battle_result.create()
-
-                        if client.battle.player1.player_client in clients:
-                            clients.remove(client.battle.player1.player_client)
-
-                        if client.battle.player2.player_client in clients:
-                            clients.remove(client.battle.player2.player_client)
 
                     else:
                         client.battle.player2.player_client.wait += 1
+
+                else:
+
+                    if client.battle.player1.player_client.wait > \
+                            client.battle.player2.player_client.wait > 30:
+
+                        winner = client.battle.player1
+                        loser = client.battle.player2
+
+                        battle_result = BattleResult(winner, loser, client)
+                        battle_result.create()
+
+                    elif client.battle.player2.player_client.wait > \
+                            client.battle.player1.player_client.wait > 30:
+
+                        winner = client.battle.player1
+                        loser = client.battle.player2
+
+                        battle_result = BattleResult(winner, loser, client)
+                        battle_result.create()
+
+                    else:
+                        client.battle.player2.player_client.wait += 1
+                        client.battle.player1.player_client.wait += 1
 
             else:
                 if client.troops is not None and client.wait > 10:
