@@ -181,8 +181,11 @@ class ServerFactory(protocol.Factory):
                     battle_result = BattleResult(winner, loser)
                     battle_result.create()
 
-                    clients.remove(client.battle.player1.player_client)
-                    clients.remove(client.battle.player2.player_client)
+                    if client.battle.player1.player_client in clients:
+                        clients.remove(client.battle.player1.player_client)
+
+                    if client.battle.player2.player_client in clients:
+                        clients.remove(client.battle.player2.player_client)
 
                 else:
                     client.battle.player1.player_client.wait += 1
@@ -194,8 +197,11 @@ class ServerFactory(protocol.Factory):
                         battle_result = BattleResult(winner, loser)
                         battle_result.create()
 
-                        clients.remove(client.battle.player1.player_client)
-                        clients.remove(client.battle.player2.player_client)
+                        if client.battle.player1.player_client in clients:
+                            clients.remove(client.battle.player1.player_client)
+
+                        if client.battle.player2.player_client in clients:
+                            clients.remove(client.battle.player2.player_client)
 
                     else:
                         client.battle.player2.player_client.wait += 1
