@@ -219,6 +219,9 @@ class ServerFactory(protocol.Factory):
 
                 else:
                     client.wait += 1
+                    if client.wait > 30:
+                        client.transport.loseConnection()
+                        clients.remove(client)
 
         self.global_time += 1
         # print self.global_time
