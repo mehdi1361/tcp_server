@@ -191,7 +191,7 @@ class ServerFactory(protocol.Factory):
                             print 'player_2', client.battle.player2.player_client.wait
                             print 'player_1', client.battle.player1.player_client.wait
 
-                            if client.battle.player2.player_client.wait > client.battle.player1.player_client.wait:
+                            if client.battle.player2.ready and not client.battle.player1.ready:
                                 client.battle.player2.player_client.transport.loseConnection()
 
                             else:
