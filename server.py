@@ -206,7 +206,11 @@ class ServerFactory(protocol.Factory):
                         client.wait += 1
 
                     else:
-                        client.transport.loseConnection()
+                        if client.battle.player2.player_client.wait > client.battle.player1.player_client.wait > 30:
+                            client.battle.player1.transport.loseConnection()
+
+                        else:
+                            client.battle.player2.transport.loseConnection()
                     # if client.battle.player1.player_client.wait > \
                     #         client.battle.player2.player_client.wait > 30:
                     #
