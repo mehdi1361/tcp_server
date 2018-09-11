@@ -216,7 +216,6 @@ class ServerFactory(protocol.Factory):
         clients.append(client)
 
     def clientConnectionLost(self, client):
-        print "in clientConnectionLost"
         if client in clients:
             clients.remove(client)
 
@@ -229,6 +228,9 @@ class ServerFactory(protocol.Factory):
                 winner = client.battle.player1
                 loser = client.battle.player2
 
+            if winner.lost_connection:
+                winner, loser = loser, winner
+
             winner.victorious = True
             loser.victorious = False
 
@@ -236,9 +238,8 @@ class ServerFactory(protocol.Factory):
                 winner_profile = ProfileUpdateViewer(winner)
                 winner_data = winner_profile.generate()
 
-                if not winner.lost_connection:
-                    chest = CtmChestGenerate(winner.player_client.user)
-                    chest = chest.generate_chest()
+                chest = CtmChestGenerate(winner.player_client.user)
+                chest = chest.generate_chest()
                 troop_record(winner.troops)
                 profile_log(winner, 'win')
 
@@ -260,8 +261,7 @@ class ServerFactory(protocol.Factory):
                     }
                 }
 
-                if not winner.lost_connection:
-                    winner_message['v']['reward']['chest_info'] = chest
+                winner_message['v']['reward']['chest_info'] = chest
 
                 winner_message = str(winner_message).replace("u'", '"')
                 client.battle.send("{}{}".format(normal_length(len(str(winner_message))), winner_message), winner)
