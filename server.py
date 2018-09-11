@@ -194,7 +194,7 @@ class ServerFactory(protocol.Factory):
                                 client.battle.player1.player_client.transport.loseConnection()
 
                             else:
-                                client.battle.player2 = True
+                                client.battle.player2.ready = True
                                 client.battle.player2.player_client.transport.loseConnection()
 
             else:
