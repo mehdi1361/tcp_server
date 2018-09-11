@@ -236,7 +236,7 @@ class ServerFactory(protocol.Factory):
                 winner_profile = ProfileUpdateViewer(winner)
                 winner_data = winner_profile.generate()
 
-                if winner.lost_connection:
+                if not winner.lost_connection:
                     chest = CtmChestGenerate(winner.player_client.user)
                     chest = chest.generate_chest()
                 troop_record(winner.troops)
