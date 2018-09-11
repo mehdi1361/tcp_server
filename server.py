@@ -260,7 +260,7 @@ class ServerFactory(protocol.Factory):
                     }
                 }
 
-                if chest is not None:
+                if not winner.lost_connection:
                     winner_message['v']['reward']['chest_info'] = chest
 
                 winner_message = str(winner_message).replace("u'", '"')
