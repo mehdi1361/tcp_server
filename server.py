@@ -188,15 +188,12 @@ class ServerFactory(protocol.Factory):
                             client.transport.loseConnection()
 
                         else:
-                            print 'player_2', client.battle.player2.player_client.wait
-                            print 'player_1', client.battle.player1.player_client.wait
 
                             if client.battle.player2.ready and not client.battle.player1.ready:
-                                client.battle.player2.player_client.transport.loseConnection()
-
-                            else:
                                 client.battle.player1.player_client.transport.loseConnection()
 
+                            else:
+                                client.battle.player2.player_client.transport.loseConnection()
 
             else:
                 if client.troops is not None and client.wait > 10:
@@ -236,8 +233,10 @@ class ServerFactory(protocol.Factory):
             if not winner.is_bot:
                 winner_profile = ProfileUpdateViewer(winner)
                 winner_data = winner_profile.generate()
-                chest = CtmChestGenerate(winner.player_client.user)
-                chest = chest.generate_chest()
+
+                if winner.lost_connection:
+                    chest = CtmChestGenerate(winner.player_client.user)
+                    chest = chest.generate_chest()
                 troop_record(winner.troops)
                 profile_log(winner, 'win')
 

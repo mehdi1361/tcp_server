@@ -87,6 +87,7 @@ class Player(object):
         self.is_playoff = is_playoff
         self.__step_forward = 0
         self.__step_backward = 0
+        self.__lost_connection = False
 
     @property
     def player_client(self):
@@ -143,6 +144,14 @@ class Player(object):
     @step_backward.setter
     def step_backward(self, value):
         self.__step_backward = value
+
+    @property
+    def lost_connection(self):
+        return self.__lost_connection
+
+    @lost_connection.setter
+    def lost_connection(self, value):
+        self.__lost_connection = value
 
 
 class Turn(object):
