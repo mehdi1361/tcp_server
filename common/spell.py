@@ -826,20 +826,20 @@ class Spell(Factory):
 
     def different_troop(self, player, selected_troop, enemy=False):
         index = 1 if enemy else 0
+        lst_troop = []
 
-        while True:
-            random_index = random.randint(0, 4)
+        for idx, troop in enumerate(player.party['party'][index]['troop'][:-1]):
+            if idx == 0 and troop['shield'] <= 0:
+                lst_troop.append(player.party['party'][index]['troop'][-1])
 
-            for idx, troop in enumerate(player.party['party'][index]['troop'][:-1]):
-                if idx == random_index and troop['id'] != selected_troop['id']:
-                    if idx == 0 and troop['shield'] <= 0:
-                        self.troop = player.party['party'][index]['troop'][-1]
-                        return
-                    elif troop['health'] > 0:
-                        self.troop = troop
-                        return
-                else:
-                    continue
+            else:
+                lst_troop.append(player.party['party'][index]['troop'][idx])
+
+        lst_result = [item for item in lst_troop if item['id'] != selected_troop['id']]
+
+        random_number = random.randint(0, len(lst_result) - 1)
+
+        self.troop = lst_result[random_number]
 
     def miss(self):
         miss_chance = random.randint(0, 100)
