@@ -171,12 +171,9 @@ class Spell(Factory):
 
         damage_val += action_point_dmg
         damage_val = damage_val - int(damage_val * dmg_dec / 100)
-        self.damage_value = damage_val
+        self.damage_value = int(round(damage_val))
 
-        print "damage:", damage_val, "owner:", self.owner['moniker'],\
-            "dmg_dec:", dmg_dec, "target:", self.troop['moniker'], 'flag:', self.troop['flag']
-
-        return chance, damage_val
+        return chance, int(round(damage_val))
 
     def check_troop_death(self, troop):
 
@@ -358,10 +355,10 @@ class Spell(Factory):
                 troop['health'] = 0
 
         battle_object = BattleObject(
-            hp=troop['health'],
+            hp=int(round(troop['health'])),
             max_hp=troop['maxHealth'],
-            damage=damage,
-            shield=troop['shield'],
+            damage=int(round(damage)),
+            shield=int(round(troop['shield'])),
             max_shield=troop['maxShield'],
             flag=self.flag_result(troop['flag']),
             moniker=troop['moniker']
@@ -1008,15 +1005,7 @@ class ChakraSpell(Spell):
             player.player_client.battle.turns_sequence[lst_index] = chakra['id']
 
             dec_z = Decimal(float(selected_hero[0]['health']) / float(selected_hero[0]['maxHealth']))
-            print "chakra", chakra
-            print "hero", selected_hero[0]
-            print "hero health", selected_hero[0]['health']
-            print "hero maxhealth", selected_hero[0]['maxHealth']
-            print "dec z", dec_z
-            print "chakra old health", chakra['health']
-
             chakra['health'] = int(chakra['maxHealth'] * round(dec_z, 2))
-            print "chakra new health", chakra['health']
 
             chakra['flag'] = selected_hero[0]['flag']
 
@@ -1077,8 +1066,8 @@ class HealerSpellB(Spell):
                     self.different_troop(player, self.troop)
 
                 spell_effect_info_list = []
-                heal = self.owner['maxHealth'] * self.spell['params']['healer_percent'] \
-                    if 'healer_percent' in self.spell['params'].keys() else self.owner['attack']
+                heal = int(round(self.owner['maxHealth'] * self.spell['params']['healer_percent'] \
+                    if 'healer_percent' in self.spell['params'].keys() else self.owner['attack']))
 
                 if is_confuse:
                     if self.troop['health'] > 0:
@@ -1169,8 +1158,8 @@ class HealerAllSpellB(Spell):
 
         if player.action_point >= self.spell['need_ap']:
             spell_effect_info_list = []
-            heal = self.owner['maxHealth'] * self.spell['params']['healer_percent'] \
-                if 'healer_percent' in self.spell['params'].keys() else self.owner['attack']
+            heal = int(round(self.owner['maxHealth'] * self.spell['params']['healer_percent'] \
+                if 'healer_percent' in self.spell['params'].keys() else self.owner['attack']))
 
             lst_troop = player.party['party'][0]['troop']
             for idx, item in enumerate(lst_troop[:-1]):
@@ -1192,10 +1181,10 @@ class HealerAllSpellB(Spell):
                     single_stat_lst.append(single_stat.serializer)
 
                     battle_object = BattleObject(
-                        hp=item['health'],
-                        max_hp=item['maxHealth'],
-                        damage=item['attack'],
-                        shield=item['shield'],
+                        hp=int(round(item['health'])),
+                        max_hp=int(round(item['maxHealth'])),
+                        damage=int(round(item['attack'])),
+                        shield=int(round(item['shield'])),
                         max_shield=item['maxShield'],
                         flag=self.flag_result(item['flag']),
                         moniker=item['moniker']
@@ -1940,11 +1929,11 @@ class WarriorSpellD(Spell):
                 spell_effect_info_list.append(single_stat.serializer)
 
                 battle_object = BattleObject(
-                    hp=self.owner['health'],
-                    max_hp=self.owner['maxHealth'],
-                    damage=self.owner['attack'],
-                    shield=self.owner['shield'],
-                    max_shield=self.owner['maxShield'],
+                    hp=int(round(self.owner['health'])),
+                    max_hp=int(round(self.owner['maxHealth'])),
+                    damage=int(round(self.owner['attack'])),
+                    shield=int(round(self.owner['shield'])),
+                    max_shield=int(round(self.owner['maxShield'])),
                     flag=self.flag_result(self.owner['flag']),
                     moniker=self.owner['moniker']
                 )
@@ -2028,10 +2017,10 @@ class ClericSpellD(Spell):
             spell_effect_info_list.append(single_stat.serializer)
 
             battle_object = BattleObject(
-                hp=self.owner['health'],
-                max_hp=self.owner['maxHealth'],
-                damage=self.owner['attack'],
-                shield=self.owner['shield'],
+                hp=int(round(self.owner['health'])),
+                max_hp=int(round(self.owner['maxHealth'])),
+                damage=int(round(self.owner['attack'])),
+                shield=int(round(self.owner['shield'])),
                 max_shield=self.owner['maxShield'],
                 flag=self.flag_result(self.owner['flag']),
                 moniker=self.owner['moniker']
@@ -2113,8 +2102,8 @@ class ClericChakraSpellB(Spell):
             spell_effect_info_list.append(single_stat.serializer)
 
             battle_object = BattleObject(
-                hp=chakra['health'],
-                max_hp=chakra['maxHealth'],
+                hp=int(round(chakra['health'])),
+                max_hp=int(round(chakra['maxHealth'])),
                 damage=chakra['attack'],
                 shield=chakra['shield'],
                 max_shield=chakra['maxShield'],
@@ -2166,7 +2155,7 @@ class JellyMageSpellB(Spell):
         battle_object = BattleObject(
             hp=int(self.owner['health']),
             max_hp=self.owner['maxHealth'],
-            damage=self.owner['attack'],
+            damage=int(round(self.owner['attack'])),
             shield=self.owner['shield'],
             max_shield=self.owner['maxShield'],
             flag=self.flag_result(self.owner['flag']),
@@ -2287,10 +2276,10 @@ class FireSpiritSpellA(Spell):
                     character_stat_change_type=SpellSingleStatChangeType.curFlagValChange
                 )
                 battle_object = BattleObject(
-                    hp=self.troop['health'],
+                    hp=int(round(self.troop['health'])),
                     max_hp=self.troop['maxHealth'],
                     damage=0,
-                    shield=self.troop['shield'],
+                    shield=int(round(self.troop['shield'])),
                     max_shield=self.troop['maxShield'],
                     flag=result_flag,
                     moniker=self.troop['moniker']
@@ -2403,10 +2392,10 @@ class HeadRockSpellB(Spell):
             spell_effect_info_list.append(single_stat.serializer)
 
             battle_object = BattleObject(
-                hp=self.troop['health'],
-                max_hp=self.troop['maxHealth'],
-                damage=self.troop['attack'],
-                shield=self.troop['shield'],
+                hp=int(round(self.troop['health'])),
+                max_hp=int(round(self.troop['maxHealth'])),
+                damage=int(round(self.troop['attack'])),
+                shield=int(round(self.troop['shield'])),
                 max_shield=self.troop['maxShield'],
                 flag=self.flag_result(self.troop['flag']),
                 moniker=self.troop['moniker']
@@ -2487,10 +2476,10 @@ class ConfuseSpell(Spell):
                     character_stat_change_type=SpellSingleStatChangeType.curFlagValChange
                 )
                 battle_object = BattleObject(
-                    hp=self.troop['health'],
-                    max_hp=self.troop['maxHealth'],
+                    hp=int(round(self.troop['health'])),
+                    max_hp=int(round(self.troop['maxHealth'])),
                     damage=0,
-                    shield=self.troop['shield'],
+                    shield=int(round(self.troop['shield'])),
                     max_shield=self.troop['maxShield'],
                     flag=result_flag,
                     moniker=self.troop['moniker']
