@@ -315,10 +315,10 @@ class Battle(object):
             find_troop['flag'].remove(remove_flag)
 
         battle_object = BattleObject(
-            hp=find_troop['health'],
-            max_hp=find_troop['maxHealth'],
-            damage=0 if damage is None else damage,
-            shield=find_troop['shield'],
+            hp=int(round(find_troop['health'])),
+            max_hp=int(round(find_troop['maxHealth'])),
+            damage=int(round(0 if damage is None else damage)),
+            shield=int(round(find_troop['shield'])),
             max_shield=find_troop['maxShield'],
             flag=self.flag_result(find_troop['flag']),
             moniker=find_troop['moniker']
@@ -401,7 +401,8 @@ class Battle(object):
             elif lst_spells[i]['action'] in ['burn', 'poison']:
 
                     if troop['shield'] > 0:
-                        troop['shield'] -= 0 if lst_spells[i]['damage'] is None else int(lst_spells[i]['damage'])
+                        troop['shield'] -= int(round(0 if lst_spells[i]['damage'] is None
+                                                     else int(lst_spells[i]['damage'])))
 
                         lst_status_update_data.append(
                             self.live_spell_stat(
@@ -413,7 +414,8 @@ class Battle(object):
 
                     else:
                         if troop['health'] > 0:
-                            troop['health'] -= 0 if lst_spells[i]['damage'] is None else lst_spells[i]['damage']
+                            troop['health'] -= int(round(0 if lst_spells[i]['damage'] is None
+                                                         else lst_spells[i]['damage']))
                             if troop['health'] < 0:
                                 troop['health'] = 0
                                 if i not in lst_index_delete:
