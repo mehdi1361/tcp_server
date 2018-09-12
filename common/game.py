@@ -380,27 +380,25 @@ class Battle(object):
         for i in range(0, len(lst_spells)):
             troop = self.find_troop(lst_spells[i])
 
-            if lst_spells[i]['player'] != player.player_client.user.username \
-                    and lst_spells[i]['turn_type'] == 'enemy_turn':
+            if lst_spells[i]['action'] == 'taunt':
+                if lst_spells[i]['player'] != player.player_client.user.username:
+                    if lst_spells[i]['turn_count'] > 0:
+                        lst_spells[i]['turn_count'] = int(lst_spells[i]['turn_count']) - 1
 
-                if lst_spells[i]['turn_count'] > 0:
-                    lst_spells[i]['turn_count'] = int(lst_spells[i]['turn_count']) - 1
+                    else:
+                        remove_flag = BattleFlags.Taunt.value
 
-                else:
-                    remove_flag = BattleFlags.Taunt.value
-
-                    lst_status_update_data.append(
-                        self.live_spell_stat(
-                            spell=lst_spells[i],
-                            stat_change_type=SpellSingleStatChangeType.curFlagValChange,
-                            remove_flag=remove_flag
+                        lst_status_update_data.append(
+                            self.live_spell_stat(
+                                spell=lst_spells[i],
+                                stat_change_type=SpellSingleStatChangeType.curFlagValChange,
+                                remove_flag=remove_flag
+                            )
                         )
-                    )
 
-                    lst_index_delete.append(i)
+                        lst_index_delete.append(i)
 
-            else:
-                if lst_spells[i]['action'] in ['burn', 'poison']:
+            elif lst_spells[i]['action'] in ['burn', 'poison']:
 
                     if troop['shield'] > 0:
                         troop['shield'] -= 0 if lst_spells[i]['damage'] is None else int(lst_spells[i]['damage'])
@@ -429,37 +427,47 @@ class Battle(object):
                                 )
                             )
 
-                lst_spells[i]['turn_count'] = int(lst_spells[i]['turn_count']) - 1
+                    if lst_spells[i]['turn_count'] > 0:
+                        lst_spells[i]['turn_count'] = int(lst_spells[i]['turn_count']) - 1
 
-                if lst_spells[i]['turn_count'] == 0:
-                    if lst_spells[i]['action'] == 'burn' and BattleFlags.Burn.value in troop['flag']:
-                        lst_spells[i]['troop'][0]['flag'].remove(BattleFlags.Burn.value)
+                    else:
+                        if lst_spells[i]['action'] == 'burn' and BattleFlags.Burn.value in troop['flag']:
+                            lst_spells[i]['troop'][0]['flag'].remove(BattleFlags.Burn.value)
 
-                        if BattleFlags.Burn.value in troop['flag']:
-                            troop['flag'].remove(BattleFlags.Burn.value)
+                            if BattleFlags.Burn.value in troop['flag']:
+                                troop['flag'].remove(BattleFlags.Burn.value)
 
-                    if lst_spells[i]['action'] == 'poison' and BattleFlags.Poison.value in troop['flag']:
-                        lst_spells[i]['troop'][0]['flag'].remove(BattleFlags.Poison.value)
+                        if lst_spells[i]['action'] == 'poison' and BattleFlags.Poison.value in troop['flag']:
+                            lst_spells[i]['troop'][0]['flag'].remove(BattleFlags.Poison.value)
 
-                        if BattleFlags.Poison.value in troop['flag']:
-                            troop['flag'].remove(BattleFlags.Poison.value)
+                            if BattleFlags.Poison.value in troop['flag']:
+                                troop['flag'].remove(BattleFlags.Poison.value)
 
-                    if lst_spells[i]['action'] == 'confuse' and BattleFlags.Confuse.value in troop['flag']:
-                        lst_spells[i]['troop'][0]['flag'].remove(BattleFlags.Confuse.value)
-
-                    if lst_spells[i]['action'] == 'damage_reduction' and \
-                            BattleFlags.DamageReduction.value in troop['flag']:
-                        lst_spells[i]['troop'][0]['flag'].remove(BattleFlags.DamageReduction.value)
-
-                    lst_status_update_data.append(
-                        self.live_spell_stat(
-                            spell=lst_spells[i],
-                            stat_change_type=SpellSingleStatChangeType.curFlagValChange
+                        lst_status_update_data.append(
+                            self.live_spell_stat(
+                                spell=lst_spells[i],
+                                stat_change_type=SpellSingleStatChangeType.curFlagValChange
+                            )
                         )
-                    )
 
-                    if i not in lst_index_delete:
-                        lst_index_delete.append(i)
+                        if i not in lst_index_delete:
+                            lst_index_delete.append(i)
+
+            elif lst_spells[i]['action'] == 'confuse':
+                if lst_spells[i]['turn_count'] > 0:
+                    lst_spells[i]['turn_count'] = int(lst_spells[i]['turn_count']) - 1
+                else:
+                    if BattleFlags.Confuse.value in troop['flag']:
+                        lst_spells[i]['troop'][0]['flag'].remove(BattleFlags.Confuse.value)
+                        lst_status_update_data.append(
+                            self.live_spell_stat(
+                                spell=lst_spells[i],
+                                stat_change_type=SpellSingleStatChangeType.curFlagValChange
+                            )
+                        )
+
+                        if i not in lst_index_delete:
+                            lst_index_delete.append(i)
 
             result, message = self.chakra_check()
             if result:
