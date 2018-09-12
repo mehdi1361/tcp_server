@@ -400,7 +400,7 @@ class Battle(object):
 
             elif lst_spells[i]['action'] in ['burn', 'poison']:
 
-                    if troop['shield'] > 0:
+                    if troop['shield'] > 0 and lst_spells[i]['turn_count'] > 0:
                         troop['shield'] -= int(round(0 if lst_spells[i]['damage'] is None
                                                      else int(lst_spells[i]['damage'])))
 
@@ -413,7 +413,7 @@ class Battle(object):
                         )
 
                     else:
-                        if troop['health'] > 0:
+                        if troop['health'] > 0 and lst_spells[i]['turn_count'] > 0:
                             troop['health'] -= int(round(0 if lst_spells[i]['damage'] is None
                                                          else lst_spells[i]['damage']))
                             if troop['health'] < 0:
