@@ -1843,7 +1843,7 @@ class TroopTaunt(Spell):
     def run(self):
         player = self.find_player()
         if self.check_confuse():
-            self.different_troop(player, self.troop, enemy=True)
+            self.different_troop(player, self.troop)
 
         if player.action_point >= self.spell['need_ap']:
             self.taunt(self.troop, player)
