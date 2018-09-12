@@ -835,7 +835,7 @@ class Spell(Factory):
             else:
                 lst_troop.append(player.party['party'][index]['troop'][idx])
 
-        lst_result = [item for item in lst_troop if item['id'] != selected_troop['id']]
+        lst_result = [item for item in lst_troop if item['id'] != selected_troop['id'] and item['health'] > 0]
 
         random_number = random.randint(0, len(lst_result) - 1)
 
