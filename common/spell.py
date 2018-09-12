@@ -1237,7 +1237,7 @@ class TrueDamageSpell(Spell):
 
         if player.action_point >= self.spell['need_ap']:
             if self.check_confuse():
-                self.different_troop(self.player, self.troop, enemy=True)
+                self.different_troop(player, self.troop, enemy=True)
 
             first_health = self.troop['health']
             message = self.true_damage(troop=self.troop)
