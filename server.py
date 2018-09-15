@@ -190,12 +190,20 @@ class ServerFactory(protocol.Factory):
                         else:
 
                             if client.battle.player2.ready and not client.battle.player1.ready:
-                                client.battle.player1.lost_connection = True
-                                client.battle.player1.player_client.transport.loseConnection()
+                                try:
+                                    client.battle.player1.lost_connection = True
+                                    client.battle.player1.player_client.transport.loseConnection()
+
+                                except Exception as e:
+                                    print e
 
                             else:
-                                client.battle.player2.ready = True
-                                client.battle.player2.player_client.transport.loseConnection()
+                                try:
+                                    client.battle.player2.ready = True
+                                    client.battle.player2.player_client.transport.loseConnection()
+
+                                except Exception as e:
+                                    print e
 
             else:
                 if client.troops is not None and client.wait > 10:
