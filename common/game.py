@@ -7,7 +7,7 @@ import settings
 import copy
 
 from common.objects import SceneType, BattleObject, SpellSingleStatChangeInfo, \
-    SpellSingleStatChangeType, BattleFlags, SpellEffectInfo, SpellEffectOnChar, cool_down_troop, BattleResult
+    SpellSingleStatChangeType, BattleFlags, SpellEffectInfo, SpellEffectOnChar, cool_down_troop
 from dal.views import get_player_info, get_troops_info, ProfileUpdateViewer, get_bot_match_making
 from random import shuffle
 from common.utils import normal_length, create_list_with_key
@@ -15,6 +15,7 @@ from common.spell import Factory
 from common.objects import clients, CtmChestGenerate
 
 from tasks import battle_log, create_battle_log, end_battle_log, playoff_log, profile_log, troop_record
+from dal.views import get_rank
 
 
 def level_creator(user_level_lst, strike, is_beginner=False, is_play_off=False):
@@ -816,6 +817,7 @@ class Battle(object):
 
             cool_down_troop_lst = cool_down_troop(winner)
 
+            winner_current_rank, winner_previous_rank = get_rank(winner.player_client.user)
             winner_message = {
                 "t": "BattleResult",
                 "v": {
@@ -825,7 +827,10 @@ class Battle(object):
                         "trophy": 0 if winner_league_type == 'promoted' else winner_data['trophy']
                     },
                     "cooldown_data": cool_down_troop_lst,
-                    "connection_lost": "False"
+                    "connection_lost": "False",
+                    "current_rank": winner_current_rank,
+                    "previous_rank": winner_previous_rank,
+                    "total_score": winner_data['total_score']
                 }
             }
             chest = chest.generate_chest()
@@ -848,6 +853,7 @@ class Battle(object):
 
             loser_profile.join_to_league()
 
+            loser_current_rank, loser_previous_rank = get_rank(loser.player_client.user)
             loser_message = {
                 "t": "BattleResult",
                 "v": {
@@ -856,7 +862,11 @@ class Battle(object):
                         "coin": 0,
                         "trophy": loser_data['trophy'],
                     },
-                    "cooldown_data": cool_down_troop(loser)
+                    "cooldown_data": cool_down_troop(loser),
+                    "connection_lost": "False",
+                    "current_rank": loser_current_rank,
+                    "previous_rank": loser_previous_rank,
+                    "total_score": loser_data['total_score']
                 }
             }
 

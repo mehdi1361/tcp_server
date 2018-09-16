@@ -172,6 +172,7 @@ class ProfileUpdateViewer:
         data = self.calculate()
         update_profile(user=data['user'], coin=data['coin'], gem=0, trophy=data['trophy'])
         score = update_score(user=data['user'], score=data['trophy'])
+        data['total_score'] = score
         return data
 
     def join_to_league(self):
@@ -225,3 +226,6 @@ def get_first_league():
 
 def get_bot_match_making(strike):
     return fetch_bot_match_making(strike)
+
+def get_rank(user):
+    return fetch_rank(user)

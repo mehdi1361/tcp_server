@@ -11,9 +11,9 @@ from common.game import Battle
 from common.objects import Player, clients, CtmChestGenerate
 from common.utils import normal_length
 from twisted.application import service, internet
-from dal.views import ProfileUpdateViewer, get_user, get_random_user, get_troop_list, get_profile
+from dal.views import ProfileUpdateViewer, get_user, get_random_user, get_troop_list, get_profile, get_rank
 from tasks import end_battle_log, playoff_log, troop_record, profile_log
-from common.objects import cool_down_troop, BattleResult
+from common.objects import cool_down_troop
 from twisted.python import log
 
 # clients = []
@@ -256,6 +256,7 @@ class ServerFactory(protocol.Factory):
                     
                 winner_profile.join_to_league()
 
+                winner_current_rank, winner_previous_rank = get_rank(winner.player_client.user)
                 winner_message = {
                     "t": "BattleResult",
                     "v": {
@@ -265,7 +266,10 @@ class ServerFactory(protocol.Factory):
                             "trophy": winner_data['trophy']
                         },
                         "cooldown_data": cool_down_troop(winner),
-                        "connection_lost": "True"
+                        "connection_lost": "True",
+                        "current_rank": winner_current_rank,
+                        "previous_rank": winner_previous_rank,
+                        "total_score": winner_data['total_score']
                     }
                 }
 
