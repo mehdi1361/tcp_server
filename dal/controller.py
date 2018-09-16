@@ -1,5 +1,6 @@
 import random
 import json
+from operator import itemgetter
 
 import settings
 from .models import User, Profile, UserHero, Hero, UserCard, Unit, \
@@ -779,3 +780,62 @@ def fetch_bot_match_making(strike):
     except:
         session.rollback()
         return None
+
+def fetch_rank(user):
+    previous_rank = None
+    current_rank = None
+
+    try:
+        query = session.query(Profile)
+        profile = query.filter(Profile.user_id == user.id).first()
+
+        query = session.query(LeagueUser)
+        league_user = query.filter(
+            LeagueUser.player_id == profile.id,
+            LeagueUser.close_league == False
+        ).first()
+
+        query = session.query(Leagues, CreatedLeagues)
+        base_league = query.filter(
+            Leagues.id == CreatedLeagues.base_league_id,
+            CreatedLeagues.id == league_user.league_id
+        ).first()
+
+        query = session.query(LeagueUser)
+        players = query.filter(
+            LeagueUser.league_id == league_user.league_id,
+            LeagueUser.close_league == False
+        ).order_by(LeagueUser.score.desc())
+
+        score_board = []
+        for player in players.all():
+            score_board.append({
+                'player': player.player_id,
+                'score': player.score,
+                'rank': player.rank
+            })
+
+        fake_count = base_league.Leagues.capacity - len(score_board)
+
+        if fake_count > 0:
+            for i in range(0, fake_count):
+                score_board.append(
+                    {
+                        'score': base_league.CreatedLeagues.params['fake_user'][i]['score'],
+                        'rank': 0,
+                        'player': base_league.CreatedLeagues.params['fake_user'][i]['name']
+                    }
+                )
+        score_board = sorted(score_board, key=itemgetter('score'), reverse=True)
+
+        for idx, item in enumerate(score_board):
+            item['rank'] = idx + 1
+            if item['player'] == league_user.player_id:
+                current_rank = idx + 1
+                previous_rank = league_user.rank
+
+    except Exception as e:
+        session.rollback()
+
+    finally:
+        return current_rank, previous_rank
