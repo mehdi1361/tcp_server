@@ -710,7 +710,7 @@ class Spell(Factory):
         owner_battle_object = BattleObject(
             hp=self.owner['health'],
             max_hp=self.owner['maxHealth'],
-            damage=troop['attack'],
+            damage=self.owner['attack'],
             shield=self.owner['shield'],
             max_shield=self.owner['maxShield'],
             flag=self.flag_result(self.owner['flag']),
