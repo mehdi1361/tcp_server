@@ -318,7 +318,7 @@ class Battle(object):
         battle_object = BattleObject(
             hp=int(round(find_troop['health'])),
             max_hp=int(round(find_troop['maxHealth'])),
-            damage=int(round(0 if damage is None else damage)),
+            damage=int(find_troop['attack']),
             shield=int(round(find_troop['shield'])),
             max_shield=find_troop['maxShield'],
             flag=self.flag_result(find_troop['flag']),
