@@ -357,7 +357,7 @@ class Spell(Factory):
         battle_object = BattleObject(
             hp=int(round(troop['health'])),
             max_hp=troop['maxHealth'],
-            damage=int(round(damage)),
+            damage=int(round(troop['attack'])),
             shield=int(round(troop['shield'])),
             max_shield=troop['maxShield'],
             flag=self.flag_result(troop['flag']),
@@ -443,7 +443,7 @@ class Spell(Factory):
         battle_object = BattleObject(
             hp=troop['health'],
             max_hp=troop['maxHealth'],
-            damage=damage,
+            damage=troop['attack'],
             shield=troop['shield'],
             max_shield=troop['maxShield'],
             flag=self.flag_result(troop['flag']),
@@ -493,7 +493,7 @@ class Spell(Factory):
         battle_object = BattleObject(
             hp=self.troop['health'],
             max_hp=self.troop['maxHealth'],
-            damage=damage,
+            damage=self.troop['attack'],
             shield=self.troop['shield'],
             max_shield=self.troop['maxShield'],
             flag=self.flag_result(self.troop['flag']),
@@ -682,7 +682,7 @@ class Spell(Factory):
         battle_object = BattleObject(
             hp=troop['health'],
             max_hp=troop['maxHealth'],
-            damage=damage,
+            damage=troop['attack'],
             shield=troop['shield'],
             max_shield=troop['maxShield'],
             flag=self.flag_result(troop['flag']),
@@ -1602,7 +1602,7 @@ class SelfTaunt(Spell):
             battle_object = BattleObject(
                 hp=self.owner['health'],
                 max_hp=self.owner['maxHealth'],
-                damage=0,
+                damage=self.owner['attack'],
                 shield=self.owner['shield'],
                 max_shield=self.owner['maxShield'],
                 flag=result_flag,
@@ -1670,7 +1670,7 @@ class BurnSpell(Spell):
                 battle_object = BattleObject(
                     hp=self.troop['health'],
                     max_hp=self.troop['maxHealth'],
-                    damage=0,
+                    damage=self.troop['attack'],
                     shield=self.troop['shield'],
                     max_shield=self.troop['maxShield'],
                     flag=result_flag,
@@ -1774,7 +1774,7 @@ class WizardChakraSpellC(Spell):
                         battle_object = BattleObject(
                             hp=item['health'],
                             max_hp=item['maxHealth'],
-                            damage=0,
+                            damage=item['attack'],
                             shield=item['shield'],
                             max_shield=item['maxShield'],
                             flag=result_flag,
@@ -1860,7 +1860,7 @@ class TroopTaunt(Spell):
             battle_object = BattleObject(
                 hp=self.troop['health'],
                 max_hp=self.troop['maxHealth'],
-                damage=0,
+                damage=self.troop['attack'],
                 shield=self.troop['shield'],
                 max_shield=self.troop['maxShield'],
                 flag=result_flag,
@@ -2278,7 +2278,7 @@ class FireSpiritSpellA(Spell):
                 battle_object = BattleObject(
                     hp=int(round(self.troop['health'])),
                     max_hp=self.troop['maxHealth'],
-                    damage=0,
+                    damage=self.troop['attack'],
                     shield=int(round(self.troop['shield'])),
                     max_shield=self.troop['maxShield'],
                     flag=result_flag,
@@ -2478,7 +2478,7 @@ class ConfuseSpell(Spell):
                 battle_object = BattleObject(
                     hp=int(round(self.troop['health'])),
                     max_hp=int(round(self.troop['maxHealth'])),
-                    damage=0,
+                    damage=int(round(self.troop['attack'])),
                     shield=int(round(self.troop['shield'])),
                     max_shield=self.troop['maxShield'],
                     flag=result_flag,
