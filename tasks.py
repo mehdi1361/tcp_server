@@ -9,7 +9,7 @@ Session = sessionmaker()
 session = Session()
 
 
-app = Celery('tasks', broker='pyamqp://guest@localhost//')
+app = Celery('tasks', broker='pyamqp://festival@localhost//')
 
 
 @app.task
