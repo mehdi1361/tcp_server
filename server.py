@@ -255,7 +255,7 @@ class ServerFactory(protocol.Factory):
                 if winner.is_playoff:
                     playoff_log(winner.player_client.user, 'win')
                     
-                winner_profile.join_to_league()
+                winner_profile.join_to_league(winner_data['trophy'])
 
                 winner_current_rank, winner_previous_rank = get_rank(winner.player_client.user)
                 winner_message = {

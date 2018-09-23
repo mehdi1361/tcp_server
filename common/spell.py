@@ -187,6 +187,18 @@ class Spell(Factory):
             if troop['health'] <= 0:
                 self.enemy.action_point += settings.ACTION_POINT['death']
 
+    def check_owner_troop_death(self, troop):
+
+        if next((index for (index, d) in enumerate(self.player.party['party'][0]['troop'])
+                 if d["id"] == self.troop['id']), None):
+
+            if troop['health'] <= 0:
+                self.player.action_point += settings.ACTION_POINT['death']
+
+        else:
+            if troop['health'] <= 0:
+                self.enemy.action_point += settings.ACTION_POINT['death']
+
     def chakra_check(self):
         try:
             result = []
@@ -457,6 +469,9 @@ class Spell(Factory):
             single_stat_changes=spell_effect_info_list
         )
 
+        if troop['health'] <= 0:
+            pass
+
         message = {
             "con_ap": 0,
             "gen_ap": 0,
@@ -533,9 +548,15 @@ class Spell(Factory):
         }
         return message
 
-    def gen_action_point(self):
+    def gen_action_point(self, param_troop=None):
+        if param_troop is None:
+            selected_troop = self.troop
+
+        else:
+            selected_troop = param_troop
+
         for troop in self.player.party['party'][0]['troop']:
-            if troop['id'] == self.troop['id']:
+            if troop['id'] == selected_troop['id']:
                 self.player.action_point += settings.ACTION_POINT['normal']
                 break
         else:

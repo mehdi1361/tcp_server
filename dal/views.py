@@ -175,7 +175,7 @@ class ProfileUpdateViewer:
         data['total_score'] = score
         return data
 
-    def join_to_league(self):
+    def join_to_league(self, score=0):
         joint, league = current_league(self.player.player_client.user)
         if joint:
             if self.player.is_playoff:
@@ -185,7 +185,7 @@ class ProfileUpdateViewer:
             else:
                 return 'normal'
         else:
-            return create_or_join_league(self.player.player_client.user)
+            return create_or_join_league(self.player.player_client.user, score)
 
 
 def get_bot(trophy):

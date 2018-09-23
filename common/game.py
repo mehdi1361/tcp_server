@@ -813,7 +813,7 @@ class Battle(object):
             if winner.is_playoff:
                 playoff_log(winner.player_client.user, 'win')
 
-            winner_league_type = winner_profile.join_to_league()
+            winner_league_type = winner_profile.join_to_league(winner_data['trophy'])
 
             cool_down_troop_lst = cool_down_troop(winner)
 

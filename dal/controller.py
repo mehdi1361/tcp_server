@@ -502,7 +502,7 @@ def promoted(user):
         return False, None
 
 
-def create_or_join_league(user):
+def create_or_join_league(user, score=0):
     profile = session.query(Profile).filter(Profile.user_id == user.id).first()
 
     base_league = session.query(Leagues).filter(Leagues.step_number == 0).first()
@@ -544,7 +544,7 @@ def create_or_join_league(user):
         new_league_user.league_id = new_league_id
         new_league_user.player_id = profile.id
         new_league_user.close_league = False
-        new_league_user.score = 0
+        new_league_user.score = score
         new_league_user.play_off_count = 0
         new_league_user.play_off_status = 'disable'
         new_league_user.match_count = 0
