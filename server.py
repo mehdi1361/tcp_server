@@ -87,7 +87,8 @@ class GameProtocol(protocol.Protocol):
 
             if not self.user:
                 user = get_user(clean_data['username'])
-                self.is_playoff = clean_data['is_playoff']
+                # self.is_playoff = clean_data['is_playoff']
+                self.is_playoff = False
 
                 if user in [client.user for client in clients]:
                     message = {
