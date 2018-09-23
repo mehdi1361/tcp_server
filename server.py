@@ -81,7 +81,7 @@ class GameProtocol(protocol.Protocol):
         self.factory.clientConnectionLost(self)
 
     def dataReceived(self, data):
-        # try:
+        try:
             clean_data = json.loads(data)
             log.msg(clean_data)
 
@@ -135,32 +135,32 @@ class GameProtocol(protocol.Protocol):
                 self.battle.action(self, clean_data['spell_index'], clean_data['target_id'])
                 return
 
-        # except ValueError as e:
-        #     message = {
-        #         "t": "Error",
-        #         "v": {'error_code': 400, 'msg': 'data invalid!!!{}'.format(e)}
-        #     }
-        #     self.transport.write('{}{}'.format(normal_length(len(str(message))), str(message).replace("'", '"')))
-        #     print 'value error-{}'.format(e.message)
-        #     self.transport.loseConnection()
-        #
-        # except KeyError as e:
-        #     message = {
-        #         "t": "Error",
-        #         "v": {'error_code': 401, 'msg': 'data invalid!!!{}'.format(e)}
-        #     }
-        #     self.transport.write('{}{}'.format(normal_length(len(str(message))), str(message).replace("'", "'")))
-        #     print 'KeyError-{}'.format(e.message)
-        #     self.transport.loseConnection()
-        #
-        # except Exception as e:
-        #     message = {
-        #         "t": "Error",
-        #         "v": {'error_code': 402, 'msg': 'data invalid!!!{}'.format(e)}
-        #     }
-        #     self.transport.write('{}{}'.format(normal_length(len(str(message))), str(message).replace("'", '"')))
-        #     print 'Exception-{}'.format(e.message)
-        #     self.transport.loseConnection()
+        except ValueError as e:
+            message = {
+                "t": "Error",
+                "v": {'error_code': 400, 'msg': 'data invalid!!!{}'.format(e)}
+            }
+            self.transport.write('{}{}'.format(normal_length(len(str(message))), str(message).replace("'", '"')))
+            print 'value error-{}'.format(e.message)
+            self.transport.loseConnection()
+
+        except KeyError as e:
+            message = {
+                "t": "Error",
+                "v": {'error_code': 401, 'msg': 'data invalid!!!{}'.format(e)}
+            }
+            self.transport.write('{}{}'.format(normal_length(len(str(message))), str(message).replace("'", "'")))
+            print 'KeyError-{}'.format(e.message)
+            self.transport.loseConnection()
+
+        except Exception as e:
+            message = {
+                "t": "Error",
+                "v": {'error_code': 402, 'msg': 'data invalid!!!{}'.format(e)}
+            }
+            self.transport.write('{}{}'.format(normal_length(len(str(message))), str(message).replace("'", '"')))
+            print 'Exception-{}'.format(e.message)
+            self.transport.loseConnection()
 
 
 class ServerFactory(protocol.Factory):
@@ -267,8 +267,8 @@ class ServerFactory(protocol.Factory):
                         },
                         "cooldown_data": cool_down_troop(winner),
                         "connection_lost": "True",
-                        "current_rank": winner_current_rank,
-                        "previous_rank": winner_previous_rank,
+                        "current_rank": -1 if winner_current_rank is None else winner_current_rank,
+                        "previous_rank": -1 if winner_previous_rank is None else winner_previous_rank,
                         "total_score": winner_data['total_score']
                     }
                 }

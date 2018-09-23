@@ -828,8 +828,8 @@ class Battle(object):
                     },
                     "cooldown_data": cool_down_troop_lst,
                     "connection_lost": "False",
-                    "current_rank": winner_current_rank,
-                    "previous_rank": winner_previous_rank,
+                    "current_rank": -1 if winner_current_rank is None else winner_current_rank,
+                    "previous_rank": -1 if winner_previous_rank is None else winner_previous_rank,
                     "total_score": winner_data['total_score']
                 }
             }
@@ -864,8 +864,8 @@ class Battle(object):
                     },
                     "cooldown_data": cool_down_troop(loser),
                     "connection_lost": "False",
-                    "current_rank": loser_current_rank,
-                    "previous_rank": loser_previous_rank,
+                    "current_rank": -1 if loser_current_rank is None else loser_current_rank,
+                    "previous_rank": -1 if loser_previous_rank is None else loser_previous_rank,
                     "total_score": loser_data['total_score']
                 }
             }
