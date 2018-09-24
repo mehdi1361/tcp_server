@@ -172,6 +172,7 @@ class ProfileUpdateViewer:
         data = self.calculate()
         update_profile(user=data['user'], coin=data['coin'], gem=0, trophy=data['trophy'])
         score = update_score(user=data['user'], score=data['trophy'])
+        print"generate score", score
         data['total_score'] = score
         return data
 

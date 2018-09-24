@@ -341,6 +341,7 @@ def update_score(user, score):
             LeagueUser.close_league == False
         ).first()
 
+        print "update score method", score
         result.LeagueUser.score += score
 
         if result.LeagueUser.score < 0:
@@ -503,6 +504,7 @@ def promoted(user):
 
 
 def create_or_join_league(user, score=0):
+    print "create_or_join_league", score
     profile = session.query(Profile).filter(Profile.user_id == user.id).first()
 
     base_league = session.query(Leagues).filter(Leagues.step_number == 0).first()
