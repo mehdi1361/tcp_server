@@ -19,6 +19,10 @@ from twisted.python import log
 # clients = []
 global_time = 0
 
+from raven import Client
+
+capture_client = Client('http://6b88be1346c944be8892a2ab8f38d334:cad68d2b9d6a4f6fab9b10c874637d7c@130.185.74.237:9001/2')
+
 
 def battle_finder(player, bot=False):
     for client in clients:
@@ -142,7 +146,7 @@ class GameProtocol(protocol.Protocol):
                 "v": {'error_code': 400, 'msg': 'data invalid!!!{}'.format(e)}
             }
             self.transport.write('{}{}'.format(normal_length(len(str(message))), str(message).replace("'", '"')))
-            print 'value error-{}'.format(e.message)
+            capture_client.captureException()
             self.transport.loseConnection()
 
         except KeyError as e:
@@ -151,7 +155,7 @@ class GameProtocol(protocol.Protocol):
                 "v": {'error_code': 401, 'msg': 'data invalid!!!{}'.format(e)}
             }
             self.transport.write('{}{}'.format(normal_length(len(str(message))), str(message).replace("'", "'")))
-            print 'KeyError-{}'.format(e.message)
+            capture_client.captureException()
             self.transport.loseConnection()
 
         except Exception as e:
@@ -160,7 +164,7 @@ class GameProtocol(protocol.Protocol):
                 "v": {'error_code': 402, 'msg': 'data invalid!!!{}'.format(e)}
             }
             self.transport.write('{}{}'.format(normal_length(len(str(message))), str(message).replace("'", '"')))
-            print 'Exception-{}'.format(e.message)
+            capture_client.captureException()
             self.transport.loseConnection()
 
 

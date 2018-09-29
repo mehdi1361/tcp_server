@@ -1,6 +1,6 @@
 [
   {"username": "22261217128974879622593941072", "password":"22261217128974879622593941072", "troops_id": [9, 16, 23, 10], "is_playoff": "false"},
-  {"username": "mehdi", "password":"Mehdi#1361", "troops_id": [9, 16, 23, 10]},
+  {"username": "mehdi", "password":"Mehdi#1361", "troops_id": [9, 16, 23, 10], "is_playoff": "false"},
   {"username": "mehdi", "password":"Mehdi#1361", "troops_id": [9, 9, 9, 9]},
   {"username": "sam", "password":"Mehdi#1361", "troops_id": [11, 11, 11, 11]},
   {"username": "sam1", "password":"Mehdi#1361", "troops_id": [9, 16, 23, 10]},
