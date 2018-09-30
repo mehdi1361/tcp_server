@@ -717,7 +717,7 @@ def fetch_ctm_hero_id_list(ctm, enable=True):
     )
     print "ctm", ctm.id
 
-    return [hero.id for hero in hero_list]
+    return [hero.hero_id for hero in hero_list]
 
 
 def fetch_ctm_unit_id_list(ctm, enable=True):
