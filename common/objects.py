@@ -566,7 +566,7 @@ class CtmChestGenerate:
 
                         lst_result.extend(
                             [{
-                                "name": get_hero_moniker(random_user_hero.id),
+                                "name": get_hero_moniker(random_user_hero.hero_id),
                                 "type": "hero"
                             }] * variance
                         )
