@@ -686,7 +686,7 @@ def fetch_user_hero_list(user, lst_valid_hero):
 
     hero_list = query.filter(
         UserHero.user_id == user.id,
-        UserHero.character_id.in_(lst_valid_hero),
+        UserHero.hero_id.in_(lst_valid_hero),
     )
 
     return [hero for hero in hero_list]
