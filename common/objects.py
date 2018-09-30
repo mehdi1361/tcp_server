@@ -536,11 +536,13 @@ class CtmChestGenerate:
         for i in range(0, ctm.card_try):
             if not self.selected_hero:
                 lst_valid_hero = get_ctm_hero_id_list(ctm)
+                print "valid hero", lst_valid_hero
 
                 random_hero_chance = random.uniform(0, 100)
 
                 if ctm.chance_hero >= random_hero_chance:
                     user_heroes = get_user_hero_list(user=self.user, lst_valid_hero=lst_valid_hero)
+                    print "user hero", user_heroes
 
                     if user_heroes is not None:
                         random_user_hero = user_heroes[random.randint(0, len(user_heroes) - 1)]

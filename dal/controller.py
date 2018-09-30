@@ -715,6 +715,7 @@ def fetch_ctm_hero_id_list(ctm, enable=True):
         CTMHero.ctm_id == ctm.id,
         CTMHero.enable == enable
     )
+    print "ctm", ctm.id
 
     return [hero.id for hero in hero_list]
 
