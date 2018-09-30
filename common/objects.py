@@ -554,7 +554,12 @@ class CtmChestGenerate:
                             valid_card = settings.HERO_UPDATE[random_user_hero.level + 1][
                                              'hero_cards'] - random_user_hero.quantity
 
-                        variance = 100 + valid_card - random_user_hero.used_count
+                        count = random_user_hero.used_count if random_user_hero.used_count is not None else 0
+
+                        print "count", count
+                        print "valid card", valid_card
+
+                        variance = 100 + valid_card - count
 
                         if variance < 20:
                             variance = 20
