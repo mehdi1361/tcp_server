@@ -499,11 +499,12 @@ class CtmChestGenerate:
         self.chest_type = chest_type
         self.selected_hero = False
         self.result = []
+        self.deck_is_full = False
 
     def generate_chest(self):
 
         if not UserChestViewer.deck_is_open(self.user):
-            return None
+            self.deck_is_full = True
 
         if self.chest_type_index is None:
             index, chest_type = UserChestViewer.get_sequence(self.user)
@@ -624,8 +625,11 @@ class CtmChestGenerate:
             "chest_type": settings.CHEST_TYPE[ctm.chest_type],
             "gems": random.randint(ctm.min_gem, ctm.max_gem),
             "coins": random.randint(ctm.min_coin, ctm.max_coin),
-            "units": self.result,
-            "reward_range": {
+        }
+
+        if not self.deck_is_full:
+            data["units"] = self.result
+            data["reward_range"] = {
                 "type": settings.CHEST_TYPE[ctm.chest_type],
                 "min_coin": ctm.min_coin,
                 "max_coin": ctm.max_coin,
@@ -636,7 +640,6 @@ class CtmChestGenerate:
                 "max_hero": ctm.max_hero,
                 "hero_card_chance": ctm.chance_hero
             }
-        }
 
         return data
 
