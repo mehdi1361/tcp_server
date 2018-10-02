@@ -841,6 +841,8 @@ class Spell(Factory):
         else:
             result_troop = selected_troop
 
+        print "result_troop", result_troop
+
         for troop in self.player.party['party'][0]['troop']:
             if result_troop['id'] == troop['id']:
                 player = self.player
