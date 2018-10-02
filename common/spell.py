@@ -387,6 +387,7 @@ class Spell(Factory):
         return critical, spell_effect_info.serializer
 
     def return_damage(self, owner, troop, damage, flag=None):
+        find_troop_player = self.find_player(selected_troop=troop)
         spell_effect_info_list = []
 
         if troop['shield'] <= 0:
@@ -470,7 +471,7 @@ class Spell(Factory):
         )
 
         if troop['health'] <= 0:
-            pass
+            find_troop_player.action_point += settings.ACTION_POINT['death']
 
         message = {
             "con_ap": 0,
@@ -833,9 +834,15 @@ class Spell(Factory):
         else:
             self.player.player_client.battle.live_spells.append(damage_reduction_spell.serializer)
 
-    def find_player(self):
+    def find_player(self, selected_troop=None):
+        if selected_troop is None:
+            result_troop = self.owner['id']
+
+        else:
+            result_troop = selected_troop
+
         for troop in self.player.party['party'][0]['troop']:
-            if self.owner['id'] == troop['id']:
+            if result_troop['id'] == troop['id']:
                 player = self.player
                 break
         else:
