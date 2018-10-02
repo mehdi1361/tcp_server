@@ -433,7 +433,7 @@ class Battle(object):
                     if lst_spells[i]['turn_count'] > 0:
                         lst_spells[i]['turn_count'] = int(lst_spells[i]['turn_count']) - 1
 
-                    else:
+                    if lst_spells[i]['turn_count'] <= 0:
                         if lst_spells[i]['action'] == 'burn' and BattleFlags.Burn.value in troop['flag']:
                             lst_spells[i]['troop'][0]['flag'].remove(BattleFlags.Burn.value)
 
