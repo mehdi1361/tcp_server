@@ -836,7 +836,7 @@ class Spell(Factory):
 
     def find_player(self, selected_troop=None):
         if selected_troop is None:
-            result_troop = self.owner['id']
+            result_troop = self.owner
 
         else:
             result_troop = selected_troop
