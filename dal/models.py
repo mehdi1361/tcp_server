@@ -48,6 +48,8 @@ fakes = Table('fakes', metadata, autoload=True)
 fake_details = Table('fake_details', metadata, autoload=True)
 
 bot_match_making = Table('bot_match_makings', metadata, autoload=True)
+custom_bots = Table('custom_bots', metadata, autoload=True)
+custom_bot_troops = Table('custom_bot_troops', metadata, autoload=True)
 
 
 class User(object): pass
@@ -92,6 +94,9 @@ class FakeDetail(object): pass
 
 class BotMatchMaking(object): pass
 
+class CustomBot(object): pass
+class CustomBotTroop(object): pass
+
 
 mapper(User, users_table)
 mapper(Profile, profile)
@@ -134,3 +139,6 @@ mapper(Fakes, fakes)
 mapper(FakeDetail, fake_details)
 
 mapper(BotMatchMaking, bot_match_making)
+
+mapper(CustomBot, custom_bots)
+mapper(CustomBotTroop, custom_bot_troops)

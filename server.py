@@ -11,7 +11,8 @@ from common.game import Battle
 from common.objects import Player, clients, CtmChestGenerate
 from common.utils import normal_length
 from twisted.application import service, internet
-from dal.views import ProfileUpdateViewer, get_user, get_random_user, get_troop_list, get_profile, get_rank
+from dal.views import ProfileUpdateViewer, get_user, get_random_user, get_troop_list, \
+    get_profile, get_rank, get_selected_bot_troop
 from tasks import end_battle_log, playoff_log, troop_record, profile_log
 from common.objects import cool_down_troop
 from twisted.python import log
@@ -43,6 +44,10 @@ def battle_finder(player, bot=False):
         enemy.user = get_random_user(player.user.username)
         troops = get_troop_list(enemy.user)
         enemy.troops = troops
+
+        used_custom_bot, bot_troops = get_selected_bot_troop()
+        if used_custom_bot:
+            troops = bot_troops
 
         player2 = Player(client=enemy, troops=troops)
         player2.is_bot = bot

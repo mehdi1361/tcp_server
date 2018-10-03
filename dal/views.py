@@ -230,3 +230,6 @@ def get_bot_match_making(strike):
 
 def get_rank(user):
     return fetch_rank(user)
+
+def get_selected_bot_troop():
+    return fetch_selected_bot_troop()

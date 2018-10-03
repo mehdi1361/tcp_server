@@ -6,7 +6,7 @@ import settings
 from .models import User, Profile, UserHero, Hero, UserCard, Unit, \
     HeroSpell, UnitSpell, ChakraSpell, Item, UserChest, Chest, Battle, Bot, Leagues, \
     LeagueUser, CreatedLeagues, PlayOff, Claim, CTM, \
-    CTMHero, CTMUnit, Fakes, FakeDetail, BotMatchMaking
+    CTMHero, CTMUnit, Fakes, FakeDetail, BotMatchMaking, CustomBot, CustomBotTroop
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import func
 from datetime import datetime, timedelta
@@ -842,3 +842,18 @@ def fetch_rank(user):
 
     finally:
         return current_rank, previous_rank
+
+
+def fetch_selected_bot_troop():
+    try:
+        query = session.query(CustomBot)
+        custom_bot = query.filter(CustomBot.enable == True).first()
+
+        query = session.query(CustomBotTroop)
+        custom_bot_troops = query.filter(CustomBotTroop.bot_id == custom_bot.id).all()
+
+        return True, [item.troop_id for item in custom_bot_troops]
+
+    except:
+        session.rollback()
+        return False, []
