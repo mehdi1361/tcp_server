@@ -521,7 +521,7 @@ class CtmChestGenerate:
             "reward_data": self._get_card()
         }
 
-        if self.chest_type_index is None:
+        if self.chest_type_index is None and not self.deck_is_full:
             user_chest = UserChestViewer.add_chest(data)
             return user_chest_serializer(user_chest)
 
