@@ -208,6 +208,8 @@ class Spell(Factory):
                     in player.party['turn'] and player.party['party'][0]['troop'][0]['health'] > 0:
                 selected_hero = player.party['party'][0]['troop']
 
+                print "in chakra 1"
+
                 chakra = selected_hero[-1]
                 chakra['flag'] = selected_hero[0]['flag']
                 lst_index = self.player.player_client.battle.turns_sequence.index(selected_hero[0]['id'])
@@ -254,6 +256,7 @@ class Spell(Factory):
                     and player.party['party'][1]['troop'][0]['health'] > 0:
                 selected_hero = player.party['party'][1]['troop']
 
+                print "in chakra 2"
                 chakra = selected_hero[-1]
                 chakra['flag'] = selected_hero[0]['flag']
                 lst_index = self.player.player_client.battle.turns_sequence.index(selected_hero[0]['id'])

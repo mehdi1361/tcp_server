@@ -603,46 +603,32 @@ class Battle(object):
 
     def chakra_check(self):
         try:
-            print "in chakra check"
             selected_hero = None
             if self.player1.party['party'][0]['troop'][0]['shield'] <= 0 and \
                     self.player1.party['party'][0]['troop'][0][
                         'id'] in self.player1.player_client.battle.turns_sequence:
                 selected_hero = self.player1.party['party'][0]['troop']
-                print "find chakra in party 0"
 
             elif self.player1.party['party'][1]['troop'][0]['shield'] <= 0 and \
                     self.player1.party['party'][1]['troop'][0][
                         'id'] in self.player1.player_client.battle.turns_sequence:
                 selected_hero = self.player1.party['party'][1]['troop']
-                print "find chakra in party 1"
 
             if selected_hero is not None:
                 chakra = selected_hero[-1]
-                print "hero flag", selected_hero[0]['flag']
-                print "chakra flag", chakra['flag']
                 chakra['flag'] = selected_hero[0]['flag']
-                print "chakra flag after", chakra['flag']
 
                 lst_index = self.turns_sequence.index(selected_hero[0]['id'])
 
                 self.turns_sequence[lst_index] = chakra['id']
 
                 dec_z = Decimal(float(selected_hero[0]['health']) / float(selected_hero[0]['maxHealth']))
-                print "hero health", selected_hero[0]['maxHealth']
-                print "dec z", dec_z
-                print "chakra old health", chakra['health']
 
                 chakra['health'] = int(chakra['maxHealth'] * round(dec_z, 2))
-                print "chakra new health", chakra['health']
 
                 for spell in self.live_spells:
-                    print "spellllll **************************"
                     if spell['troop'][0]['id'] == selected_hero[0]['id']:
-                        print "before", spell['troop'][0]
-                        print "in if"
                         spell['troop'][0]['id'] = chakra['id']
-                        print "after", spell['troop'][0]
 
                 result_flag = self.flag_result(chakra['flag'])
 
