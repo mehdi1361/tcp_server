@@ -190,6 +190,7 @@ class ServerFactory(protocol.Factory):
 
             ping_message = "{}{}".format(normal_length(len(str(ping_message))), ping_message)
             client.transport.write(str(ping_message).replace("'", '"'))
+            print "ping message", ping_message
 
             if client.battle:
                 if client.battle.player1.ready is True and client.battle.player2.ready is True:
