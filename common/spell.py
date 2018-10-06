@@ -220,7 +220,7 @@ class Spell(Factory):
 
                 chakra['health'] = int(chakra['maxHealth'] * round(dec_z, 2))
 
-                for spell in player.battle.live_spells:
+                for spell in player.player_client.battle.live_spells:
                     if spell['troop'][0]['id'] == selected_hero[0]['id']:
                         spell['troop'][0]['id'] = chakra['id']
 
@@ -267,9 +267,9 @@ class Spell(Factory):
 
                 chakra['health'] = int(chakra['health'] * round(dec_z, 2))
 
-                # for spell in player.battle.live_spells:
-                #     if spell['troop'][0]['id'] == selected_hero[0]['id']:
-                #         spell['troop'][0]['id'] = chakra['id']
+                for spell in player.player_client.battle.live_spells:
+                    if spell['troop'][0]['id'] == selected_hero[0]['id']:
+                        spell['troop'][0]['id'] = chakra['id']
 
                 battle_object = BattleObject(
                     hp=chakra['health'],
