@@ -2304,6 +2304,7 @@ class FireSpiritSpellA(Spell):
                     self.troop['flag'].append(BattleFlags.Poison.value)
 
                 result_flag = self.flag_result(self.troop['flag'])
+                print "fire spirit target flag", result_flag
 
                 single_stat = SpellSingleStatChangeInfo(
                     int_val=result_flag,
