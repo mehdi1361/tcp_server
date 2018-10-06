@@ -218,6 +218,10 @@ class Spell(Factory):
 
                 chakra['health'] = int(chakra['maxHealth'] * round(dec_z, 2))
 
+                for spell in player.battle.live_spells:
+                    if spell['troop'][0]['id'] == selected_hero[0]['id']:
+                        spell['troop'][0]['id'] = chakra['id']
+
                 battle_object = BattleObject(
                     hp=chakra['health'],
                     max_hp=chakra['maxHealth'],
@@ -257,15 +261,12 @@ class Spell(Factory):
                 self.player.player_client.battle.turns_sequence[lst_index] = chakra['id']
 
                 dec_z = Decimal(float(selected_hero[0]['health']) / float(selected_hero[0]['maxHealth']))
-                print "chakra", chakra['moniker']
-                print "hero", selected_hero[0]['moniker']
-                print "hero health", selected_hero[0]['health']
-                print "hero maxhealth", selected_hero[0]['maxHealth']
-                print "dec z", dec_z
-                print "chakra old health", chakra['health']
 
                 chakra['health'] = int(chakra['health'] * round(dec_z, 2))
-                print "chakra new health", chakra['health']
+
+                for spell in player.battle.live_spells:
+                    if spell['troop'][0]['id'] == selected_hero[0]['id']:
+                        spell['troop'][0]['id'] = chakra['id']
 
                 battle_object = BattleObject(
                     hp=chakra['health'],

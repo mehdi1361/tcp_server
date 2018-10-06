@@ -630,7 +630,7 @@ class Battle(object):
 
                 for spell in self.live_spells:
                     if spell['troop'][0]['id'] == selected_hero[0]['id']:
-                        spell['troop'] = (chakra,)
+                        spell['troop'][0]['id'] = chakra['id']
 
                 battle_object = BattleObject(
                     hp=chakra['health'],
