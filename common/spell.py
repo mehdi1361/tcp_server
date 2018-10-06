@@ -2016,7 +2016,10 @@ class WarriorSpellD(Spell):
             if val is not None:
                 message["v"]["f_acts"].extend(val)
 
+            print "before action point", player.action_point
             player.action_point -= self.spell['need_ap']
+            print "before action point", player.action_point
+
             return message
 
         raise Exception('not enough action point for WarriorSpellD')
@@ -2635,6 +2638,8 @@ class OrcSpellB(Spell):
             val = self.chakra_check()
             if val is not None:
                 message["v"]["f_acts"].extend(val)
+
+            player.action_point -= self.spell['need_ap']
 
             return message
 
