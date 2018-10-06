@@ -473,6 +473,7 @@ class Battle(object):
                             lst_index_delete.append(i)
 
             result, message = self.chakra_check()
+            print "chakra result", result
             if result:
                 self.lst_pre_fight.append(message)
 
@@ -602,16 +603,19 @@ class Battle(object):
 
     def chakra_check(self):
         try:
+            print "in chakra check"
             selected_hero = None
             if self.player1.party['party'][0]['troop'][0]['shield'] <= 0 and \
                     self.player1.party['party'][0]['troop'][0][
                         'id'] in self.player1.player_client.battle.turns_sequence:
                 selected_hero = self.player1.party['party'][0]['troop']
+                print "find chakra in party 0"
 
             elif self.player1.party['party'][1]['troop'][0]['shield'] <= 0 and \
                     self.player1.party['party'][1]['troop'][0][
                         'id'] in self.player1.player_client.battle.turns_sequence:
                 selected_hero = self.player1.party['party'][1]['troop']
+                print "find chakra in party 1"
 
             if selected_hero is not None:
                 chakra = selected_hero[-1]
@@ -629,7 +633,9 @@ class Battle(object):
                 print "chakra new health", chakra['health']
 
                 for spell in self.live_spells:
+                    print "spellllll **************************"
                     if spell['troop'][0]['id'] == selected_hero[0]['id']:
+                        print "in if"
                         spell['troop'][0]['id'] = chakra['id']
 
                 battle_object = BattleObject(
