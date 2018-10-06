@@ -635,8 +635,10 @@ class Battle(object):
                 for spell in self.live_spells:
                     print "spellllll **************************"
                     if spell['troop'][0]['id'] == selected_hero[0]['id']:
+                        print "before", self.live_spells
                         print "in if"
                         spell['troop'][0]['id'] = chakra['id']
+                        print "after", self.live_spells
 
                 battle_object = BattleObject(
                     hp=chakra['health'],
