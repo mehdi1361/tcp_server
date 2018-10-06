@@ -90,7 +90,7 @@ class GameProtocol(protocol.Protocol):
         self.factory.clientConnectionLost(self)
 
     def dataReceived(self, data):
-        # try:
+        try:
             clean_data = json.loads(data)
             log.msg(clean_data)
 
@@ -145,32 +145,32 @@ class GameProtocol(protocol.Protocol):
                 self.battle.action(self, clean_data['spell_index'], clean_data['target_id'])
                 return
 
-        # except ValueError as e:
-        #     message = {
-        #         "t": "Error",
-        #         "v": {'error_code': 400, 'msg': 'data invalid!!!{}'.format(e)}
-        #     }
-        #     self.transport.write('{}{}'.format(normal_length(len(str(message))), str(message).replace("'", '"')))
-        #     capture_client.captureException()
-        #     self.transport.loseConnection()
-        #
-        # except KeyError as e:
-        #     message = {
-        #         "t": "Error",
-        #         "v": {'error_code': 401, 'msg': 'data invalid!!!{}'.format(e)}
-        #     }
-        #     self.transport.write('{}{}'.format(normal_length(len(str(message))), str(message).replace("'", "'")))
-        #     capture_client.captureException()
-        #     self.transport.loseConnection()
-        #
-        # except Exception as e:
-        #     message = {
-        #         "t": "Error",
-        #         "v": {'error_code': 402, 'msg': 'data invalid!!!{}'.format(e)}
-        #     }
-        #     self.transport.write('{}{}'.format(normal_length(len(str(message))), str(message).replace("'", '"')))
-        #     capture_client.captureException()
-        #     self.transport.loseConnection()
+        except ValueError as e:
+            message = {
+                "t": "Error",
+                "v": {'error_code': 400, 'msg': 'data invalid!!!{}'.format(e)}
+            }
+            self.transport.write('{}{}'.format(normal_length(len(str(message))), str(message).replace("'", '"')))
+            capture_client.captureException()
+            self.transport.loseConnection()
+
+        except KeyError as e:
+            message = {
+                "t": "Error",
+                "v": {'error_code': 401, 'msg': 'data invalid!!!{}'.format(e)}
+            }
+            self.transport.write('{}{}'.format(normal_length(len(str(message))), str(message).replace("'", "'")))
+            capture_client.captureException()
+            self.transport.loseConnection()
+
+        except Exception as e:
+            message = {
+                "t": "Error",
+                "v": {'error_code': 402, 'msg': 'data invalid!!!{}'.format(e)}
+            }
+            self.transport.write('{}{}'.format(normal_length(len(str(message))), str(message).replace("'", '"')))
+            capture_client.captureException()
+            self.transport.loseConnection()
 
 
 class ServerFactory(protocol.Factory):
@@ -183,14 +183,13 @@ class ServerFactory(protocol.Factory):
 
     def announce(self):
         for client in clients:
-            # ping_message = {
-            #     "t": "Ping",
-            #     "v": ""
-            # }
-            #
-            # ping_message = "{}{}".format(normal_length(len(str(ping_message))), ping_message)
-            # client.transport.write(str(ping_message).replace("'", '"'))
-            # print "ping message", ping_message
+            ping_message = {
+                "t": "Ping",
+                "v": ""
+            }
+
+            ping_message = "{}{}".format(normal_length(len(str(ping_message))), ping_message)
+            client.transport.write(str(ping_message).replace("'", '"'))
 
             if client.battle:
                 if client.battle.player1.ready is True and client.battle.player2.ready is True:
