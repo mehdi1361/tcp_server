@@ -619,7 +619,11 @@ class Battle(object):
 
             if selected_hero is not None:
                 chakra = selected_hero[-1]
+                print "hero flag", selected_hero[0]['flag']
+                print "chakra flag", chakra['flag']
                 chakra['flag'] = selected_hero[0]['flag']
+                print "chakra flag after", chakra['flag']
+
                 lst_index = self.turns_sequence.index(selected_hero[0]['id'])
 
                 self.turns_sequence[lst_index] = chakra['id']
@@ -635,10 +639,17 @@ class Battle(object):
                 for spell in self.live_spells:
                     print "spellllll **************************"
                     if spell['troop'][0]['id'] == selected_hero[0]['id']:
-                        print "before", self.live_spells
+                        print "before", spell['troop'][0]
                         print "in if"
                         spell['troop'][0]['id'] = chakra['id']
-                        print "after", self.live_spells
+                        print "after", spell['troop'][0]
+
+                result_flag = self.flag_result(chakra['flag'])
+
+                single_stat = SpellSingleStatChangeInfo(
+                    int_val=result_flag,
+                    character_stat_change_type=SpellSingleStatChangeType.curFlagValChange
+                )
 
                 battle_object = BattleObject(
                     hp=chakra['health'],
@@ -654,7 +665,7 @@ class Battle(object):
                     target_character_id=chakra['id'],
                     effect_on_character=SpellEffectOnChar.Appear.value,
                     final_character_stats=battle_object.serializer,
-                    single_stat_changes=[]
+                    single_stat_changes=[single_stat.serializer]
                 )
                 selected_spell = (item for item in selected_hero[0]['spell'] if
                                   'chakra' in item["name"]).next()
