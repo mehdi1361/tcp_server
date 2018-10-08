@@ -809,7 +809,7 @@ class Battle(object):
         if not winner.is_bot:
             profile_log(winner, 'win')
             winner_profile = ProfileUpdateViewer(winner)
-            winner_data = winner_profile.generate()
+
             troop_record(winner.troops)
 
             chest = CtmChestGenerate(winner.player_client.user)
@@ -818,7 +818,8 @@ class Battle(object):
             if winner.is_playoff:
                 playoff_log(winner.player_client.user, 'win')
 
-            winner_league_type = winner_profile.join_to_league(winner_data['trophy'])
+            winner_league_type = winner_profile.join_to_league()
+            winner_data = winner_profile.generate()
 
             cool_down_troop_lst = cool_down_troop(winner)
 
