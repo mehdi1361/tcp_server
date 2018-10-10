@@ -511,7 +511,7 @@ def create_or_join_league(user, score=0):
 
     # if profile.trophy >= base_league.min_trophy:
     sum = profile.win_count + profile.lose_count
-    if sum >= 3:
+    if sum >= 2:
         candidate_league = [
             value for value in session.query(CreatedLeagues.id).
                 filter(CreatedLeagues.base_league_id == base_league.id,
