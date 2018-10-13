@@ -14,6 +14,7 @@ from tasks import profile_log, troop_record, playoff_log, end_battle_log
 
 clients = []
 
+
 class BattleFlags(Enum):
     None_f = 0
     Taunt = 1
@@ -28,6 +29,7 @@ class BattleFlags(Enum):
     Retard = 512
     DamageReturn = 1024
     Poison = 2048
+
 
 class SpellSingleStatChangeType(Enum):
     None_f = "None"
@@ -61,6 +63,7 @@ class SceneType(Enum):
     Castle = "Castle"
     Hell = "Hell"
 
+
 class LiveSpellTurnType(Enum):
     enemy_turn = 'enemy_turn'
     general_turn = 'general_turn'
@@ -73,6 +76,7 @@ class LiveSpellAction(Enum):
     poison = 'poison'
     confuse = 'confuse'
     damage_reduction = 'damage_reduction'
+
 
 class Player(object):
     def __init__(self, client, troops, is_playoff=False):
@@ -223,6 +227,7 @@ class CoolDownData(object):
     def remaining_turns(self):
         return self.__remaining_turns
 
+
 class BattleObject(object):
     def __init__(self, hp, max_hp, damage, shield, max_shield, flag, moniker):
         self.__hp = hp
@@ -367,7 +372,8 @@ class SpellEffectInfo(object):
     @single_stat_changes.setter
     def single_stat_changes(self, values_list):
         for value in values_list:
-            spell_single_state_changes = SpellSingleStatChangeInfo(value['int_val'], value['character_stat_change_type'])
+            spell_single_state_changes = SpellSingleStatChangeInfo(value['int_val'],
+                                                                   value['character_stat_change_type'])
             self.__single_stat_changes.append(spell_single_state_changes)
 
     @property
@@ -483,6 +489,7 @@ class ChestGenerate:
 
         return lst_unit
 
+
 class CtmChestGenerate:
 
     def __init__(self, user, chest_type_index=None, chest_type='W'):
@@ -492,12 +499,13 @@ class CtmChestGenerate:
             self.league = get_first_league()
 
         else:
-                self.league = league.Leagues
+            self.league = league.Leagues
 
         self.user = user
         self.chest_type_index = chest_type_index
         self.chest_type = chest_type
         self.selected_hero = False
+        self.card_generate = 0
         self.result = []
         self.deck_is_full = False
 
@@ -533,20 +541,27 @@ class CtmChestGenerate:
 
         lst_result = []
         lst_exclude = []
+        hero_fetch = None
 
         for i in range(0, ctm.card_try):
             if not self.selected_hero:
                 lst_valid_hero = get_ctm_hero_id_list(ctm)
-                print "valid hero", lst_valid_hero
 
-                random_hero_chance = random.uniform(0, 100)
+                user_heroes = get_user_hero_list(user=self.user, lst_valid_hero=lst_valid_hero)
 
-                if ctm.chance_hero >= random_hero_chance:
-                    user_heroes = get_user_hero_list(user=self.user, lst_valid_hero=lst_valid_hero)
-                    print "user hero", user_heroes
+                if user_heroes is not None:
+                    random_user_hero = user_heroes[random.randint(0, len(user_heroes) - 1)]
 
-                    if user_heroes is not None:
-                        random_user_hero = user_heroes[random.randint(0, len(user_heroes) - 1)]
+                else:
+                    random_user_hero = None
+
+                if ctm.chance_hero == 100:
+                    hero_fetch = get_hero_moniker(random_user_hero.hero_id)
+
+                else:
+                    random_hero_chance = random.uniform(0, 100)
+
+                    if ctm.chance_hero >= random_hero_chance:
 
                         if random_user_hero.quantity > settings.HERO_UPDATE[random_user_hero.level + 1]['hero_cards']:
                             valid_card = random_user_hero.quantity \
@@ -556,9 +571,6 @@ class CtmChestGenerate:
                                              'hero_cards'] - random_user_hero.quantity
 
                         count = random_user_hero.used_count if random_user_hero.used_count is not None else 0
-
-                        print "count", count
-                        print "valid card", valid_card
 
                         variance = 100 + valid_card - count
 
@@ -607,19 +619,40 @@ class CtmChestGenerate:
         tmp_lst = []
         while len(self.result) < ctm.card_try:
 
+            if hero_fetch is not None and hero_fetch not in tmp_lst:
+                count_card = random.randint(ctm.min_hero, ctm.max_hero)
+                self.result.append(
+                    {
+                        "unit": hero_fetch,
+                        "count": count_card
+                    }
+                )
+                tmp_lst.append(hero_fetch)
+
             lst_result = [k for k in lst_result if k['name'] not in tmp_lst]
             idx = random.randint(0, len(lst_result) - 1)
 
             if lst_result[idx]['name'] not in tmp_lst:
+                card_count = random.randint(ctm.min_troop, ctm.max_troop) \
+                    if lst_result[idx]['type'] == 'troop' else random.randint(ctm.min_hero, ctm.max_hero)
+
                 self.result.append(
                     {
                         "unit": str(lst_result[idx]['name']),
-                        "count": random.randint(ctm.min_troop, ctm.max_troop) if lst_result[idx]['type'] == 'troop' else
-                        random.randint(ctm.min_hero, ctm.max_hero)
+                        "count": card_count
                     }
                 )
 
                 tmp_lst.append(lst_result[idx]['name'])
+
+        self.card_generate = sum(item['count'] for item in self.result)
+
+        while self.card_generate < ctm.total:
+            idx = random.randint(0, len(self.result)-1)
+
+            if self.result[idx]['unit'] not in ['Wizard', 'Warrior', 'Cleric']:
+                self.result[idx]['count'] += 1
+                self.card_generate = sum(item['count'] for item in self.result)
 
         data = {
             "chest_type": settings.CHEST_TYPE[ctm.chest_type],
@@ -731,6 +764,7 @@ class BattleResult(object):
 
         self.__remove_client()
 
+
 def cool_down_troop(player):
     cool_down_lst = []
     for troop in player.party['party'][0]['troop'][1:-1]:
@@ -743,7 +777,3 @@ def cool_down_troop(player):
                 cool_down_lst.append({"character_id": card.character_id, "remain_time": second_remain})
 
     return cool_down_lst
-
-
-
-

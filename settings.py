@@ -82,7 +82,7 @@ COOL_DOWN_UNIT = {
     10: {'time': 1100, 'skip_gem': 50, 'add_time': 180}
 }
 
-FIRST_LEAGUE_NAME = 'Cooper01'
+FIRST_LEAGUE_NAME = 'Cooper00'
 
 FAKE_NAME = ["محمود",
              "احمد",
