@@ -587,8 +587,11 @@ class CtmChestGenerate:
 
             # lst_valid_unit = get_ctm_unit_id_list(ctm)
             lst_valid_unit = get_valid_unit(self.league.id)
+            print "league", self.league.id
 
             user_units = get_user_card_list(self.user, lst_valid_unit, lst_exclude)
+
+            print "user_units", user_units
 
             if user_units is not None:
                 random_user_unit = user_units[random.randint(0, len(user_units) - 1)]
