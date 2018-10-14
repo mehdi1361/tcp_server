@@ -752,6 +752,10 @@ def fetch_valid_unit(league_id):
 
     print "leagues", leagues_id
 
+    query = session.query(
+        Unit
+    )
+
     unit_list = query.filter(
         Unit.unlock_league_id.in_(leagues_id)
     )
