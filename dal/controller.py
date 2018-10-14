@@ -745,7 +745,7 @@ def fetch_valid_unit(league_id):
 
     leagues = query.filter(
         Leagues.step_number <= step_league.step_number,
-        Leagues.step_number > 0
+        Leagues.step_number >= 0
     ).all()
 
     leagues_id = [league.id for league in leagues]
