@@ -743,15 +743,23 @@ def fetch_valid_unit(league_id):
         Leagues
     )
 
-    leagues = query.filter(Leagues.step_number <= step_league.step_number).all()
+    leagues = query.filter(
+        Leagues.step_number <= step_league.step_number,
+        Leagues.step_number > 0
+    ).all()
 
     leagues_id = [league.id for league in leagues]
+
+    print "leagues", leagues_id
 
     unit_list = query.filter(
         Unit.unlock_league_id.in_(leagues_id)
     )
 
-    return [unit.id for unit in unit_list]
+    result = [unit.id for unit in unit_list]
+    print "result unit", result
+
+    return result
 
 
 def fetch_troop(character_id):
