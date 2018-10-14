@@ -732,6 +732,27 @@ def fetch_ctm_unit_id_list(ctm, enable=True):
 
     return [unit.unit_id for unit in unit_list]
 
+def fetch_valid_unit(league_id):
+    query = session.query(
+        Leagues
+    )
+
+    step_league = query.filter(Leagues.id == league_id).first()
+
+    query = session.query(
+        Leagues
+    )
+
+    leagues = query.filter(Leagues.step_number <= step_league.step_number).all()
+
+    leagues_id = [league.id for league in leagues]
+
+    unit_list = query.filter(
+        Unit.unlock_league_id.in_(leagues_id)
+    )
+
+    return [unit.id for unit in unit_list]
+
 
 def fetch_troop(character_id):
     query = session.query(

@@ -5,7 +5,7 @@ from enum import Enum
 from common.utils import normal_length
 from dal.views import UserChestViewer, set_cool_down, UserLeague, \
     get_ctm, get_user_hero_list, get_user_card_list, get_ctm_hero_id_list, \
-    get_ctm_unit_id_list, get_troop, get_hero_moniker, get_first_league, ProfileUpdateViewer
+    get_ctm_unit_id_list, get_troop, get_hero_moniker, get_first_league, ProfileUpdateViewer, get_valid_unit
 from dal.serializers import unit_serializer, user_chest_serializer
 from datetime import datetime, timedelta
 from random import shuffle
@@ -585,7 +585,8 @@ class CtmChestGenerate:
                         )
                         self.selected_hero = True
 
-            lst_valid_unit = get_ctm_unit_id_list(ctm)
+            # lst_valid_unit = get_ctm_unit_id_list(ctm)
+            lst_valid_unit = get_valid_unit(self.league.id)
 
             user_units = get_user_card_list(self.user, lst_valid_unit, lst_exclude)
 

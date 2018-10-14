@@ -215,6 +215,10 @@ def get_ctm_hero_id_list(ctm, enable=True):
 
 def get_ctm_unit_id_list(ctm, enable=True):
     return fetch_ctm_unit_id_list(ctm, enable=enable)
+    # return fetch_valid_unit(ctm)
+
+def get_valid_unit(league_id):
+    return fetch_valid_unit(league_id)
 
 def get_troop(character_id):
     return fetch_troop(character_id)
