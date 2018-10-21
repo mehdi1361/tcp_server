@@ -1064,7 +1064,7 @@ class Spell(Factory):
             message = {
                 "con_ap": 0,
                 "gen_ap": 0,
-                "spell_index": 1,
+                "spell_index": 0,
                 "owner_id": owner['id'],
                 "spell_type": 'magic',
                 "spell_effect_info": [spell_effect_info.serializer],
