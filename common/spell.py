@@ -967,6 +967,116 @@ class Spell(Factory):
         )
 
         return spell_effect_info.serializer
+    
+    def counter_attack(self, owner, troop):
+        chance_counter_attack = random.randint(0, 100)
+
+        if isinstance(owner['params'], dict) and 'counter_attack' in owner['params'].keys() \
+                and self.troop['health'] > 0 and owner['params']['counter_attack']['chance'] >= chance_counter_attack:
+
+            damage = int(round(owner['attack'] * owner['params']['counter_attack']['damage_percent']))
+        
+            find_troop_player = self.find_player(selected_troop=troop)
+            spell_effect_info_list = []
+    
+            if troop['shield'] <= 0:
+                troop['health'] -= damage
+                single_stat = SpellSingleStatChangeInfo(
+                    int_val=-1 * owner['attack'],
+                    character_stat_change_type=SpellSingleStatChangeType.curHpValChange
+                )
+                spell_effect_info_list.append(single_stat.serializer)
+    
+            elif troop['shield'] >= owner['attack']:
+    
+                if troop['shield'] > 0:
+                    shield_value = troop['shield'] - damage
+                    if shield_value >= 0:
+                        troop['shield'] = shield_value
+                        single_stat = SpellSingleStatChangeInfo(
+                            int_val=-1 * owner['attack'],
+                            character_stat_change_type=SpellSingleStatChangeType.curShieldValChange
+                        )
+                        spell_effect_info_list.append(single_stat.serializer)
+    
+                    else:
+                        single_stat = SpellSingleStatChangeInfo(
+                            int_val=-1 * troop['shield'],
+                            character_stat_change_type=SpellSingleStatChangeType.curShieldValChange
+                        )
+                        spell_effect_info_list.append(single_stat.serializer)
+    
+                        troop['health'] += shield_value
+                        single_stat = SpellSingleStatChangeInfo(
+                            int_val=shield_value,
+                            character_stat_change_type=SpellSingleStatChangeType.curHpValChange
+                        )
+                        spell_effect_info_list.append(single_stat.serializer)
+    
+                        troop['shield'] = 0
+    
+                else:
+                    troop['health'] -= damage
+                    single_stat = SpellSingleStatChangeInfo(
+                        int_val=-1 * owner['attack'],
+                        character_stat_change_type=SpellSingleStatChangeType.curHpValChange
+                    )
+                    spell_effect_info_list.append(single_stat.serializer)
+    
+            else:
+                shield_value = troop['shield'] - damage
+                single_stat = SpellSingleStatChangeInfo(
+                    int_val=-1 * troop['shield'],
+                    character_stat_change_type=SpellSingleStatChangeType.curShieldValChange
+                )
+                spell_effect_info_list.append(single_stat.serializer)
+    
+                troop['health'] += shield_value
+                single_stat = SpellSingleStatChangeInfo(
+                    int_val=shield_value,
+                    character_stat_change_type=SpellSingleStatChangeType.curHpValChange
+                )
+                spell_effect_info_list.append(single_stat.serializer)
+    
+                troop['shield'] = 0
+                if troop['health'] < 0:
+                    troop['health'] = 0
+    
+            battle_object = BattleObject(
+                hp=troop['health'],
+                max_hp=troop['maxHealth'],
+                damage=troop['attack'],
+                shield=troop['shield'],
+                max_shield=troop['maxShield'],
+                flag=self.flag_result(troop['flag']),
+                moniker=troop['moniker']
+            )
+    
+            spell_effect_info = SpellEffectInfo(
+                target_character_id=troop['id'],
+                effect_on_character=SpellEffectOnChar.NormalDamage.value,
+                final_character_stats=battle_object.serializer,
+                single_stat_changes=spell_effect_info_list
+            )
+    
+            if troop['health'] <= 0:
+                find_troop_player.action_point += settings.ACTION_POINT['death']
+    
+            message = {
+                "con_ap": 0,
+                "gen_ap": 0,
+                "spell_index": 1,
+                "owner_id": owner['id'],
+                "spell_type": 'magic',
+                "spell_effect_info": [spell_effect_info.serializer],
+                "is_critical": "False"
+            }
+    
+            return message
+        
+        else:
+            return None
+
 
 class GeneralSpell(Spell):
     def run(self):
@@ -1004,6 +1114,8 @@ class GeneralSpell(Spell):
                     damage=int(self.damage_value * self.troop['params']['return_damage'])
                 )
             )
+
+        f_acts.append(self.counter_attack(owner=self.troop, troop=self.owner))
 
         message = {
             "t": "FightAction",
@@ -1179,6 +1291,8 @@ class HealerSpellB(Spell):
                         )
                     )
 
+                message["v"]["f_acts"].append(self.counter_attack(owner=self.troop, troop=self.owner))
+
                 val = self.chakra_check()
                 if val is not None:
                     message["v"]["f_acts"].extend(val)
@@ -1287,6 +1401,8 @@ class TrueDamageSpell(Spell):
                     )
                 )
 
+            message["v"]["f_acts"].append(self.counter_attack(owner=self.troop, troop=self.owner))
+
             return message
 
         raise Exception('not enough action point for TrueDamageSpell')
@@ -1323,6 +1439,8 @@ class SplashSpell(Spell):
                             damage=int(self.damage_value * item['params']['return_damage'])
                         )
                     )
+
+                damage_return_message.append(self.counter_attack(owner=item, troop=self.owner))
 
             f_acts_lst = [
                 {
@@ -1409,6 +1527,9 @@ class FeriSpellA(Spell):
                         damage=int(sum_damage * self.troop['params']['return_damage'])
                     )
                 )
+
+            message["v"]["f_acts"].append(self.counter_attack(owner=self.troop, troop=self.owner))
+
         else:
             if troop is not None and  \
                     isinstance(troop['params'], dict) and \
@@ -1422,6 +1543,8 @@ class FeriSpellA(Spell):
                         damage=int(sum_damage * troop['params']['return_damage'])
                     )
                 )
+
+            message["v"]["f_acts"].append(self.counter_attack(owner=troop, troop=self.owner))
 
         val = self.chakra_check()
         if val is not None:
@@ -1466,6 +1589,8 @@ class SagittariusSpellA(Spell):
                             damage=int(self.damage_value * item['troop']['params']['return_damage'])
                         )
                     )
+
+                damage_return_message.append(self.counter_attack(owner=item['troop'], troop=self.owner))
 
             self.check_troop_death(item['troop'])
 
@@ -1536,6 +1661,8 @@ class ClericSpellB(Spell):
                             )
                         )
 
+                    damage_return_message.append(self.counter_attack(owner=item, troop=self.owner))
+
                 self.check_troop_death(item)
                 count_loop += 1
 
@@ -1591,6 +1718,8 @@ class LifeSteal(Spell):
                         damage=int(self.damage_value * self.troop['params']['return_damage'])
                     )
                 )
+
+            damage_return_message.append(self.counter_attack(owner=self.troop, troop=self.owner))
 
             message = {
                 "t": "FightAction",
@@ -1751,6 +1880,8 @@ class BurnSpell(Spell):
                     )
                 )
 
+            f_acts.append(self.counter_attack(owner=self.troop, troop=self.owner))
+
             message = {
                 "t": "FightAction",
                 "v": {
@@ -1844,6 +1975,8 @@ class WizardChakraSpellC(Spell):
                             damage=int(self.damage_value * item['params']['return_damage'])
                         )
                     )
+
+                f_acts.append(self.counter_attack(owner=item, troop=self.owner))
 
             message = {
                 "t": "FightAction",
@@ -2009,6 +2142,8 @@ class WarriorSpellD(Spell):
                     )
                 )
 
+            f_acts.append(self.counter_attack(owner=self.troop, troop=self.owner))
+
             for acts in f_acts:
                 message["v"]["f_acts"].append(acts)
 
@@ -2100,6 +2235,8 @@ class ClericSpellD(Spell):
                     )
                 )
 
+            f_acts.append(self.counter_attack(owner=self.troop, troop=self.owner))
+
             for acts in f_acts:
                 message["v"]["f_acts"].append(acts)
 
@@ -2170,6 +2307,8 @@ class ClericChakraSpellB(Spell):
                     )
                 )
 
+            f_acts.append(self.counter_attack(owner=self.troop, troop=self.owner))
+
             for acts in f_acts:
                 message["v"]["f_acts"].append(acts)
 
@@ -2239,6 +2378,8 @@ class JellyMageSpellB(Spell):
                 )
             )
 
+        f_acts.append(self.counter_attack(owner=self.troop, troop=self.owner))
+
         for acts in f_acts:
             message["v"]["f_acts"].append(acts)
 
@@ -2284,6 +2425,8 @@ class WildlingSpellA(Spell):
                     damage=int(self.damage_value * self.troop['params']['return_damage'])
                 )
             )
+
+        f_acts.append(self.counter_attack(owner=self.troop, troop=self.owner))
 
         for acts in f_acts:
             message["v"]["f_acts"].append(acts)
@@ -2373,6 +2516,8 @@ class FireSpiritSpellA(Spell):
                         damage=int(self.damage_value * self.troop['params']['return_damage'])
                     )
                 )
+
+            f_acts.append(self.counter_attack(owner=self.troop, troop=self.owner))
 
             for acts in f_acts:
                 message["v"]["f_acts"].append(acts)
@@ -2476,6 +2621,8 @@ class HeadRockSpellB(Spell):
                     )
                 )
 
+            f_acts.append(self.counter_attack(owner=self.troop, troop=self.owner))
+
             for acts in f_acts:
                 message["v"]["f_acts"].append(acts)
 
@@ -2562,6 +2709,8 @@ class ConfuseSpell(Spell):
                     )
                 )
 
+            f_acts.append(self.counter_attack(owner=self.troop, troop=self.owner))
+
             message = {
                 "t": "FightAction",
                 "v": {
@@ -2627,6 +2776,8 @@ class OrcSpellB(Spell):
                         damage=int(self.damage_value * self.troop['params']['return_damage'])
                     )
                 )
+
+            f_acts.append(self.counter_attack(owner=self.troop, troop=self.owner))
 
             message = {
                 "t": "FightAction",
