@@ -150,12 +150,11 @@ class Spell(Factory):
             if 'val' in self.spell['params'].keys() and \
                     self.spell['params']['val'] == 'goolakh_spell_a' and \
                     self.owner['health'] < self.owner['maxHealth']:
-
-                    diff_health = self.owner['maxHealth'] - self.owner['health']
-                    owner_val = self.owner['attack'] + int(diff_health * self.spell['params']['inc_dmg'])
+                diff_health = self.owner['maxHealth'] - self.owner['health']
+                owner_val = self.owner['attack'] + int(diff_health * self.spell['params']['inc_dmg'])
 
         for spell in self.player.player_client.battle.live_spells:
-            if 'troop' in spell.keys() and spell['troop'][0]['id'] == troop['id']\
+            if 'troop' in spell.keys() and spell['troop'][0]['id'] == troop['id'] \
                     and 'action' in spell.keys() and spell['action'] == 'damage_reduction' and 'damage' in spell.keys():
                 dmg_dec += int(spell['damage'])
                 break
@@ -967,7 +966,7 @@ class Spell(Factory):
         )
 
         return spell_effect_info.serializer
-    
+
     def counter_attack(self, owner, troop):
         chance_counter_attack = random.randint(0, 100)
 
@@ -975,10 +974,10 @@ class Spell(Factory):
                 and self.troop['health'] > 0 and owner['params']['counter_attack']['chance'] >= chance_counter_attack:
 
             damage = int(round(owner['attack'] * owner['params']['counter_attack']['damage_percent']))
-        
+
             find_troop_player = self.find_player(selected_troop=troop)
             spell_effect_info_list = []
-    
+
             if troop['shield'] <= 0:
                 troop['health'] -= damage
                 single_stat = SpellSingleStatChangeInfo(
@@ -986,9 +985,9 @@ class Spell(Factory):
                     character_stat_change_type=SpellSingleStatChangeType.curHpValChange
                 )
                 spell_effect_info_list.append(single_stat.serializer)
-    
+
             elif troop['shield'] >= owner['attack']:
-    
+
                 if troop['shield'] > 0:
                     shield_value = troop['shield'] - damage
                     if shield_value >= 0:
@@ -998,23 +997,23 @@ class Spell(Factory):
                             character_stat_change_type=SpellSingleStatChangeType.curShieldValChange
                         )
                         spell_effect_info_list.append(single_stat.serializer)
-    
+
                     else:
                         single_stat = SpellSingleStatChangeInfo(
                             int_val=-1 * troop['shield'],
                             character_stat_change_type=SpellSingleStatChangeType.curShieldValChange
                         )
                         spell_effect_info_list.append(single_stat.serializer)
-    
+
                         troop['health'] += shield_value
                         single_stat = SpellSingleStatChangeInfo(
                             int_val=shield_value,
                             character_stat_change_type=SpellSingleStatChangeType.curHpValChange
                         )
                         spell_effect_info_list.append(single_stat.serializer)
-    
+
                         troop['shield'] = 0
-    
+
                 else:
                     troop['health'] -= damage
                     single_stat = SpellSingleStatChangeInfo(
@@ -1022,7 +1021,7 @@ class Spell(Factory):
                         character_stat_change_type=SpellSingleStatChangeType.curHpValChange
                     )
                     spell_effect_info_list.append(single_stat.serializer)
-    
+
             else:
                 shield_value = troop['shield'] - damage
                 single_stat = SpellSingleStatChangeInfo(
@@ -1030,18 +1029,18 @@ class Spell(Factory):
                     character_stat_change_type=SpellSingleStatChangeType.curShieldValChange
                 )
                 spell_effect_info_list.append(single_stat.serializer)
-    
+
                 troop['health'] += shield_value
                 single_stat = SpellSingleStatChangeInfo(
                     int_val=shield_value,
                     character_stat_change_type=SpellSingleStatChangeType.curHpValChange
                 )
                 spell_effect_info_list.append(single_stat.serializer)
-    
+
                 troop['shield'] = 0
                 if troop['health'] < 0:
                     troop['health'] = 0
-    
+
             battle_object = BattleObject(
                 hp=troop['health'],
                 max_hp=troop['maxHealth'],
@@ -1051,17 +1050,17 @@ class Spell(Factory):
                 flag=self.flag_result(troop['flag']),
                 moniker=troop['moniker']
             )
-    
+
             spell_effect_info = SpellEffectInfo(
                 target_character_id=troop['id'],
                 effect_on_character=SpellEffectOnChar.NormalDamage.value,
                 final_character_stats=battle_object.serializer,
                 single_stat_changes=spell_effect_info_list
             )
-    
+
             if troop['health'] <= 0:
                 find_troop_player.action_point += settings.ACTION_POINT['death']
-    
+
             message = {
                 "con_ap": 0,
                 "gen_ap": 0,
@@ -1071,9 +1070,9 @@ class Spell(Factory):
                 "spell_effect_info": [spell_effect_info.serializer],
                 "is_critical": "False"
             }
-    
+
             return message
-        
+
         else:
             return None
 
@@ -1106,7 +1105,7 @@ class GeneralSpell(Spell):
             }
         ]
 
-        if isinstance(self.troop['params'], dict) and 'return_damage' in self.troop['params'].keys()\
+        if isinstance(self.troop['params'], dict) and 'return_damage' in self.troop['params'].keys() \
                 and self.troop['health'] > 0 and not miss:
             f_acts.append(
                 self.return_damage(
@@ -1115,7 +1114,9 @@ class GeneralSpell(Spell):
                 )
             )
 
-        f_acts.append(self.counter_attack(owner=self.troop, troop=self.owner))
+        counter_attack = self.counter_attack(owner=self.troop, troop=self.owner)
+        if counter_attack is not None:
+            f_acts.append(counter_attack)
 
         message = {
             "t": "FightAction",
@@ -1129,6 +1130,7 @@ class GeneralSpell(Spell):
             message["v"]["f_acts"].extend(val)
 
         return message
+
 
 class ChakraSpell(Spell):
     def run(self):
@@ -1196,6 +1198,7 @@ class ChakraSpell(Spell):
 
         raise Exception("no action point")
 
+
 class HealerSpellB(Spell):
     def run(self):
         ally = None
@@ -1216,7 +1219,7 @@ class HealerSpellB(Spell):
 
                 spell_effect_info_list = []
                 heal = int(round(self.owner['maxHealth'] * self.spell['params']['healer_percent'] \
-                    if 'healer_percent' in self.spell['params'].keys() else self.owner['attack']))
+                                     if 'healer_percent' in self.spell['params'].keys() else self.owner['attack']))
 
                 if is_confuse:
                     if self.troop['health'] > 0:
@@ -1291,7 +1294,9 @@ class HealerSpellB(Spell):
                         )
                     )
 
-                message["v"]["f_acts"].append(self.counter_attack(owner=self.troop, troop=self.owner))
+                counter_attack = self.counter_attack(owner=self.troop, troop=self.owner)
+                if counter_attack is not None:
+                    message["v"]["f_acts"].append(counter_attack)
 
                 val = self.chakra_check()
                 if val is not None:
@@ -1303,6 +1308,7 @@ class HealerSpellB(Spell):
 
             raise Exception('not enough action point for HealerSpellB')
 
+
 class HealerAllSpellB(Spell):
     def run(self):
         player = self.find_player()
@@ -1310,7 +1316,7 @@ class HealerAllSpellB(Spell):
         if player.action_point >= self.spell['need_ap']:
             spell_effect_info_list = []
             heal = int(round(self.owner['maxHealth'] * self.spell['params']['healer_percent'] \
-                if 'healer_percent' in self.spell['params'].keys() else self.owner['attack']))
+                                 if 'healer_percent' in self.spell['params'].keys() else self.owner['attack']))
 
             lst_troop = player.party['party'][0]['troop']
             for idx, item in enumerate(lst_troop[:-1]):
@@ -1371,6 +1377,7 @@ class HealerAllSpellB(Spell):
 
         raise Exception('not enough action point for HealerAllSpellB')
 
+
 class TrueDamageSpell(Spell):
     def run(self):
         player = self.find_player()
@@ -1401,11 +1408,14 @@ class TrueDamageSpell(Spell):
                     )
                 )
 
-            message["v"]["f_acts"].append(self.counter_attack(owner=self.troop, troop=self.owner))
+            counter_attack = self.counter_attack(owner=self.troop, troop=self.owner)
+            if counter_attack is not None:
+                message["v"]["f_acts"].append(counter_attack)
 
             return message
 
         raise Exception('not enough action point for TrueDamageSpell')
+
 
 class SplashSpell(Spell):
     def run(self):
@@ -1440,7 +1450,9 @@ class SplashSpell(Spell):
                         )
                     )
 
-                damage_return_message.append(self.counter_attack(owner=item, troop=self.owner))
+                counter_attack = self.counter_attack(owner=item, troop=self.owner)
+                if counter_attack is not None:
+                    damage_return_message.append(counter_attack)
 
             f_acts_lst = [
                 {
@@ -1474,6 +1486,7 @@ class SplashSpell(Spell):
             return message
 
         raise Exception('not enough action point for SplashSpell')
+
 
 class FeriSpellA(Spell):
     def run(self):
@@ -1528,14 +1541,15 @@ class FeriSpellA(Spell):
                     )
                 )
 
-            message["v"]["f_acts"].append(self.counter_attack(owner=self.troop, troop=self.owner))
+            counter_attack = self.counter_attack(owner=self.troop, troop=self.owner)
+            if counter_attack is not None:
+                message["v"]["f_acts"].append(counter_attack)
 
         else:
-            if troop is not None and  \
+            if troop is not None and \
                     isinstance(troop['params'], dict) and \
                     'return_damage' in troop['params'].keys() \
                     and troop['health'] > 0:
-
                 sum_damage -= self.damage_value
                 message["v"]["f_acts"].append(
                     self.return_damage(
@@ -1544,13 +1558,16 @@ class FeriSpellA(Spell):
                     )
                 )
 
-            message["v"]["f_acts"].append(self.counter_attack(owner=troop, troop=self.owner))
+            counter_attack = self.counter_attack(owner=troop, troop=self.owner)
+            if counter_attack is not None:
+                message["v"]["f_acts"].append(counter_attack)
 
         val = self.chakra_check()
         if val is not None:
             message["v"]["f_acts"].extend(val)
 
         return message
+
 
 class SagittariusSpellA(Spell):
     def run(self):
@@ -1590,7 +1607,9 @@ class SagittariusSpellA(Spell):
                         )
                     )
 
-                damage_return_message.append(self.counter_attack(owner=item['troop'], troop=self.owner))
+                counter_attack = self.counter_attack(owner=item['troop'], troop=self.owner)
+                if counter_attack is not None:
+                    damage_return_message.append(counter_attack)
 
             self.check_troop_death(item['troop'])
 
@@ -1624,6 +1643,7 @@ class SagittariusSpellA(Spell):
 
         self.player.action_point -= self.spell['need_ap']
         return message
+
 
 class ClericSpellB(Spell):
     def run(self):
@@ -1661,7 +1681,9 @@ class ClericSpellB(Spell):
                             )
                         )
 
-                    damage_return_message.append(self.counter_attack(owner=item, troop=self.owner))
+                    counter_attack = self.counter_attack(owner=item, troop=self.owner)
+                    if counter_attack is not None:
+                        damage_return_message.append(counter_attack)
 
                 self.check_troop_death(item)
                 count_loop += 1
@@ -1698,6 +1720,7 @@ class ClericSpellB(Spell):
         else:
             raise Exception('not enough action point for ClericSpellB')
 
+
 class LifeSteal(Spell):
     def run(self):
         damage_return_message = []
@@ -1719,7 +1742,9 @@ class LifeSteal(Spell):
                     )
                 )
 
-            damage_return_message.append(self.counter_attack(owner=self.troop, troop=self.owner))
+            counter_attack = self.counter_attack(owner=self.troop, troop=self.owner)
+            if counter_attack is not None:
+                damage_return_message.append(counter_attack)
 
             message = {
                 "t": "FightAction",
@@ -1749,6 +1774,7 @@ class LifeSteal(Spell):
             return message
         else:
             raise Exception('not enough action point for LifeSteal')
+
 
 class SelfTaunt(Spell):
     def run(self):
@@ -1808,6 +1834,7 @@ class SelfTaunt(Spell):
 
         else:
             raise Exception('not enough action point for SelfTaunt')
+
 
 class BurnSpell(Spell):
     def run(self):
@@ -1880,7 +1907,9 @@ class BurnSpell(Spell):
                     )
                 )
 
-            f_acts.append(self.counter_attack(owner=self.troop, troop=self.owner))
+            counter_attack = self.counter_attack(owner=self.troop, troop=self.owner)
+            if counter_attack is not None:
+                f_acts.append(counter_attack)
 
             message = {
                 "t": "FightAction",
@@ -1901,6 +1930,7 @@ class BurnSpell(Spell):
 
         else:
             raise Exception('not enough action point for BurnSpell')
+
 
 class WizardChakraSpellC(Spell):
     def run(self):
@@ -1976,7 +2006,10 @@ class WizardChakraSpellC(Spell):
                         )
                     )
 
-                f_acts.append(self.counter_attack(owner=item, troop=self.owner))
+                counter_attack = self.counter_attack(owner=item, troop=self.owner)
+                if counter_attack is not None:
+                    f_acts.append(counter_attack)
+
 
             message = {
                 "t": "FightAction",
@@ -2008,6 +2041,7 @@ class WizardChakraSpellC(Spell):
             return message
 
         raise Exception('not enough action point for WizardChakraSpellC')
+
 
 class TroopTaunt(Spell):
     def run(self):
@@ -2069,6 +2103,7 @@ class TroopTaunt(Spell):
             return message
 
         raise Exception('not enough action point for TroopTaunt')
+
 
 class WarriorSpellD(Spell):
     def run(self):
@@ -2142,7 +2177,9 @@ class WarriorSpellD(Spell):
                     )
                 )
 
-            f_acts.append(self.counter_attack(owner=self.troop, troop=self.owner))
+            counter_attack = self.counter_attack(owner=self.troop, troop=self.owner)
+            if counter_attack is not None:
+                f_acts.append(counter_attack)
 
             for acts in f_acts:
                 message["v"]["f_acts"].append(acts)
@@ -2158,6 +2195,7 @@ class WarriorSpellD(Spell):
             return message
 
         raise Exception('not enough action point for WarriorSpellD')
+
 
 class ClericSpellD(Spell):
     def run(self):
@@ -2235,7 +2273,9 @@ class ClericSpellD(Spell):
                     )
                 )
 
-            f_acts.append(self.counter_attack(owner=self.troop, troop=self.owner))
+            counter_attack = self.counter_attack(owner=self.troop, troop=self.owner)
+            if counter_attack is not None:
+                f_acts.append(counter_attack)
 
             for acts in f_acts:
                 message["v"]["f_acts"].append(acts)
@@ -2248,6 +2288,7 @@ class ClericSpellD(Spell):
             return message
 
         raise Exception('not enough action point for ClericSpellD')
+
 
 class ClericChakraSpellB(Spell):
     def run(self):
@@ -2307,7 +2348,10 @@ class ClericChakraSpellB(Spell):
                     )
                 )
 
-            f_acts.append(self.counter_attack(owner=self.troop, troop=self.owner))
+            counter_attack = self.counter_attack(owner=self.troop, troop=self.owner)
+            if counter_attack is not None:
+                f_acts.append(counter_attack)
+
 
             for acts in f_acts:
                 message["v"]["f_acts"].append(acts)
@@ -2315,6 +2359,7 @@ class ClericChakraSpellB(Spell):
             return message
         else:
             raise Exception('not enough action point for ClericChakraSpellB')
+
 
 class JellyMageSpellB(Spell):
     def run(self):
@@ -2378,12 +2423,15 @@ class JellyMageSpellB(Spell):
                 )
             )
 
-        f_acts.append(self.counter_attack(owner=self.troop, troop=self.owner))
+        counter_attack = self.counter_attack(owner=self.troop, troop=self.owner)
+        if counter_attack is not None:
+            f_acts.append(counter_attack)
 
         for acts in f_acts:
             message["v"]["f_acts"].append(acts)
 
         return message
+
 
 class WildlingSpellA(Spell):
     def run(self):
@@ -2426,12 +2474,15 @@ class WildlingSpellA(Spell):
                 )
             )
 
-        f_acts.append(self.counter_attack(owner=self.troop, troop=self.owner))
+        counter_attack = self.counter_attack(owner=self.troop, troop=self.owner)
+        if counter_attack is not None:
+            f_acts.append(counter_attack)
 
         for acts in f_acts:
             message["v"]["f_acts"].append(acts)
 
         return message
+
 
 class FireSpiritSpellA(Spell):
     def run(self):
@@ -2517,7 +2568,10 @@ class FireSpiritSpellA(Spell):
                     )
                 )
 
-            f_acts.append(self.counter_attack(owner=self.troop, troop=self.owner))
+            counter_attack = self.counter_attack(owner=self.troop, troop=self.owner)
+            if counter_attack is not None:
+                f_acts.append(counter_attack)
+
 
             for acts in f_acts:
                 message["v"]["f_acts"].append(acts)
@@ -2527,6 +2581,7 @@ class FireSpiritSpellA(Spell):
 
         else:
             raise Exception('not enough action point for FireSpiritSpellA')
+
 
 class HeadRockSpellB(Spell):
     def run(self):
@@ -2545,7 +2600,6 @@ class HeadRockSpellB(Spell):
                 self.troop['health'] -= int(self.troop['maxHealth'] * float(self.spell['params']['decrease_health']))
 
                 if self.troop['id'] == player.party['party'][0]['troop'][0]['id']:
-
                     player.party['party'][0]['troop'][-1]['attack'] += int(
                         self.player.party['party'][0]['troop'][-1]['attack']
                         * float(self.spell['params']['increase_dmg'])
@@ -2621,7 +2675,9 @@ class HeadRockSpellB(Spell):
                     )
                 )
 
-            f_acts.append(self.counter_attack(owner=self.troop, troop=self.owner))
+            counter_attack = self.counter_attack(owner=self.troop, troop=self.owner)
+            if counter_attack is not None:
+                f_acts.append(counter_attack)
 
             for acts in f_acts:
                 message["v"]["f_acts"].append(acts)
@@ -2638,6 +2694,7 @@ class HeadRockSpellB(Spell):
             return message
 
         raise Exception('not enough action point for HeadRockSpellB')
+
 
 class ConfuseSpell(Spell):
     def run(self):
@@ -2709,7 +2766,9 @@ class ConfuseSpell(Spell):
                     )
                 )
 
-            f_acts.append(self.counter_attack(owner=self.troop, troop=self.owner))
+            counter_attack = self.counter_attack(owner=self.troop, troop=self.owner)
+            if counter_attack is not None:
+                f_acts.append(counter_attack)
 
             message = {
                 "t": "FightAction",
@@ -2730,6 +2789,7 @@ class ConfuseSpell(Spell):
 
         else:
             raise Exception('not enough action point for HeadRockSpellA')
+
 
 class OrcSpellB(Spell):
     def run(self):
@@ -2777,7 +2837,10 @@ class OrcSpellB(Spell):
                     )
                 )
 
-            f_acts.append(self.counter_attack(owner=self.troop, troop=self.owner))
+            counter_attack = self.counter_attack(owner=self.troop, troop=self.owner)
+            if counter_attack is not None:
+                f_acts.append(counter_attack)
+
 
             message = {
                 "t": "FightAction",
@@ -2796,6 +2859,7 @@ class OrcSpellB(Spell):
 
         else:
             raise Exception('not enough action point for OrcSpellB')
+
 
 class BlindSpellA(Spell):
     def run(self):
@@ -2839,14 +2903,14 @@ class BlindSpellA(Spell):
             f_acts.extend(val)
 
         f_acts.append({
-                "con_ap": 0,
-                "gen_ap": 0,
-                "spell_index": 2,
-                "owner_id": self.owner['id'],
-                "spell_type": self.spell['type'],
-                "spell_effect_info": [self.damage_reduction_troop(player, self.owner)],
-                "is_critical": "True" if critical else "False"
-            })
+            "con_ap": 0,
+            "gen_ap": 0,
+            "spell_index": 2,
+            "owner_id": self.owner['id'],
+            "spell_type": self.spell['type'],
+            "spell_effect_info": [self.damage_reduction_troop(player, self.owner)],
+            "is_critical": "True" if critical else "False"
+        })
 
         message = {
             "t": "FightAction",
@@ -2856,6 +2920,7 @@ class BlindSpellA(Spell):
         }
 
         return message
+
 
 class BlindSpellB(Spell):
     def run(self):
