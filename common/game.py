@@ -472,6 +472,22 @@ class Battle(object):
                         if i not in lst_index_delete:
                             lst_index_delete.append(i)
 
+            elif lst_spells[i]['action'] == 'damage_reduction':
+                if lst_spells[i]['turn_count'] > 0:
+                    lst_spells[i]['turn_count'] = int(lst_spells[i]['turn_count']) - 1
+                else:
+                    if BattleFlags.DamageReduction.value in troop['flag']:
+                        lst_spells[i]['troop'][0]['flag'].remove(BattleFlags.Confuse.value)
+                        lst_status_update_data.append(
+                            self.live_spell_stat(
+                                spell=lst_spells[i],
+                                stat_change_type=SpellSingleStatChangeType.curFlagValChange
+                            )
+                        )
+
+                        if i not in lst_index_delete:
+                            lst_index_delete.append(i)
+
             result, message = self.chakra_check()
             print "chakra result", result
             if result:
@@ -582,7 +598,7 @@ class Battle(object):
             "battle_id": self.id
         }
 
-        # create_battle_log.delay(**battle_start_data)
+        create_battle_log.delay(**battle_start_data)
 
         result = {
             "battle_id": self.id,

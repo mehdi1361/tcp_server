@@ -97,7 +97,7 @@ class Factory(object):
 
             return GeneralSpell(owner, spell, troop, player, enemy)
         if settings.PRODUCTION_MODE == 'develop':
-            return ConfuseSpell(owner, spell, troop, player, enemy)
+            return BlindSpellA(owner, spell, troop, player, enemy)
 
 
 class Spell(Factory):
@@ -305,6 +305,9 @@ class Spell(Factory):
     def normal_damage(self, troop, flag=None, damage=None):
         spell_effect_info_list = []
         critical, damage = self.damage(flag=flag, damage=damage, troop=troop)
+
+        if 'damage_reduction' in troop['flag']:
+            pass
 
         if troop['shield'] <= 0:
             troop['health'] -= damage
