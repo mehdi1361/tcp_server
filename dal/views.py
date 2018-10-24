@@ -12,7 +12,17 @@ def get_random_user(user_name):
     return fetch_random_user(user_name)
 
 def get_player_info(user, bot=False):
-    player_info = fetch_player_info(user)
+    if bot:
+        hero_id, level = get_custom_bot()
+
+        if hero_id:
+            player_info = fetch_player_info(user, hero_id=hero_id, level=level)
+
+        else:
+            player_info = fetch_player_info(user)
+
+    else:
+        player_info = fetch_player_info(user)
 
     serializer = player_info_serializer(player_info, bot=bot)
     return serializer
@@ -237,3 +247,7 @@ def get_rank(user):
 
 def get_selected_bot_troop():
     return fetch_selected_bot_troop()
+
+
+def get_custom_bot():
+    return fetch_custom_bot()

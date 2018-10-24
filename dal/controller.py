@@ -16,6 +16,7 @@ import pytz
 Session = sessionmaker()
 session = Session()
 
+
 def generate_fake_user_league(league):
     fake_user_lst = []
     result = []
@@ -79,24 +80,42 @@ def fetch_random_user(user_name):
     return user.User
 
 
-def fetch_player_info(user):
-    query = session.query(
-        User,
-        Profile,
-        UserHero,
-        Hero
-    )
+def fetch_player_info(user, hero_id=None, level=None):
+    if hero_id is None:
+        query = session.query(
+            User,
+            Profile,
+            UserHero,
+            Hero
+        )
 
-    player_info = query.filter(
-        User.id == Profile.user_id,
-        User.id == UserHero.user_id,
-        UserHero.enable_hero,
-        User.username == user.username,
-        Hero.id == UserHero.hero_id
-    ).first()
+        player_info = query.filter(
+            User.id == Profile.user_id,
+            User.id == UserHero.user_id,
+            UserHero.enable_hero,
+            User.username == user.username,
+            Hero.id == UserHero.hero_id
+        ).first()
+
+    else:
+        query = session.query(
+            User,
+            Profile,
+            UserHero,
+            Hero
+        )
+
+        player_info = query.filter(
+            User.id == Profile.user_id,
+            User.id == UserHero.user_id,
+            UserHero.hero_id == hero_id,
+            User.username == user.username,
+            Hero.id == UserHero.hero_id
+        ).first()
+
+        player_info.UserHero.level = level
 
     return player_info
-
 
 def fetch_troops_info(user, troops):
     unit_query = session.query(
@@ -732,6 +751,7 @@ def fetch_ctm_unit_id_list(ctm, enable=True):
 
     return [unit.unit_id for unit in unit_list]
 
+
 def fetch_valid_unit(league_id):
     query = session.query(
         Leagues
@@ -817,6 +837,7 @@ def fetch_bot_match_making(strike):
         session.rollback()
         return None
 
+
 def fetch_rank(user):
     previous_rank = None
     current_rank = None
@@ -885,8 +906,32 @@ def fetch_selected_bot_troop():
         query = session.query(CustomBotTroop)
         custom_bot_troops = query.filter(CustomBotTroop.bot_id == custom_bot.id).all()
 
-        return True, [item.troop_id for item in custom_bot_troops]
+        lst_troop_id = []
+        lst_bot_data = []
 
-    except:
+        for item in custom_bot_troops:
+            query = session.query(Unit)
+            unit = query.filter(Unit.id == item.troop_id).first()
+            lst_troop_id.append(unit.id)
+            lst_bot_data.append({"moniker": unit.moniker, "level": item.level})
+
+        query = session.query(Hero)
+        custom_hero = query.filter(Hero.id == custom_bot.hero_id).first()
+
+        lst_bot_data.append({"moniker": custom_hero.moniker, "level": custom_bot.level})
+
+        return True, lst_troop_id, lst_bot_data
+
+    except Exception as e:
         session.rollback()
-        return False, []
+        return False, [], []
+
+def fetch_custom_bot():
+    query = session.query(CustomBot)
+    custom_bot = query.filter(CustomBot.enable == True).first()
+
+    if custom_bot:
+        return custom_bot.hero_id, custom_bot.level
+
+    else:
+        return None, None

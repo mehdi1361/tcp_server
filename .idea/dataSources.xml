@@ -37,5 +37,11 @@
         <property name="ApplicationName" value="DataGrip" />
       </driver-properties>
     </data-source>
+    <data-source source="LOCAL" name="release" uuid="34088f0f-8ea7-49df-814c-0e49c650b7e2">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://130.185.74.237:5432/anc_db_release</jdbc-url>
+    </data-source>
   </component>
 </project>

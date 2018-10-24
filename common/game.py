@@ -65,6 +65,7 @@ class Battle(object):
         self.lst_pre_fight = []
         self.stat = 'turn_change'
         self.winner = None
+        self.bot_data = None
 
     def set_turns(self):
         if len(self.players) != 0 and len(self.turns) == 0:
@@ -172,117 +173,126 @@ class Battle(object):
             idx = 0
 
             for troop in party_player_1["party"][1]["troop"][:-1]:
+
+                if self.bot_data:
+                    selected_level = next(item for item in self.bot_data if item["moniker"] == troop["moniker"])
+                    custom_level = selected_level['level']
+
+                else:
+                    custom_level = lst_level[idx]
+
                 if idx == 0:
-                    party_player_1["party"][1]["troop"][-1]["level"] = lst_level[idx]
+
+                    party_player_1["party"][1]["troop"][-1]["level"] = custom_level
                     party_player_1["party"][1]["troop"][-1]["maxHealth"] = int(
                         round(
                             party_player_1["party"][1]["troop"][-1]["maxHealth"] +
                             party_player_1["party"][1]["troop"][-1]["maxHealth"] *
-                            settings.HERO_UPDATE[lst_level[idx]]['increase']
+                            settings.HERO_UPDATE[custom_level]['increase']
                         )
-                    ) if lst_level[idx] in settings.HERO_UPDATE.keys() else party_player_1["party"][1]["troop"][-1][
+                    ) if custom_level in settings.HERO_UPDATE.keys() else party_player_1["party"][1]["troop"][-1][
                         "maxHealth"]
 
                     party_player_1["party"][1]["troop"][-1]["maxShield"] = int(
                         round(
                             party_player_1["party"][1]["troop"][-1]["maxShield"] +
                             party_player_1["party"][1]["troop"][-1]["maxShield"] *
-                            settings.HERO_UPDATE[lst_level[idx]]['increase']
+                            settings.HERO_UPDATE[custom_level]['increase']
                         )
-                    ) if lst_level[idx] in settings.HERO_UPDATE.keys() else party_player_1["party"][1]["troop"][-1][
+                    ) if custom_level in settings.HERO_UPDATE.keys() else party_player_1["party"][1]["troop"][-1][
                         "maxShield"]
 
                     party_player_1["party"][1]["troop"][-1]["health"] = int(
                         round(
                             party_player_1["party"][1]["troop"][-1]["health"] +
                             party_player_1["party"][1]["troop"][-1]["health"] *
-                            settings.HERO_UPDATE[lst_level[idx]]['increase']
+                            settings.HERO_UPDATE[custom_level]['increase']
                         )
-                    ) if lst_level[idx] in settings.HERO_UPDATE.keys() else party_player_1["party"][1]["troop"][-1][
+                    ) if custom_level in settings.HERO_UPDATE.keys() else party_player_1["party"][1]["troop"][-1][
                         "health"]
 
                     party_player_1["party"][1]["troop"][-1]["shield"] = int(
                         round(
                             party_player_1["party"][1]["troop"][-1]["shield"] +
                             party_player_1["party"][1]["troop"][-1]["shield"] *
-                            settings.HERO_UPDATE[lst_level[idx]]['increase']
+                            settings.HERO_UPDATE[custom_level]['increase']
                         )
-                    ) if lst_level[idx] in settings.HERO_UPDATE.keys() else party_player_1["party"][1]["troop"][-1][
+                    ) if custom_level in settings.HERO_UPDATE.keys() else party_player_1["party"][1]["troop"][-1][
                         "shield"]
 
                     party_player_1["party"][1]["troop"][-1]["attack"] = int(
                         round(
                             party_player_1["party"][1]["troop"][-1]["attack"] +
                             party_player_1["party"][1]["troop"][-1]["attack"] *
-                            settings.HERO_UPDATE[lst_level[idx]]['increase']
+                            settings.HERO_UPDATE[custom_level]['increase']
                         )
-                    ) if lst_level[idx] in settings.HERO_UPDATE.keys() else party_player_1["party"][1]["troop"][-1][
+                    ) if custom_level in settings.HERO_UPDATE.keys() else party_player_1["party"][1]["troop"][-1][
                         "attack"]
 
-                    troop["level"] = lst_level[idx]
+                    troop["level"] = custom_level
 
                     troop["maxHealth"] = int(
                         round(
-                            troop["maxHealth"] + troop["maxHealth"] * settings.HERO_UPDATE[lst_level[idx]]['increase']
+                            troop["maxHealth"] + troop["maxHealth"] * settings.HERO_UPDATE[custom_level]['increase']
                         )
-                    ) if lst_level[idx] in settings.HERO_UPDATE.keys() else troop["maxHealth"]
+                    ) if custom_level in settings.HERO_UPDATE.keys() else troop["maxHealth"]
 
                     troop["maxShield"] = int(
                         round(
-                            troop["maxShield"] + troop["maxShield"] * settings.HERO_UPDATE[lst_level[idx]]['increase']
+                            troop["maxShield"] + troop["maxShield"] * settings.HERO_UPDATE[custom_level]['increase']
                         )
-                    ) if lst_level[idx] in settings.HERO_UPDATE.keys() else troop["maxShield"]
+                    ) if custom_level in settings.HERO_UPDATE.keys() else troop["maxShield"]
 
                     troop["health"] = int(
                         round(
-                            troop["health"] + troop["health"] * settings.HERO_UPDATE[lst_level[idx]]['increase']
+                            troop["health"] + troop["health"] * settings.HERO_UPDATE[custom_level]['increase']
                         )
-                    ) if lst_level[idx] in settings.HERO_UPDATE.keys() else troop["health"]
+                    ) if custom_level in settings.HERO_UPDATE.keys() else troop["health"]
 
                     troop["shield"] = int(
                         round(
-                            troop["shield"] + troop["shield"] * settings.HERO_UPDATE[lst_level[idx]]['increase']
+                            troop["shield"] + troop["shield"] * settings.HERO_UPDATE[custom_level]['increase']
                         )
-                    ) if lst_level[idx] in settings.HERO_UPDATE.keys() else troop["shield"]
+                    ) if custom_level in settings.HERO_UPDATE.keys() else troop["shield"]
 
                     troop["attack"] = int(
                         round(
-                            troop["attack"] + troop["attack"] * settings.HERO_UPDATE[lst_level[idx]]['increase']
+                            troop["attack"] + troop["attack"] * settings.HERO_UPDATE[custom_level]['increase']
                         )
-                    ) if lst_level[idx] in settings.HERO_UPDATE.keys() else troop["attack"]
+                    ) if custom_level in settings.HERO_UPDATE.keys() else troop["attack"]
 
                 else:
-                    troop["level"] = lst_level[idx]
+                    troop["level"] = custom_level
 
                     troop["maxHealth"] = int(
                         round(
-                            troop["maxHealth"] + troop["maxHealth"] * settings.UNIT_UPDATE[lst_level[idx]]['increase']
+                            troop["maxHealth"] + troop["maxHealth"] * settings.UNIT_UPDATE[custom_level]['increase']
                         )
-                    ) if lst_level[idx] in settings.UNIT_UPDATE.keys() else troop["maxHealth"]
+                    ) if custom_level in settings.UNIT_UPDATE.keys() else troop["maxHealth"]
 
                     troop["maxShield"] = int(
                         round(
-                            troop["maxShield"] + troop["maxShield"] * settings.UNIT_UPDATE[lst_level[idx]]['increase']
+                            troop["maxShield"] + troop["maxShield"] * settings.UNIT_UPDATE[custom_level]['increase']
                         )
-                    ) if lst_level[idx] in settings.UNIT_UPDATE.keys() else troop["maxShield"]
+                    ) if custom_level in settings.UNIT_UPDATE.keys() else troop["maxShield"]
 
                     troop["health"] = int(
                         round(
-                            troop["health"] + troop["health"] * settings.UNIT_UPDATE[lst_level[idx]]['increase']
+                            troop["health"] + troop["health"] * settings.UNIT_UPDATE[custom_level]['increase']
                         )
-                    ) if lst_level[idx] in settings.UNIT_UPDATE.keys() else troop["health"]
+                    ) if custom_level in settings.UNIT_UPDATE.keys() else troop["health"]
 
                     troop["shield"] = int(
                         round(
-                            troop["shield"] + troop["shield"] * settings.UNIT_UPDATE[lst_level[idx]]['increase']
+                            troop["shield"] + troop["shield"] * settings.UNIT_UPDATE[custom_level]['increase']
                         )
-                    ) if lst_level[idx] in settings.UNIT_UPDATE.keys() else troop["shield"]
+                    ) if custom_level in settings.UNIT_UPDATE.keys() else troop["shield"]
 
                     troop["attack"] = int(
                         round(
-                            troop["attack"] + troop["attack"] * settings.UNIT_UPDATE[lst_level[idx]]['increase']
+                            troop["attack"] + troop["attack"] * settings.UNIT_UPDATE[custom_level]['increase']
                         )
-                    ) if lst_level[idx] in settings.UNIT_UPDATE.keys() else troop["attack"]
+                    ) if custom_level in settings.UNIT_UPDATE.keys() else troop["attack"]
 
                 idx += 1
 

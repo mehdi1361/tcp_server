@@ -45,13 +45,17 @@ def battle_finder(player, bot=False):
         troops = get_troop_list(enemy.user)
         enemy.troops = troops
 
-        used_custom_bot, bot_troops = get_selected_bot_troop()
+        used_custom_bot, bot_troops, bot_data = get_selected_bot_troop()
         if used_custom_bot:
             troops = bot_troops
 
         player2 = Player(client=enemy, troops=troops)
         player2.is_bot = bot
         battle = Battle(player1, player2)
+
+        if used_custom_bot:
+            battle.bot_data = bot_data
+
         player.battle = battle
         enemy.battle = battle
 
