@@ -487,7 +487,7 @@ class Battle(object):
                     lst_spells[i]['turn_count'] = int(lst_spells[i]['turn_count']) - 1
                 else:
                     if BattleFlags.DamageReduction.value in troop['flag']:
-                        lst_spells[i]['troop'][0]['flag'].remove(BattleFlags.Confuse.value)
+                        lst_spells[i]['troop'][0]['flag'].remove(BattleFlags.DamageReduction.value)
                         lst_status_update_data.append(
                             self.live_spell_stat(
                                 spell=lst_spells[i],
