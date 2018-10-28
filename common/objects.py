@@ -76,6 +76,7 @@ class LiveSpellAction(Enum):
     poison = 'poison'
     confuse = 'confuse'
     damage_reduction = 'damage_reduction'
+    protect = 'protect'
 
 
 class Player(object):

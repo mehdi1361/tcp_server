@@ -95,6 +95,9 @@ class Factory(object):
             if spell['name'] == 'Blind_spell_A':
                 return BlindSpellA(owner, spell, troop, player, enemy)
 
+            if spell['name'] == 'Blind_spell_B':
+                return BlindSpellB(owner, spell, troop, player, enemy)
+
             return GeneralSpell(owner, spell, troop, player, enemy)
         if settings.PRODUCTION_MODE == 'develop':
             return BlindSpellA(owner, spell, troop, player, enemy)
@@ -391,6 +394,22 @@ class Spell(Factory):
         )
 
         return critical, spell_effect_info.serializer
+
+    def protect(self, player, turn_count):
+        for item in player.player_client.battle.live_spells:
+            if item['player'] == player.player_client.user.username \
+                    and item['action'] == 'protect' and item['troop'][0]['id'] == self.troop['id']:
+                item['turn_count'] = turn_count
+                break
+        else:
+            protect_spell = LiveSpell(
+                player=player.player_client.user.username,
+                troop=self.troop,
+                turn_count=turn_count,
+                turn_type=LiveSpellTurnType.enemy_turn.value,
+                action=LiveSpellAction.protect.value
+            )
+            player.player_client.battle.live_spells.append(protect_spell.serializer)
 
     def return_damage(self, owner, troop, damage, flag=None):
         find_troop_player = self.find_player(selected_troop=troop)
@@ -1785,7 +1804,7 @@ class SelfTaunt(Spell):
         if player.action_point >= self.spell['need_ap']:
             self.taunt(self.owner, player)
 
-            if not BattleFlags.Taunt.value in self.owner['flag']:
+            if BattleFlags.Taunt.value not in self.owner['flag']:
                 self.owner['flag'].append(BattleFlags.Taunt.value)
 
             result_flag = self.flag_result(self.owner['flag'])
@@ -2927,4 +2946,60 @@ class BlindSpellA(Spell):
 
 class BlindSpellB(Spell):
     def run(self):
-        pass
+        player = self.find_player()
+        if player.action_point >= self.spell['need_ap']:
+            self.protect(player, 4)
+
+            if BattleFlags.Protect.value not in self.owner['flag']:
+                self.owner['flag'].append(BattleFlags.Protect.value)
+
+            result_flag = self.flag_result(self.owner['flag'])
+
+            single_stat = SpellSingleStatChangeInfo(
+                int_val=result_flag,
+                character_stat_change_type=SpellSingleStatChangeType.curFlagValChange
+            )
+            battle_object = BattleObject(
+                hp=self.owner['health'],
+                max_hp=self.owner['maxHealth'],
+                damage=self.owner['attack'],
+                shield=self.owner['shield'],
+                max_shield=self.owner['maxShield'],
+                flag=result_flag,
+                moniker=self.owner['moniker']
+            )
+
+            spell_effect_info = SpellEffectInfo(
+                target_character_id=self.owner['id'],
+                effect_on_character=SpellEffectOnChar.Taunt.value,
+                final_character_stats=battle_object.serializer,
+                single_stat_changes=[single_stat.serializer]
+            )
+
+            message = {
+                "t": "FightAction",
+                "v": {
+                    "f_acts": [
+                        {
+                            "con_ap": 0,
+                            "gen_ap": 0,
+                            "spell_index": self.spell['index'],
+                            "owner_id": self.owner['id'],
+                            "spell_type": self.spell['type'],
+                            "spell_effect_info": [spell_effect_info.serializer],
+                            "is_critical": "False"
+                        }
+                    ]
+                }
+            }
+
+            # val = self.chakra_check()
+            # if val is not None:
+            #     message["v"]["f_acts"].append(val)
+
+            player.action_point -= self.spell['need_ap']
+            return message
+
+        else:
+            raise Exception('not enough action point for SelfTaunt')
+

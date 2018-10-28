@@ -43,5 +43,11 @@
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://130.185.74.237:5432/anc_db_release</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="festival" uuid="2ca08936-6522-439f-b988-7d4d839a5c5b">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://130.185.74.237:5432/anc_db_festival</jdbc-url>
+    </data-source>
   </component>
 </project>
