@@ -409,6 +409,24 @@ class Battle(object):
 
                         lst_index_delete.append(i)
 
+            elif lst_spells[i]['action'] == 'protect':
+                if lst_spells[i]['player'] != player.player_client.user.username:
+                    if lst_spells[i]['turn_count'] > 0:
+                        lst_spells[i]['turn_count'] = int(lst_spells[i]['turn_count']) - 1
+
+                    else:
+                        remove_flag = BattleFlags.Protect.value
+
+                        lst_status_update_data.append(
+                            self.live_spell_stat(
+                                spell=lst_spells[i],
+                                stat_change_type=SpellSingleStatChangeType.curFlagValChange,
+                                remove_flag=remove_flag
+                            )
+                        )
+
+                        lst_index_delete.append(i)
+
             elif lst_spells[i]['action'] in ['burn', 'poison']:
 
                     if troop['shield'] > 0 and lst_spells[i]['turn_count'] > 0:
