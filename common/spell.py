@@ -993,7 +993,7 @@ class Spell(Factory):
         chance_counter_attack = random.randint(0, 100)
 
         if isinstance(owner['params'], dict) and 'counter_attack' in owner['params'].keys() \
-                and troop['health'] > 0 and owner['params']['counter_attack']['chance'] >= chance_counter_attack:
+                and owner['health'] > 0 and owner['params']['counter_attack']['chance'] >= chance_counter_attack:
 
             damage = int(round(owner['attack'] * owner['params']['counter_attack']['damage_percent']))
 
