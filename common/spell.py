@@ -99,7 +99,7 @@ class Factory(object):
 
             return GeneralSpell(owner, spell, troop, player, enemy)
         if settings.PRODUCTION_MODE == 'develop':
-            return BlindSpellA(owner, spell, troop, player, enemy)
+            return BlindSpellB(owner, spell, troop, player, enemy)
 
 
 class Spell(Factory):
@@ -173,7 +173,7 @@ class Spell(Factory):
         damage_val += action_point_dmg
         damage_val = damage_val - int(damage_val * dmg_dec / 100)
 
-        print "flags", troop
+        print "flags", troop['flags']
         # if 'protect' in troop.flags:
         #     print "in if"
         #     damage_val = 0
@@ -866,8 +866,6 @@ class Spell(Factory):
 
         else:
             result_troop = selected_troop
-
-        print "result_troop", result_troop
 
         for troop in self.player.party['party'][0]['troop']:
             if result_troop['id'] == troop['id']:
