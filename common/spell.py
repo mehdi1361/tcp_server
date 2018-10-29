@@ -2946,7 +2946,7 @@ class BlindSpellB(Spell):
     def run(self):
         player = self.find_player()
         if player.action_point >= self.spell['need_ap']:
-            self.protect(player, 4)
+            self.protect(player, self.spell['params']['protect_duration'])
 
             if BattleFlags.Protect.value not in self.troop['flag']:
                 self.troop['flag'].append(BattleFlags.Protect.value)
