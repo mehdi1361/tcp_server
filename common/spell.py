@@ -173,10 +173,10 @@ class Spell(Factory):
         damage_val += action_point_dmg
         damage_val = damage_val - int(damage_val * dmg_dec / 100)
 
-        print "flags", troop['flags']
-        # if 'protect' in troop.flags:
-        #     print "in if"
-        #     damage_val = 0
+        # print "flags", troop['flags']
+        if BattleFlags.Protect.value in troop['flag']:
+            print "in if"
+            damage_val = 0
 
         self.damage_value = int(round(damage_val))
         return chance, int(round(damage_val))
