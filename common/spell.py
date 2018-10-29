@@ -173,7 +173,7 @@ class Spell(Factory):
         damage_val += action_point_dmg
         damage_val = damage_val - int(damage_val * dmg_dec / 100)
 
-        print "flags", troop.flags
+        print "flags", troop
         # if 'protect' in troop.flags:
         #     print "in if"
         #     damage_val = 0
