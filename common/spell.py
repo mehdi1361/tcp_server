@@ -2948,7 +2948,7 @@ class BlindSpellB(Spell):
         if player.action_point >= self.spell['need_ap']:
             self.protect(player, 4)
 
-            if BattleFlags.Protect.value not in self.owner['flag']:
+            if BattleFlags.Protect.value not in self.troop['flag']:
                 self.troop['flag'].append(BattleFlags.Protect.value)
 
             result_flag = self.flag_result(self.troop['flag'])
@@ -2969,7 +2969,7 @@ class BlindSpellB(Spell):
 
             spell_effect_info = SpellEffectInfo(
                 target_character_id=self.troop['id'],
-                effect_on_character=SpellEffectOnChar.Taunt.value,
+                effect_on_character=SpellEffectOnChar.Protect.value,
                 final_character_stats=battle_object.serializer,
                 single_stat_changes=[single_stat.serializer]
             )
@@ -2982,7 +2982,7 @@ class BlindSpellB(Spell):
                             "con_ap": 0,
                             "gen_ap": 0,
                             "spell_index": self.spell['index'],
-                            "owner_id": self.troop['id'],
+                            "owner_id": self.owner['id'],
                             "spell_type": self.spell['type'],
                             "spell_effect_info": [spell_effect_info.serializer],
                             "is_critical": "False"
