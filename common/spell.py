@@ -2,7 +2,6 @@ from __future__ import generators
 from decimal import Decimal
 import settings
 import random
-import pprint
 from .objects import SpellEffectInfo, SpellEffectOnChar, BattleObject, BattleFlags, SpellSingleStatChangeType, \
     SpellSingleStatChangeInfo, LiveSpell, LiveSpellTurnType, LiveSpellAction
 
@@ -174,6 +173,10 @@ class Spell(Factory):
         damage_val += action_point_dmg
         damage_val = damage_val - int(damage_val * dmg_dec / 100)
 
+        print "flags", troop.flags
+        if 'protect' in troop.flags:
+            print "in if"
+            damage_val = 0
 
         self.damage_value = int(round(damage_val))
         return chance, int(round(damage_val))
@@ -2592,7 +2595,6 @@ class FireSpiritSpellA(Spell):
             if counter_attack is not None:
                 f_acts.append(counter_attack)
 
-
             for acts in f_acts:
                 message["v"]["f_acts"].append(acts)
 
@@ -2860,7 +2862,6 @@ class OrcSpellB(Spell):
             counter_attack = self.counter_attack(owner=self.troop, troop=self.owner)
             if counter_attack is not None:
                 f_acts.append(counter_attack)
-
 
             message = {
                 "t": "FightAction",
