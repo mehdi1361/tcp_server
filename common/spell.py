@@ -176,7 +176,7 @@ class Spell(Factory):
         print "flags", troop.flags
         # if 'protect' in troop.flags:
         #     print "in if"
-            damage_val = 0
+        #     damage_val = 0
 
         self.damage_value = int(round(damage_val))
         return chance, int(round(damage_val))
