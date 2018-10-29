@@ -173,8 +173,9 @@ class Spell(Factory):
 
         damage_val += action_point_dmg
         damage_val = damage_val - int(damage_val * dmg_dec / 100)
-        self.damage_value = int(round(damage_val))
 
+
+        self.damage_value = int(round(damage_val))
         return chance, int(round(damage_val))
 
     def check_troop_death(self, troop):
@@ -308,9 +309,6 @@ class Spell(Factory):
     def normal_damage(self, troop, flag=None, damage=None):
         spell_effect_info_list = []
         critical, damage = self.damage(flag=flag, damage=damage, troop=troop)
-
-        if 'damage_reduction' in troop['flag']:
-            pass
 
         if troop['shield'] <= 0:
             troop['health'] -= damage
@@ -2951,26 +2949,26 @@ class BlindSpellB(Spell):
             self.protect(player, 4)
 
             if BattleFlags.Protect.value not in self.owner['flag']:
-                self.owner['flag'].append(BattleFlags.Protect.value)
+                self.troop['flag'].append(BattleFlags.Protect.value)
 
-            result_flag = self.flag_result(self.owner['flag'])
+            result_flag = self.flag_result(self.troop['flag'])
 
             single_stat = SpellSingleStatChangeInfo(
                 int_val=result_flag,
                 character_stat_change_type=SpellSingleStatChangeType.curFlagValChange
             )
             battle_object = BattleObject(
-                hp=self.owner['health'],
-                max_hp=self.owner['maxHealth'],
-                damage=self.owner['attack'],
-                shield=self.owner['shield'],
-                max_shield=self.owner['maxShield'],
+                hp=self.troop['health'],
+                max_hp=self.troop['maxHealth'],
+                damage=self.troop['attack'],
+                shield=self.troop['shield'],
+                max_shield=self.troop['maxShield'],
                 flag=result_flag,
-                moniker=self.owner['moniker']
+                moniker=self.troop['moniker']
             )
 
             spell_effect_info = SpellEffectInfo(
-                target_character_id=self.owner['id'],
+                target_character_id=self.troop['id'],
                 effect_on_character=SpellEffectOnChar.Taunt.value,
                 final_character_stats=battle_object.serializer,
                 single_stat_changes=[single_stat.serializer]
@@ -2984,7 +2982,7 @@ class BlindSpellB(Spell):
                             "con_ap": 0,
                             "gen_ap": 0,
                             "spell_index": self.spell['index'],
-                            "owner_id": self.owner['id'],
+                            "owner_id": self.troop['id'],
                             "spell_type": self.spell['type'],
                             "spell_effect_info": [spell_effect_info.serializer],
                             "is_critical": "False"
