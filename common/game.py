@@ -323,7 +323,11 @@ class Battle(object):
         find_troop = self.find_troop(spell)
 
         if remove_flag is not None:
-            find_troop['flag'].remove(remove_flag)
+            try:
+                find_troop['flag'].remove(remove_flag)
+
+            except:
+                pass
 
         battle_object = BattleObject(
             hp=int(round(find_troop['health'])),
