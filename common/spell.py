@@ -396,6 +396,39 @@ class Spell(Factory):
 
         return critical, spell_effect_info.serializer
 
+    def remove_flag(self, troop, flag):
+        if flag in troop['flag']:
+            spell_effect_info_list = []
+
+            troop['flag'].remove(flag)
+            single_stat = SpellSingleStatChangeInfo(
+                int_val=0,
+                character_stat_change_type=SpellSingleStatChangeType.curFlagValChange
+            )
+            spell_effect_info_list.append(single_stat.serializer)
+
+            battle_object = BattleObject(
+                hp=int(round(troop['health'])),
+                max_hp=troop['maxHealth'],
+                damage=int(round(troop['attack'])),
+                shield=int(round(troop['shield'])),
+                max_shield=troop['maxShield'],
+                flag=self.flag_result(troop['flag']),
+                moniker=troop['moniker']
+            )
+
+            spell_effect_info = SpellEffectInfo(
+                target_character_id=troop['id'],
+                effect_on_character=SpellEffectOnChar.None_f.value,
+                final_character_stats=battle_object.serializer,
+                single_stat_changes=spell_effect_info_list
+            )
+
+            return spell_effect_info.serializer
+
+        else:
+            return None
+
     def protect(self, player, turn_count):
         for item in player.player_client.battle.live_spells:
             if item['player'] == player.player_client.user.username \
@@ -1100,6 +1133,7 @@ class Spell(Factory):
 
 class GeneralSpell(Spell):
     def run(self):
+        spell_effect_info_lst = []
         player = self.find_player()
         critical = False
 
@@ -1110,6 +1144,10 @@ class GeneralSpell(Spell):
 
         if not miss:
             critical, spell_effect_info = self.normal_damage(self.troop)
+            spell_effect_info_lst.append(spell_effect_info)
+
+        if BattleFlags.Protect.value in self.troop['flag']:
+            spell_effect_info_lst.append(self.remove_flag(self.troop, BattleFlags.Protect.value))
 
         self.gen_action_point()
         self.check_troop_death(self.troop)
@@ -1121,7 +1159,7 @@ class GeneralSpell(Spell):
                 "spell_index": self.spell['index'],
                 "owner_id": self.owner['id'],
                 "spell_type": self.spell['type'],
-                "spell_effect_info": [spell_effect_info],
+                "spell_effect_info": spell_effect_info_lst,
                 "is_critical": "True" if critical else "False"
             }
         ]
@@ -2372,7 +2410,6 @@ class ClericChakraSpellB(Spell):
             counter_attack = self.counter_attack(owner=self.troop, troop=self.owner)
             if counter_attack is not None:
                 f_acts.append(counter_attack)
-
 
             for acts in f_acts:
                 message["v"]["f_acts"].append(acts)
