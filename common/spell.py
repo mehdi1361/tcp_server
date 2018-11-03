@@ -606,6 +606,13 @@ class Spell(Factory):
                 ]
             }
         }
+
+        print "flag in true damage", self.troop['flag']
+        if BattleFlags.Protect.value in self.troop['flag']:
+            message["v"]["f_acts"][0]["spell_effect_info"].append(
+                self.remove_flag(self.troop, BattleFlags.Protect.value)
+            )
+
         return message
 
     def gen_action_point(self, param_troop=None):
@@ -1146,8 +1153,10 @@ class GeneralSpell(Spell):
             critical, spell_effect_info = self.normal_damage(self.troop)
             spell_effect_info_lst.append(spell_effect_info)
 
+        print "flag", self.troop['flag']
         if BattleFlags.Protect.value in self.troop['flag']:
             spell_effect_info_lst.append(self.remove_flag(self.troop, BattleFlags.Protect.value))
+            print "effect", spell_effect_info_lst
 
         self.gen_action_point()
         self.check_troop_death(self.troop)
@@ -1575,6 +1584,12 @@ class FeriSpellA(Spell):
             }
         }
 
+        print "flag in true feri", self.troop['flag']
+        if BattleFlags.Protect.value in self.troop['flag']:
+            message["v"]["f_acts"][0]["spell_effect_info"].append(
+                self.remove_flag(self.troop, BattleFlags.Protect.value)
+            )
+
         second_chance = random.randint(1, 100)
         troop = None
         if second_chance < int(self.spell['params']['second_attack_chance']):
@@ -1768,6 +1783,13 @@ class ClericSpellB(Spell):
                     "f_acts": f_acts_lst
                 }
             }
+
+            print "flag in ClericSpellB", self.troop['flag']
+            if BattleFlags.Protect.value in self.troop['flag']:
+                message["v"]["f_acts"][0]["spell_effect_info"].append(
+                    self.remove_flag(self.troop, BattleFlags.Protect.value)
+                )
+
             self.gen_action_point()
 
             val = self.chakra_check()
@@ -1828,6 +1850,12 @@ class LifeSteal(Spell):
             val = self.chakra_check()
             if val is not None:
                 message["v"]["f_acts"].extend(val)
+
+            print "flag in LifeSteal", self.troop['flag']
+            if BattleFlags.Protect.value in self.troop['flag']:
+                message["v"]["f_acts"][0]["spell_effect_info"].append(
+                    self.remove_flag(self.troop, BattleFlags.Protect.value)
+                )
 
             player.action_point -= self.spell['need_ap']
             return message
@@ -1977,6 +2005,12 @@ class BurnSpell(Spell):
                 }
             }
 
+            print "flag in BurnSpell", self.troop['flag']
+            if BattleFlags.Protect.value in self.troop['flag']:
+                message["v"]["f_acts"][0]["spell_effect_info"].append(
+                    self.remove_flag(self.troop, BattleFlags.Protect.value)
+                )
+
             self.gen_action_point()
             self.check_troop_death(self.troop)
 
@@ -2068,7 +2102,6 @@ class WizardChakraSpellC(Spell):
                 counter_attack = self.counter_attack(owner=item, troop=self.owner)
                 if counter_attack is not None:
                     f_acts.append(counter_attack)
-
 
             message = {
                 "t": "FightAction",
@@ -2343,6 +2376,12 @@ class ClericSpellD(Spell):
             if val is not None:
                 message["v"]["f_acts"].extend(val)
 
+            print "flag in ClericSpellD", self.troop['flag']
+            if BattleFlags.Protect.value in self.troop['flag']:
+                message["v"]["f_acts"][0]["spell_effect_info"].append(
+                    self.remove_flag(self.troop, BattleFlags.Protect.value)
+                )
+
             player.action_point -= self.spell['need_ap']
             return message
 
@@ -2413,6 +2452,12 @@ class ClericChakraSpellB(Spell):
 
             for acts in f_acts:
                 message["v"]["f_acts"].append(acts)
+
+            print "flag in ClericChakraSpellB", self.troop['flag']
+            if BattleFlags.Protect.value in self.troop['flag']:
+                message["v"]["f_acts"][0]["spell_effect_info"].append(
+                    self.remove_flag(self.troop, BattleFlags.Protect.value)
+                )
 
             return message
         else:
@@ -2539,6 +2584,12 @@ class WildlingSpellA(Spell):
         for acts in f_acts:
             message["v"]["f_acts"].append(acts)
 
+        print "flag in WildlingSpellA", self.troop['flag']
+        if BattleFlags.Protect.value in self.troop['flag']:
+            message["v"]["f_acts"][0]["spell_effect_info"].append(
+                self.remove_flag(self.troop, BattleFlags.Protect.value)
+            )
+
         return message
 
 
@@ -2632,6 +2683,12 @@ class FireSpiritSpellA(Spell):
 
             for acts in f_acts:
                 message["v"]["f_acts"].append(acts)
+
+            print "flag in FireSpiritSpellA", self.troop['flag']
+            if BattleFlags.Protect.value in self.troop['flag']:
+                message["v"]["f_acts"][0]["spell_effect_info"].append(
+                    self.remove_flag(self.troop, BattleFlags.Protect.value)
+                )
 
             player.action_point -= self.spell['need_ap']
             return message
@@ -2748,6 +2805,12 @@ class HeadRockSpellB(Spell):
             self.gen_action_point()
             self.check_troop_death(self.troop)
 
+            print "flag in HeadRockSpellB", self.troop['flag']
+            if BattleFlags.Protect.value in self.troop['flag']:
+                message["v"]["f_acts"][0]["spell_effect_info"].append(
+                    self.remove_flag(self.troop, BattleFlags.Protect.value)
+                )
+
             return message
 
         raise Exception('not enough action point for HeadRockSpellB')
@@ -2842,6 +2905,13 @@ class ConfuseSpell(Spell):
                 message["v"]["f_acts"].extend(val)
 
             player.action_point -= self.spell['need_ap']
+
+            print "flag in ConfuseSpell", self.troop['flag']
+            if BattleFlags.Protect.value in self.troop['flag']:
+                message["v"]["f_acts"][0]["spell_effect_info"].append(
+                    self.remove_flag(self.troop, BattleFlags.Protect.value)
+                )
+
             return message
 
         else:
@@ -2911,6 +2981,12 @@ class OrcSpellB(Spell):
 
             player.action_point -= self.spell['need_ap']
 
+            print "flag in OrcSpellB", self.troop['flag']
+            if BattleFlags.Protect.value in self.troop['flag']:
+                message["v"]["f_acts"][0]["spell_effect_info"].append(
+                    self.remove_flag(self.troop, BattleFlags.Protect.value)
+                )
+
             return message
 
         else:
@@ -2975,6 +3051,12 @@ class BlindSpellA(Spell):
             }
         }
 
+        print "flag in BlindSpellA", self.troop['flag']
+        if BattleFlags.Protect.value in self.troop['flag']:
+            message["v"]["f_acts"][0]["spell_effect_info"].append(
+                self.remove_flag(self.troop, BattleFlags.Protect.value)
+            )
+
         return message
 
 
@@ -3032,6 +3114,13 @@ class BlindSpellB(Spell):
             #     message["v"]["f_acts"].append(val)
 
             player.action_point -= self.spell['need_ap']
+
+            print "flag in BlindSpellB", self.troop['flag']
+            if BattleFlags.Protect.value in self.troop['flag']:
+                message["v"]["f_acts"][0]["spell_effect_info"].append(
+                    self.remove_flag(self.troop, BattleFlags.Protect.value)
+                )
+
             return message
 
         else:
