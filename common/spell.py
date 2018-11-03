@@ -175,7 +175,6 @@ class Spell(Factory):
 
         # print "flags", troop['flags']
         if BattleFlags.Protect.value in troop['flag']:
-            print "in if"
             damage_val = 0
 
         self.damage_value = int(round(damage_val))
@@ -788,7 +787,7 @@ class Spell(Factory):
             single_stat_changes=spell_effect_info_list
         )
 
-        if self.owner['health'] < self.owner['maxHealth']:
+        if self.owner['health'] < self.owner['maxHealth'] and damage > 0:
             self.owner['health'] += int(round(damage * int(self.spell['params']['life_steal_percent']) / 100))
             if self.owner['health'] > self.owner['maxHealth']:
                 self.owner['health'] = self.owner['maxHealth']
@@ -1370,6 +1369,12 @@ class HealerSpellB(Spell):
                 if val is not None:
                     message["v"]["f_acts"].extend(val)
 
+                print "flag in HealerSpellB", self.troop['flag']
+                if BattleFlags.Protect.value in self.troop['flag']:
+                    message["v"]["f_acts"][0]["spell_effect_info"].append(
+                        self.remove_flag(self.troop, BattleFlags.Protect.value)
+                    )
+
                 player.action_point -= self.spell['need_ap']
                 return message
         else:
@@ -1507,6 +1512,13 @@ class SplashSpell(Spell):
                         critical_result = critical
 
                     spell_effect_info_list.append(result)
+
+                    print "flag in HealerSpellB", item['flag']
+                    if BattleFlags.Protect.value in item['flag']:
+                        spell_effect_info_list.append(
+                            self.remove_flag(item, BattleFlags.Protect.value)
+                        )
+
                     self.check_troop_death(self.troop)
 
                 if isinstance(item['params'], dict) \
@@ -1584,12 +1596,6 @@ class FeriSpellA(Spell):
             }
         }
 
-        print "flag in true feri", self.troop['flag']
-        if BattleFlags.Protect.value in self.troop['flag']:
-            message["v"]["f_acts"][0]["spell_effect_info"].append(
-                self.remove_flag(self.troop, BattleFlags.Protect.value)
-            )
-
         second_chance = random.randint(1, 100)
         troop = None
         if second_chance < int(self.spell['params']['second_attack_chance']):
@@ -1640,6 +1646,12 @@ class FeriSpellA(Spell):
         if val is not None:
             message["v"]["f_acts"].extend(val)
 
+        print "flag in true feri", self.troop['flag']
+        if BattleFlags.Protect.value in self.troop['flag']:
+            message["v"]["f_acts"][0]["spell_effect_info"].append(
+                self.remove_flag(self.troop, BattleFlags.Protect.value)
+            )
+
         return message
 
 
@@ -1671,6 +1683,11 @@ class SagittariusSpellA(Spell):
                     critical_result = critical
 
                 spell_effect_info_list.append(result)
+
+                if BattleFlags.Protect.value in item['flag']:
+                    spell_effect_info_list.append(
+                        self.remove_flag(item, BattleFlags.Protect.value)
+                    )
 
                 if isinstance(item['troop']['params'], dict) \
                         and 'return_damage' in item['troop']['params'].keys() and item['troop']['health'] > 0:
@@ -1745,6 +1762,11 @@ class ClericSpellB(Spell):
                         critical_result = critical
 
                     spell_effect_info_list.append(result)
+
+                    if BattleFlags.Protect.value in item['flag']:
+                        spell_effect_info_list.append(
+                            self.remove_flag(item, BattleFlags.Protect.value)
+                        )
 
                     if isinstance(item['params'], dict) \
                             and 'return_damage' in item['params'].keys() and item['health'] > 0:
@@ -1938,7 +1960,7 @@ class BurnSpell(Spell):
 
             if int(self.spell['params']['burn_chance']) > burn_chance:
 
-                if not BattleFlags.Burn.value in self.troop['flag']:
+                if BattleFlags.Burn.value not in self.troop['flag']:
                     self.troop['flag'].append(BattleFlags.Burn.value)
 
                 result_flag = self.flag_result(self.troop['flag'])
@@ -1965,6 +1987,7 @@ class BurnSpell(Spell):
                 )
 
                 spell_effect_info_list.append(spell_effect_info.serializer)
+
                 self.burn(
                     troop=self.troop,
                     params={
@@ -2048,6 +2071,12 @@ class WizardChakraSpellC(Spell):
                         critical_result = critical
 
                     spell_effect_info_list.append(result)
+
+                    print "flag in WizardChakraSpellC", self.item['flag']
+                    if BattleFlags.Protect.value in item['flag']:
+                        spell_effect_info_list.append(
+                            self.remove_flag(self.troop, BattleFlags.Protect.value)
+                        )
 
                     burn_chance = random.randint(0, 100)
 
@@ -2280,9 +2309,13 @@ class WarriorSpellD(Spell):
             if val is not None:
                 message["v"]["f_acts"].extend(val)
 
-            print "before action point", player.action_point
             player.action_point -= self.spell['need_ap']
-            print "before action point", player.action_point
+
+            print "flag in WarriorSpellD", self.troop['flag']
+            if BattleFlags.Protect.value in self.troop['flag']:
+                message["v"]["f_acts"][0]["spell_effect_info"].append(
+                    self.remove_flag(self.troop, BattleFlags.Protect.value)
+                )
 
             return message
 
