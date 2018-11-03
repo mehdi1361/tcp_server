@@ -1158,7 +1158,8 @@ class GeneralSpell(Spell):
 
         if not miss:
             critical, spell_effect_info = self.normal_damage(self.troop)
-            spell_effect_info_lst.append(spell_effect_info)
+
+        spell_effect_info_lst.append(spell_effect_info)
 
         print "flag", self.troop['flag']
         if BattleFlags.Protect.value in self.troop['flag']:
