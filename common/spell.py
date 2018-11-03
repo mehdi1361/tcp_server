@@ -3115,12 +3115,6 @@ class BlindSpellB(Spell):
 
             player.action_point -= self.spell['need_ap']
 
-            print "flag in BlindSpellB", self.troop['flag']
-            if BattleFlags.Protect.value in self.troop['flag']:
-                message["v"]["f_acts"][0]["spell_effect_info"].append(
-                    self.remove_flag(self.troop, BattleFlags.Protect.value)
-                )
-
             return message
 
         else:
