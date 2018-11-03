@@ -385,10 +385,19 @@ class Spell(Factory):
             moniker=troop['moniker']
         )
 
+        if BattleFlags.Protect.value in troop['flag']:
+            effect_flag = SpellEffectOnChar.Protect.value
+
+        else:
+            if critical:
+
+                effect_flag = SpellEffectOnChar.SeriousDamage.value
+            else:
+                effect_flag = SpellEffectOnChar.NormalDamage.value
+
         spell_effect_info = SpellEffectInfo(
             target_character_id=troop['id'],
-            effect_on_character=SpellEffectOnChar.SeriousDamage.value if critical
-            else SpellEffectOnChar.NormalDamage.value,
+            effect_on_character= effect_flag,
             final_character_stats=battle_object.serializer,
             single_stat_changes=spell_effect_info_list
         )
