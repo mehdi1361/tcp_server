@@ -395,11 +395,19 @@ class Spell(Factory):
 
         return critical, spell_effect_info.serializer
 
-    def remove_flag(self, troop, flag):
+    def remove_flag(self, troop, flag, player):
         if flag in troop['flag']:
             spell_effect_info_list = []
 
             troop['flag'].remove(flag)
+
+            for idx, item in enumerate(player.player_client.battle.live_spells):
+                if item['player'] == player.player_client.user.username \
+                        and item['action'] == 'protect' and item['troop'][0]['id'] == troop['id']:
+                    player.player_client.battle.live_spells.pop(idx)
+
+                    break
+
             single_stat = SpellSingleStatChangeInfo(
                 int_val=0,
                 character_stat_change_type=SpellSingleStatChangeType.curFlagValChange
