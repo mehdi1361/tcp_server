@@ -1692,7 +1692,7 @@ class SagittariusSpellA(Spell):
 
                 spell_effect_info_list.append(result)
 
-                if BattleFlags.Protect.value in item['flag']:
+                if BattleFlags.Protect.value in item['troop']['flag']:
                     spell_effect_info_list.append(
                         self.remove_flag(item, BattleFlags.Protect.value)
                     )
