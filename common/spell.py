@@ -2090,7 +2090,6 @@ class WizardChakraSpellC(Spell):
 
                     spell_effect_info_list.append(result)
 
-                    print "flag in WizardChakraSpellC", self.item['flag']
                     if BattleFlags.Protect.value in item['flag']:
                         spell_effect_info_list.append(
                             self.remove_flag(self.troop, BattleFlags.Protect.value)
