@@ -2917,13 +2917,14 @@ class ConfuseSpell(Spell):
                         single_stat_changes=[single_stat.serializer]
                     )
 
-                    spell_effect_info_list.append(spell_effect_info.serializer)
                     self.confuse(
                         troop=self.troop,
                         params={
                             'turn_count': self.spell['params']['confuse_turn_duration']
                         }
                     )
+
+                spell_effect_info_list.append(spell_effect_info.serializer)
 
             f_acts = [
                 {
