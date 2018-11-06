@@ -2900,20 +2900,30 @@ class ConfuseSpell(Spell):
                     moniker=self.troop['moniker']
                 )
 
-                spell_effect_info = SpellEffectInfo(
-                    target_character_id=self.troop['id'],
-                    effect_on_character=SpellEffectOnChar.Nerf.value,
-                    final_character_stats=battle_object.serializer,
-                    single_stat_changes=[single_stat.serializer]
-                )
+                if BattleFlags.Protect.value in self.troop['flag']:
 
-                spell_effect_info_list.append(spell_effect_info.serializer)
-                self.confuse(
-                    troop=self.troop,
-                    params={
-                        'turn_count': self.spell['params']['confuse_turn_duration']
-                    }
-                )
+                    spell_effect_info = SpellEffectInfo(
+                        target_character_id=self.troop['id'],
+                        effect_on_character=SpellEffectOnChar.Protect.value,
+                        final_character_stats=battle_object.serializer,
+                        single_stat_changes=[single_stat.serializer]
+                    )
+
+                else:
+                    spell_effect_info = SpellEffectInfo(
+                        target_character_id=self.troop['id'],
+                        effect_on_character=SpellEffectOnChar.Nerf.value,
+                        final_character_stats=battle_object.serializer,
+                        single_stat_changes=[single_stat.serializer]
+                    )
+
+                    spell_effect_info_list.append(spell_effect_info.serializer)
+                    self.confuse(
+                        troop=self.troop,
+                        params={
+                            'turn_count': self.spell['params']['confuse_turn_duration']
+                        }
+                    )
 
             f_acts = [
                 {
