@@ -43,7 +43,7 @@ def player_info_serializer(player, bot=False):
 
                 "spell": get_hero_spell_info(player.Hero),
                 "is_active": str(True).encode('utf-8'),
-                "items": get_hero_item_info(player.User) if get_hero_item_info(player.User) else "",
+                "items": get_hero_item_info(player.User) if get_hero_item_info(player.User) or not bot else "",
                 "crt_c": player.Hero.critical_chance,
                 "crt_r": player.Hero.critical_ratio,
                 "d_chn": player.Hero.dodge_chance,

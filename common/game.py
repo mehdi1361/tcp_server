@@ -92,8 +92,8 @@ class Battle(object):
         return result
 
     def party_creator(self):
-        seen_lst = [SceneType.Jungle.value, SceneType.Castle.value, SceneType.Hell.value]
-        selected_scene = seen_lst[random.randint(0, 2)]
+        scene_lst = [SceneType.Jungle.value, SceneType.Castle.value, SceneType.Hell.value]
+        selected_scene = scene_lst[random.randint(0, 2)]
 
         player1_info = get_player_info(self.player1.player_client.user)
         player2_info = get_player_info(self.player2.player_client.user, bot=self.player2.is_bot)
