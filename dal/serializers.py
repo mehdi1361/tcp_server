@@ -15,11 +15,9 @@ def player_info_serializer(player, bot=False):
         "trophy": player.Profile.trophy,
         "hero":
             {
-                # "id": player.UserHero.id,
                 "id": str(uuid.uuid4().int >> 64)[:18],
                 "moniker": str(player.Hero.moniker).encode('utf-8'),
                 "level": player.UserHero.level,
-                # "cardCount": player.UserHero.quantity,
                 "maxHealth": int(round(player.Hero.health + player.Hero.health *
                                        settings.HERO_UPDATE[player.UserHero.level]['increase']))
                 if player.UserHero.level in settings.HERO_UPDATE.keys() else player.Hero.health,
@@ -43,7 +41,8 @@ def player_info_serializer(player, bot=False):
 
                 "spell": get_hero_spell_info(player.Hero),
                 "is_active": str(True).encode('utf-8'),
-                "items": get_hero_item_info(player.User) if get_hero_item_info(player.User) and not bot else "",
+                "items": get_hero_item_info(player.User, moniker=player.Hero.moniker)
+                if get_hero_item_info(player.User, moniker=player.Hero.moniker) else "",
                 "crt_c": player.Hero.critical_chance,
                 "crt_r": player.Hero.critical_ratio,
                 "d_chn": player.Hero.dodge_chance,
@@ -52,11 +51,9 @@ def player_info_serializer(player, bot=False):
                 "params": player.Hero.params if player.Hero.params else {}
             },
         "chakra": {
-            # "id": -1 * player.UserHero.id,
             "id": str(uuid.uuid4().int >> 64)[:18],
             "moniker": '{}Chakra'.format(str(player.Hero.moniker).encode('utf-8')),
             "level": player.UserHero.level,
-            # "cardCount": player.UserHero.quantity,
             "maxHealth": int(round(player.Hero.chakra_health + player.Hero.chakra_health *
                                    settings.HERO_UPDATE[player.UserHero.level]['increase']))
             if player.UserHero.level in settings.HERO_UPDATE.keys() else player.Hero.chakra_health,
@@ -90,11 +87,6 @@ def player_info_serializer(player, bot=False):
             "m_chn": player.Hero.miss_chance,
             "flag": [],
             "params": player.Hero.params if player.Hero.params else {}
-            # "params": {
-            #     unicode(k).encode("utf-8"): {
-            #         unicode(m).encode('utf-8'): unicode(n).encode('utf-8') for m, n in v
-            #     } if isinstance(v, dict) else unicode(v).encode("utf-8") for k, v in player.Hero.params.iteritems()
-            # } if player.Hero.params else {}
         }
     }
     return result
@@ -102,11 +94,9 @@ def player_info_serializer(player, bot=False):
 
 def troop_serializer_info(troop, bot=False):
     result = {
-        # "id": troop.UserCard.id,
         "id": str(uuid.uuid4().int >> 64)[:18],
         "moniker": str(troop.Unit.moniker).encode('utf-8'),
         "level": troop.UserCard.level,
-        # "cardCount": troop.UserCard.quantity,
         "maxHealth": troop.Unit.health if bot else int(round(troop.Unit.health + troop.Unit.health *
                                settings.UNIT_UPDATE[troop.UserCard.level]['increase']))
         if troop.UserCard.level in settings.UNIT_UPDATE.keys() else troop.Unit.health,
@@ -138,11 +128,6 @@ def troop_serializer_info(troop, bot=False):
         "m_chn": troop.Unit.miss_chance,
         "flag": [],
         "params": troop.Unit.params if troop.Unit.params else {}
-        # "params": {
-        #         unicode(k).encode("utf-8"): {
-        #             unicode(m).encode('utf-8'): unicode(n).encode('utf-8') for m, n in v
-        #         } if isinstance(v, dict) else unicode(v).encode("utf-8") for k, v in troop.Unit.params.iteritems()
-        #     } if troop.Unit.params else {}
     }
     return result
 
@@ -156,12 +141,6 @@ def spell_serializer_info(spell):
         "need_ap": spell.need_action_point,
         "index": spell.char_spells_index,
         "params": spell.params if spell.params else {}
-
-        # "params": {
-        #     unicode(k).encode("utf-8"): {
-        #         unicode(m).encode('utf-8'): unicode(n).encode('utf-8') for m, n in v
-        #     } if isinstance(v, dict) else unicode(v).encode("utf-8") for k, v in spell.params.iteritems()
-        # } if spell.params else {}
     }
     return result
 
@@ -258,15 +237,15 @@ def get_chakra_spell_info(hero):
     return spell_list
 
 
-def get_hero_item_info(user):
+def get_hero_item_info(user, moniker=None):
     result = []
-    items = fetch_hero_items(user)
+    items = fetch_hero_items(user, moniker=moniker)
     if items:
         for item in items:
             result.append(item_serializer(item))
 
     else:
-        items = fetch_hero_default_items(user)
+        items = fetch_hero_default_items(user, moniker=moniker)
         for item in items:
             result.append(item_object_serializer(item.Item))
 
