@@ -180,7 +180,7 @@ def fetch_chakra_spell_info(hero):
     return spells
 
 
-def fetch_hero_items(user):
+def fetch_hero_items(user, moniker=None):
     query = session.query(
         User,
         Hero,
@@ -189,13 +189,13 @@ def fetch_hero_items(user):
     items = query.filter(
         User.id == UserHero.user_id,
         Hero.id == UserHero.hero_id,
-        UserHero.enable_hero == True,
+        Hero.moniker == moniker,
         User.id == user.id
     ).first()
     return items.UserHero.selected_item
 
 
-def fetch_hero_default_items(user):
+def fetch_hero_default_items(user, moniker=None):
     query = session.query(
         User,
         UserHero,
@@ -205,9 +205,9 @@ def fetch_hero_default_items(user):
     items = query.filter(
         User.id == UserHero.user_id,
         Hero.id == UserHero.hero_id,
+        Hero.moniker == moniker,
         Item.hero_id == Hero.id,
         User.id == user.id,
-        UserHero.enable_hero == True,
         Item.default_item == True
     ).all()
     return items
