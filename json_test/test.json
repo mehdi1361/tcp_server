@@ -1,5 +1,6 @@
 [
   {"username": "19650951858060615919826669136", "password":"19650951858060615919826669136", "troops_id": [9, 16, 23, 10], "is_playoff": "false"},
+  {"username": "1648773832936566010467487312", "password":"1648773832936566010467487312", "troops_id": [9, 16, 23, 10], "is_playoff": "false"},
   {"username": "mehdi", "password":"Mehdi#1361", "troops_id": [9, 16, 23, 10], "is_playoff": "false"},
   {"username": "mehdi", "password":"Mehdi#1361", "troops_id": [9, 9, 9, 9]},
   {"username": "sam", "password":"Mehdi#1361", "troops_id": [11, 11, 11, 11]},
@@ -8,6 +9,6 @@
   {"troops_id":[1,14,10,22],"username":"62713706880028424659413208656","password":"62713706880028424659413208656"},
   {"troops_id":[11, 13, 17, 23],"username":"24953526980973541999435812432","password":"24953526980973541999435812432"},
   {"user_ready": "True"},
-  {"flag": "action", "spell_index": 0, "target_id": "125811756152694569"}
+  {"flag": "action", "spell_index": 0, "target_id": "151816895865069878"}
 ]
 

@@ -1,0 +1,207 @@
+{
+  "is_critical":"true",
+  "damage": {
+      "min": {"base": 1.1, "increase_by_level":0.1},
+      "max": {"base": 1.7, "increase_by_level":0.1}
+  },
+  "base_spells":{
+    "multi_damage":{
+      "value":[0.8, 0.6],
+       "target": [
+          "ally",
+          "enemy"
+        ],
+        "type":[
+          "single",
+          "splash",
+          "dual_attack"
+        ]
+    },
+    "ap_gen":{
+      "decrease_health": 0.2,
+      "ap":2,
+      "target": [
+          "ally",
+          "enemy"
+      ],
+      "type":[
+        "single",
+        "splash",
+        "dual_attack"
+      ]
+    },
+    "rage_dmg":{
+      "inc_dmg": 0.2,
+      "target": [
+          "ally",
+          "enemy"
+      ],
+      "type":[
+        "single",
+        "splash",
+        "dual_attack"
+      ]
+    },
+    "poison":{
+      "percent": "50",
+      "increase_dmg": 0.2,
+      "chance": "100",
+      "health": 0.3,
+      "duration": "5",
+      "target": [
+          "ally",
+          "enemy"
+      ],
+      "type":[
+        "single",
+        "splash",
+        "dual_attack"
+      ]
+    },
+    "heal":{
+      "percent": 0.32,
+      "target": [
+          "ally",
+          "enemy"
+      ],
+      "type":[
+        "single",
+        "splash",
+        "dual_attack"
+      ]
+    },
+    "action_point_dmg": {
+      "damage": 20,
+      "target": [
+          "ally",
+          "enemy"
+      ],
+      "type":[
+        "single",
+        "splash",
+        "dual_attack"
+      ]
+    },
+    "burn":{
+      "chance": 25,
+      "duration": 3,
+      "percent": 40,
+      "target": [
+          "ally",
+          "enemy"
+      ],
+      "type":[
+        "single",
+        "splash",
+        "dual_attack"
+      ]
+    },
+    "protect":{
+      "duration": 4,
+      "target": [
+          "ally",
+          "enemy"
+      ],
+      "type":[
+        "single",
+        "splash",
+        "dual_attack"
+      ]
+    },
+    "multi_attack":{
+      "second_chance": 100,
+      "third_chance": 25,
+      "target": [
+          "ally",
+          "enemy"
+      ],
+      "type":[
+        "single",
+        "splash",
+        "dual_attack"
+      ]
+    },
+    "dual_attack":{
+      "second_attack_power": 0.7,
+      "target": [
+          "ally",
+          "enemy"
+      ],
+      "type":[
+        "single",
+        "splash",
+        "dual_attack"
+      ]
+    },
+    "taunt":{
+      "duration": 2,
+      "target": [
+          "ally",
+          "enemy"
+      ],
+      "type":[
+        "single",
+        "splash",
+        "dual_attack"
+      ]
+    },
+    "increase_damage":{
+      "increase": 0.2,
+      "decrease_health": 0.25,
+      "target": [
+          "ally",
+          "enemy"
+      ],
+      "type":[
+        "single",
+        "splash",
+        "dual_attack"
+      ]
+    },
+    "kill_damage":{
+      "increase": 0.2,
+      "target": [
+          "ally",
+          "enemy"
+      ],
+      "type":[
+        "single",
+        "splash",
+        "dual_attack"
+      ]
+    },
+    "life_steal":{
+      "chance": 100,
+      "percent": 10,
+      "target": [
+          "ally",
+          "enemy"
+      ],
+      "type":[
+        "single",
+        "splash",
+        "dual_attack"
+      ]
+    },
+    "true_damage":{
+      "percent":100,
+      "target": "enemy",
+      "type":"single",
+      "damage": {
+        "min": {"base": 1.1, "increase_by_level":0.1},
+        "max": {"base": 1.7, "increase_by_level":0.1}
+      },
+      "effect": "Nerf"
+    },
+    "normal":{
+      "percent":100,
+      "target": "enemy",
+      "type":"single",
+      "damage": {
+        "min": {"base": 1.1, "increase_by_level":0.1},
+        "max": {"base": 1.7, "increase_by_level":0.1}
+      },
+      "effect": "Nerf"
+    }
+  }
+}
