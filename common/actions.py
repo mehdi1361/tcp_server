@@ -34,19 +34,22 @@ class Action:
 
         return str(self.effect).encode("utf-8")
 
-    def spell_effect_generator(self):
+    def spell_effect_generator(self, target_troop=None):
+        if target_troop is None:
+            target_troop = self.troop
+
         battle_object = BattleObject(
-            hp=self.troop['health'],
-            max_hp=self.troop['maxHealth'],
-            damage=self.troop['attack'],
-            shield=self.troop['shield'],
-            max_shield=self.troop['maxShield'],
-            flag=self.flag_result(self.troop['flag']),
-            moniker=self.troop['moniker']
+            hp=int(round(target_troop['health'])),
+            max_hp=int(round(target_troop['maxHealth'])),
+            damage=int(round(target_troop['attack'])),
+            shield=int(round(target_troop['shield'])),
+            max_shield=int(round(target_troop['maxShield'])),
+            flag=self.flag_result(target_troop['flag']),
+            moniker=target_troop['moniker']
         )
 
         spell_effect_info = SpellEffectInfo(
-            target_character_id=self.troop['id'],
+            target_character_id=target_troop['id'],
             effect_on_character=self.effect_on_character(),
             final_character_stats=battle_object.serializer,
             single_stat_changes=self.single_state_change_lst
@@ -57,8 +60,9 @@ class Action:
 class Flag(Action):
     __metaclass__ = ABCMeta
 
-    def __init__(self, troop, effect, owner, spell=None):
+    def __init__(self, troop, battle_flag, effect, owner, spell=None):
         Action.__init__(self, troop, effect, owner, spell)
+        self.battle_flag = battle_flag
 
 class Attack(Action):
     __metaclass__ = ABCMeta
@@ -200,6 +204,41 @@ class FlagChange(Flag):
         single_stat = SpellSingleStatChangeInfo(
             int_val=0,
             character_stat_change_type=SpellSingleStatChangeType.curFlagValChange
+        )
+        self.single_state_change_lst.append(single_stat.serializer)
+        if self.battle_flag not in self.troop['flag']:
+            self.troop['flag'].append(self.battle_flag)
+
+        return False, self.spell_effect_generator()
+
+class Shield(Action):
+    def __init__(self, troop, shield, effect, owner, spell=None):
+        Action.__init__(self, troop, effect, owner, spell)
+        self.shield = shield
+
+    def run(self):
+
+        self.troop['shield'] += self.shield
+
+        single_stat = SpellSingleStatChangeInfo(
+            int_val=self.shield,
+            character_stat_change_type=SpellSingleStatChangeType.curShieldValChange
+        )
+        self.single_state_change_lst.append(single_stat.serializer)
+
+        return False, self.spell_effect_generator()
+
+
+class Stat(Action):
+    def __init__(self, troop, int_val, stat_change, effect, owner, spell=None):
+        Action.__init__(self, troop, effect, owner, spell)
+        self.int_val = int_val
+        self.stat_change = stat_change
+
+    def run(self):
+        single_stat = SpellSingleStatChangeInfo(
+            int_val=self.int_val,
+            character_stat_change_type=self.stat_change
         )
         self.single_state_change_lst.append(single_stat.serializer)
 

@@ -754,7 +754,7 @@ class Battle(object):
         self.player2.tick = 0
         self.player1.ready = False
         self.player2.ready = False
-        print "player:", player, "active_turn:", self.active_turn['player'].player_client
+
         if (player == self.active_turn['player'].player_client and spell_key) or self.player2.is_bot:
             troops = self.active_turn['enemy'].party['party'][0]['troop'] + \
                      self.active_turn['enemy'].party['party'][1]['troop']

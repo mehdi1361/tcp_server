@@ -1,7 +1,7 @@
 from __future__ import generators
-from decimal import Decimal
-from common.actions import Normal, TrueDamage, Heal, FlagChange
-from .objects import BattleFlags, SpellEffectOnChar
+from common.actions import Normal, TrueDamage, Heal, FlagChange, Shield, Stat
+from .objects import BattleFlags, SpellEffectOnChar, LiveSpellTurnType, LiveSpell, LiveSpellAction, BattleObject, \
+    SpellEffectInfo, SpellSingleStatChangeType
 
 import settings
 import random
@@ -35,6 +35,7 @@ class Spell(Factory):
             "owner_id": self.owner['id'],
             "spell_type": self.spell['type']
         }
+        self.multi_actions = []
 
     @classmethod
     def flag_result(cls, lst_flag):
@@ -104,27 +105,326 @@ class Spell(Factory):
         self.damage_value = int(round(damage_val))
         return chance, int(round(damage_val))
 
-    def normal(self, troop, player=None,  damage=None, effect=None, spell=None):
-        critical, damage = self.damage(damage=damage, troop=troop)
+    def live_flag(self, troop, action, spell_type=LiveSpellTurnType.general_turn.value, params=None):
+        live_spell = LiveSpell(
+            player=self.enemy.player_client.user.username,
+            troop=troop,
+            turn_count=params['turn_count'],
+            turn_type=spell_type,
+            action=action,
+            damage=params['damage']
+        )
+        for item in self.player.player_client.battle.live_spells:
+            if item['player'] == self.player.player_client.user.username \
+                    and item['action'] == 'burn' and item['troop'][0]['id'] == troop['id']:
+                item['turn_count'] = params['turn_count']
+                break
+        else:
+            self.player.player_client.battle.live_spells.append(live_spell.serializer)
 
-        action = Normal(troop=troop, damage=damage, critical=critical, effect=effect, owner=self.owner, spell=spell)
-        return action.run()
+    def normal(self, troop, player=None,  damage=None, effect=None, spell=None):
+        miss, miss_spell_effect = self.miss(troop)
+
+        if miss:
+            self.spell_effect_info_lst.append(miss_spell_effect)
+
+        else:
+            critical, damage = self.damage(damage=damage, troop=troop)
+            action = Normal(troop=troop, damage=damage, critical=critical, effect=effect, owner=self.owner, spell=spell)
+
+            self.critical, effect = action.run()
+            self.spell_effect_info_lst.append(effect)
+
+            self.critical = self.spell['params']['is_critical']
 
     def true_damage(self, troop, player=None,  damage=None, effect=None, spell=None):
-        critical, damage = self.damage(damage=damage, troop=troop)
-        action = TrueDamage(troop=troop, damage=damage, critical=critical, effect=effect, owner=self.owner, spell=spell)
-        return action.run()
+        miss, miss_spell_effect = self.miss(troop)
+
+        if miss:
+            self.spell_effect_info_lst.append(miss_spell_effect)
+
+        else:
+            critical, damage = self.damage(damage=damage, troop=troop)
+            action = TrueDamage(troop=troop, damage=damage, critical=critical, effect=effect, owner=self.owner, spell=spell)
+
+            self.critical, effect = action.run()
+            self.spell_effect_info_lst.append(effect)
+            self.critical = self.spell['params']['is_critical']
 
     def heal(self, troop, player=None,  damage=None, effect=None, spell=None):
-        heal = int(round(self.owner['health'] * spell['percent'] /100))
+        heal = int(round(self.owner['health'] * spell['percent'] / 100))
         action = Heal(troop=troop, heal=heal, effect=effect, owner=self.owner, spell=spell)
-        return action.run()
+
+        self.critical, effect = action.run()
+        self.spell_effect_info_lst.append(effect)
+        self.critical = self.spell['params']['is_critical']
 
     def burn(self, troop, player=None, damage=None, effect=None, spell=None):
-        action = Heal(troop=troop, effect=SpellEffectOnChar.Burn.value, owner=self.owner, spell=spell)
-        return action.run()
+        burn_chance = random.randint(0, 100)
 
-    def find_random_troop(self, player, selected_troop, enemy=False):
+        if spell['chance'] >= burn_chance:
+            action = FlagChange(
+                troop=troop,
+                battle_flag=BattleFlags.Burn.value,
+                effect=SpellEffectOnChar.Burn.value,
+                owner=self.owner,
+                spell=spell
+            )
+
+            self.critical, effect = action.run()
+            self.spell_effect_info_lst.append(effect)
+            self.critical = self.spell['params']['is_critical']
+
+            self.live_flag(
+                troop=troop,
+                action=LiveSpellAction.burn.value,
+                params={
+                    'turn_count': spell['duration'],
+                    'damage': int(self.owner['attack']) * int(spell['percent']) / 100
+                }
+            )
+
+    def poison(self, troop, player=None, damage=None, effect=None, spell=None):
+        poison_chance = random.randint(0, 100)
+
+        if spell['chance'] >= poison_chance:
+            action = FlagChange(
+                troop=troop,
+                battle_flag=BattleFlags.Poison.value,
+                effect=SpellEffectOnChar.Poison.value,
+                owner=self.owner,
+                spell=spell
+            )
+
+            self.critical, effect = action.run()
+            self.spell_effect_info_lst.append(effect)
+            self.critical = self.spell['params']['is_critical']
+
+            self.live_flag(
+                troop=troop,
+                action=LiveSpellAction.poison.value,
+                params={
+                    'turn_count': spell['duration'],
+                    'damage': int(self.owner['attack']) * int(spell['percent']) / 100
+                }
+            )
+
+    def multi_damage(self, troop, player=None, damage=None, effect=None, spell=None):
+        miss, miss_spell_effect = self.miss(troop)
+
+        if miss:
+            self.spell_effect_info_lst.append(miss_spell_effect)
+
+        else:
+            for item in spell['value']:
+                critical, damage = self.damage(damage=damage, troop=troop)
+                damage = int(damage * item)
+
+                action = Normal(troop=troop, damage=damage, critical=critical, effect=effect, owner=self.owner, spell=spell)
+
+                self.critical, effect_on_char = action.run()
+                self.spell_effect_info_lst.append(effect_on_char)
+
+                self.critical = self.spell['params']['is_critical']
+                del action
+
+    def dual_attack(self, troop, player=None, damage=None, effect=None, spell=None):
+        miss, miss_spell_effect = self.miss(troop)
+
+        if miss:
+            self.spell_effect_info_lst.append(miss_spell_effect)
+
+        else:
+            critical, damage = self.damage(damage=damage, troop=troop)
+            action = Normal(troop=troop, damage=damage, critical=critical, effect=effect, owner=self.owner, spell=spell)
+
+            self.critical, first_effect = action.run()
+            self.spell_effect_info_lst.append(first_effect)
+
+            self.critical = self.spell['params']['is_critical']
+
+            second_troop = self.find_random_troop(player=player, selected_troop=troop, enemy=True)
+            critical, second_damage = self.damage(damage=damage, troop=second_troop)
+            action = Normal(
+                troop=second_troop,
+                damage=int(second_damage * spell['second_attack_power']),
+                critical=critical,
+                effect=effect,
+                owner=self.owner,
+                spell=spell
+            )
+
+            self.critical, second_effect = action.run()
+            self.spell_effect_info_lst.append(second_effect)
+
+            self.critical = self.spell['params']['is_critical']
+
+    def enemy_random_troop(self, exclude_troop):
+        lst_troop = []
+        for troop in self.enemy.party['party'][0]['troop']:
+            if exclude_troop['id'] == troop['id']:
+                idx = 0
+                break
+        else:
+            idx = 1
+
+        for troop in self.enemy.party['party'][idx]['troop']:
+            if troop['health'] > 0 and troop['id'] in self.enemy.party['turn'] \
+                    and troop['id'] != exclude_troop['id']:
+                lst_troop.append(troop)
+
+        if len(lst_troop):
+            result_troop = random.randint(0, len(lst_troop) - 1)
+            return True, lst_troop[result_troop]
+
+        return False, None
+
+    def new_attack(self, troop=None, damage=None, effect=None, spell=None):
+        if self.troop['health'] > 0:
+            critical, damage = self.damage(damage=damage, troop=troop)
+            action = Normal(troop=troop, damage=damage, critical=critical, effect=effect, owner=self.owner, spell=spell)
+            self.critical, troop_spell_effect_info = action.run()
+
+            troop_message = {
+                "con_ap": 0,
+                "gen_ap": 0,
+                "spell_index": self.spell['index'],
+                "owner_id": self.owner['id'],
+                "spell_type": self.spell['type'],
+                "spell_effect_info": [troop_spell_effect_info],
+                "is_critical": "True" if critical else "False"
+            }
+
+            return troop_message, self.troop
+
+        else:
+            if troop is None:
+                find, troop = self.enemy_random_troop(self.troop)
+
+            elif troop['health'] <= 0:
+                find, troop = self.enemy_random_troop(troop)
+
+            else:
+                find = True
+
+            if find:
+                critical, damage = self.damage(damage=damage, troop=troop)
+                action = Normal(troop=troop, damage=damage, critical=critical, effect=effect, owner=self.owner,
+                                spell=spell)
+                self.critical, troop_spell_effect_info = action.run()
+                troop_message = {
+                    "con_ap": 0,
+                    "gen_ap": 0,
+                    "spell_index": self.spell['index'],
+                    "owner_id": self.owner['id'],
+                    "spell_type": self.spell['type'],
+                    "spell_effect_info": [troop_spell_effect_info],
+                    "is_critical": "True" if critical else "False"
+                }
+
+                return troop_message, troop
+        return None, None
+
+    def multi_attack(self, troop, player=None, damage=None, effect=None, spell=None):
+        miss, miss_spell_effect = self.miss(troop)
+
+        if miss:
+            self.spell_effect_info_lst.append(miss_spell_effect)
+
+        else:
+            critical, damage = self.damage(damage=damage, troop=troop)
+            sum_damage = self.damage_value
+            action = Normal(troop=troop, damage=damage, critical=critical, effect=effect, owner=self.owner, spell=spell)
+
+            self.critical, effect_on_char = action.run()
+            self.spell_effect_info_lst.append(effect_on_char)
+
+            second_chance = random.randint(1, 100)
+            if second_chance < int(spell['second_chance']):
+                attack, troop = self.new_attack(troop)
+
+                sum_damage += self.damage_value
+                if attack is not None:
+                    self.multi_actions.append(attack)
+
+                last_chance = random.randint(1, 100)
+                if last_chance < int(spell['third_chance']):
+                    attack, troop = self.new_attack(troop)
+                    sum_damage += self.damage_value
+
+                    if attack is not None:
+                        self.multi_actions.append(attack)
+
+    def shield(self, troop, player=None,  damage=None, effect=None, spell=None):
+        action = Shield(troop=troop, shield=spell['value'], effect=effect, owner=self.owner, spell=spell)
+
+        self.critical, effect = action.run()
+        self.spell_effect_info_lst.append(effect)
+        self.critical = self.spell['params']['is_critical']
+
+    def confuse(self, troop, player=None, damage=None, effect=None, spell=None):
+        confuse_chance = random.randint(0, 100)
+
+        if spell['chance'] >= confuse_chance:
+            action = FlagChange(
+                troop=troop,
+                battle_flag=BattleFlags.Confuse.value,
+                effect=SpellEffectOnChar.Confuse.value,
+                owner=self.owner,
+                spell=spell
+            )
+
+            self.critical, effect = action.run()
+            self.spell_effect_info_lst.append(effect)
+            self.critical = self.spell['params']['is_critical']
+
+            self.live_flag(
+                troop=troop,
+                action=LiveSpellAction.confuse.value,
+                params={
+                    'turn_count': spell['duration'],
+                    'damage': 0
+                }
+            )
+
+    def rage(self, troop, player=None,  damage=None, effect=None, spell=None):
+        miss, miss_spell_effect = self.miss(troop)
+
+        if miss:
+            self.spell_effect_info_lst.append(miss_spell_effect)
+
+        else:
+
+            diff_health = self.owner['maxHealth'] - self.owner['health']
+            rage_damage = self.owner['attack'] + int(diff_health * spell['inc_dmg'])
+            critical, damage = self.damage(damage=damage, troop=troop)
+            action = Normal(troop=troop, damage=rage_damage, critical=critical, effect=effect, owner=self.owner, spell=spell)
+
+            self.critical, effect = action.run()
+            self.spell_effect_info_lst.append(effect)
+
+            self.critical = self.spell['params']['is_critical']
+
+    def increase_damage(self, troop, player=None, damage=None, effect=None, spell=None):
+        troop['attack'] += int(troop['attack'] * float(spell['increase']))
+        troop['health'] -= int(troop['maxHealth'] * float(spell['decrease_health']))
+
+        action = Stat(
+            troop=troop,
+            int_val=troop['attack'],
+            stat_change=SpellSingleStatChangeType.curDamageValChange,
+            effect=effect,
+            owner=self.owner,
+            spell=spell
+        )
+
+        self.critical, effect = action.run()
+        self.spell_effect_info_lst.append(effect)
+
+        self.critical = self.spell['params']['is_critical']
+
+    @staticmethod
+    def find_random_troop(player, selected_troop, enemy=False):
         index = 1 if enemy else 0
         random_index = random.randint(0, 4)
 
@@ -157,18 +457,43 @@ class Spell(Factory):
 
         return player
 
+    def miss(self, troop):
+        miss_chance = random.randint(0, 100)
+        if self.owner['m_chn'] * 100 > miss_chance:
+            battle_object = BattleObject(
+                hp=troop['health'],
+                max_hp=troop['maxHealth'],
+                damage=0,
+                shield=troop['shield'],
+                max_shield=troop['maxShield'],
+                flag=self.flag_result(troop['flag']),
+                moniker=troop['moniker']
+            )
+
+            spell_effect_info = SpellEffectInfo(
+                target_character_id=troop['id'],
+                effect_on_character=SpellEffectOnChar.Miss.value,
+                final_character_stats=battle_object.serializer,
+                single_stat_changes=[]
+            )
+
+            return True, spell_effect_info.serializer
+
+        return False, None
+
     def run(self):
+
         player = self.find_player()
 
-        for spell in self.spell['params']['base_spells']:
-            if 'effect' in self.spell['params']['base_spells'][spell]:
-                spell_effect = self.spell['params']['base_spells'][spell]['effect']
+        for spell in sorted(self.spell['params']['base_spells'].items(), key=lambda x: x[1]['action']):
+            if 'effect' in spell[1]:
+                spell_effect = spell[1]['effect']
 
             else:
                 spell_effect = None
 
-            if self.spell['params']['base_spells'][spell]['type'] == 'splash':
-                if self.spell['params']['base_spells'][spell]['target'] == 'ally':
+            if spell[1]['type'] == 'splash':
+                if spell[1]['target'] == 'ally':
                     idx = 0
 
                 else:
@@ -180,30 +505,30 @@ class Spell(Factory):
                     if lst_troop[0]['shield'] <= 0 and index == 0:
                         troop = lst_troop[-1]
 
-                    if troop['health'] > 0:
-                        self.critical, effect = getattr(self, '{}'.format(spell))(
+                    if troop['health'] > 0 and hasattr(self, '{}'.format(spell[0])):
+                        getattr(self, '{}'.format(spell[0]))(
                             troop=troop,
                             player=player,
                             effect=spell_effect,
-                            spell=self.spell['params']['base_spells'][spell]
+                            spell=spell[1]
                         )
-
-                        self.spell_effect_info_lst.append(effect)
-                        self.critical = self.spell['params']['is_critical']
 
             else:
-                self.critical, effect = getattr(self, '{}'.format(spell))(
-                            troop=self.troop,
-                            player=player,
-                            effect=spell_effect,
-                            spell=self.spell['params']['base_spells'][spell]
-                        )
-                self.spell_effect_info_lst.append(effect)
+                if self.troop['health'] > 0 and hasattr(self, '{}'.format(spell[0])):
+                    getattr(self, '{}'.format(spell[0]))(
+                                troop=self.troop,
+                                player=player,
+                                effect=spell_effect,
+                                spell=spell[1]
+                            )
 
         self.f_act["spell_effect_info"] = self.spell_effect_info_lst
         self.f_act["is_critical"] = "True" if self.critical else "False"
 
         self.actions.append(self.f_act)
+
+        for action in self.multi_actions:
+            self.actions.append(action)
 
         message = {
             "t": "FightAction",

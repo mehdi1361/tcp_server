@@ -121,18 +121,6 @@
         "dual_attack"
       ]
     },
-    "dual_attack":{
-      "second_attack_power": 0.7,
-      "target": [
-          "ally",
-          "enemy"
-      ],
-      "type":[
-        "single",
-        "splash",
-        "dual_attack"
-      ]
-    },
     "taunt":{
       "duration": 2,
       "target": [
@@ -202,6 +190,45 @@
         "max": {"base": 1.7, "increase_by_level":0.1}
       },
       "effect": "Nerf"
+    },
+    "shield":{
+      "target": "ally",
+      "type":"single",
+      "value": {
+        "min": {"base": 1.1, "increase_by_level":0.1},
+        "max": {"base": 1.7, "increase_by_level":0.1}
+      },
+      "effect": "Buff"
+    },
+    "dual_attack":{
+      "second_attack_power": 0.7,
+      "second_target": ["hero", "random"],
+      "target": [
+          "ally",
+          "enemy"
+      ],
+      "type":[
+        "single",
+        "splash",
+        "dual_attack"
+      ],
+      "action":0
+    },
+    "confuse":{
+      "chance": 100,
+      "duration": 5,
+      "target": [
+          "ally",
+          "enemy"
+      ],
+      "type":[
+        "single",
+        "splash",
+        "dual_attack"
+      ]
+    },
+    "change_hp":{
+
     }
   }
 }
