@@ -123,15 +123,17 @@
     },
     "taunt":{
       "duration": 2,
-      "target": [
-          "ally",
-          "enemy"
-      ],
-      "type":[
-        "single",
-        "splash",
-        "dual_attack"
-      ]
+      "target": "ally",
+      "type": "single",
+      "reaction":{
+        "burn":{
+          "chance": 25,
+          "duration": 3,
+          "percent": 40,
+          "target": "enemy",
+          "type": "single"
+        }
+      }
     },
     "increase_damage":{
       "increase": 0.2,
@@ -227,8 +229,24 @@
         "dual_attack"
       ]
     },
-    "change_hp":{
-
+    "heal_or_damage":{
+      "heal_percent": 50,
+      "target": "all",
+      "type":"single"
+    },
+    "ap_dmg":{
+      "value": 20,
+      "target": "enemy",
+      "type":"single",
+      "action": 0
+    },
+    "damage_reduction":{
+      "chance": 25,
+      "duration": 3,
+      "percent": 40,
+      "target": "ally",
+      "type": "single"
     }
+
   }
 }

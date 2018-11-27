@@ -35,7 +35,7 @@ class SpellSingleStatChangeType(Enum):
     None_f = "None"
     curHpValChange = "curHpValChange"
     curShieldValChange = "curShieldValChange"
-    curDamageValChange = "curShieldValChange"
+    curDamageValChange = "curDamageValChange"
     curFlagValChange = "curFlagValChange"
 
 
@@ -388,13 +388,14 @@ class SpellEffectInfo(object):
 
 
 class LiveSpell:
-    def __init__(self, player, troop, turn_count, turn_type, action, damage=None):
+    def __init__(self, player, troop, turn_count, turn_type, action, damage=None, reaction=None):
         self.player = player
         self.troop = troop.copy(),
         self.turn_count = turn_count
         self.turn_type = turn_type
         self.action = action
         self.damage = damage
+        self.reaction = reaction
 
     @property
     def serializer(self):
@@ -404,7 +405,8 @@ class LiveSpell:
             "turn_count": self.turn_count,
             "turn_type": self.turn_type,
             "action": self.action,
-            "damage": self.damage
+            "damage": self.damage,
+            "reaction": self.reaction,
         }
 
 
