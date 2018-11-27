@@ -894,7 +894,7 @@ class Spell(Factory):
         for action in self.multi_actions:
             self.actions.append(action)
 
-        val = self.chakra_check()
+        val = self.chakra_check(player)
         if val is not None:
             self.actions.extend(val)
 
