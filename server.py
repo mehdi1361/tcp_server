@@ -187,14 +187,13 @@ class ServerFactory(protocol.Factory):
 
     def announce(self):
         for client in clients:
-            # ping_message = {
-            #     "t": "Ping",
-            #     "v": ""
-            # }
-            #
-            # ping_message = "{}{}".format(normal_length(len(str(ping_message))), ping_message)
-            # client.transport.write(str(ping_message).replace("'", '"'))
-            # print "ping message", ping_message
+            ping_message = {
+                "t": "Ping",
+                "v": ""
+            }
+           
+            ping_message = "{}{}".format(normal_length(len(str(ping_message))), ping_message)
+            client.transport.write(str(ping_message).replace("'", '"'))
 
             if client.battle:
                 if client.battle.player1.ready is True and client.battle.player2.ready is True:
@@ -318,7 +317,7 @@ class ServerFactory(protocol.Factory):
                 end_battle_log.delay(client.battle.id)
 
 
-# log.startLogging(open('server.log', 'w'))
+log.startLogging(open('server.log', 'w'))
 game_factory = ServerFactory()
 reactor.listenTCP(settings.PORT, game_factory)
 reactor.run()
