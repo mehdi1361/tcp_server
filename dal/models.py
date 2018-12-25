@@ -51,6 +51,15 @@ bot_match_making = Table('bot_match_makings', metadata, autoload=True)
 custom_bots = Table('custom_bots', metadata, autoload=True)
 custom_bot_troops = Table('custom_bot_troops', metadata, autoload=True)
 
+ctm_must_have_hero = Table('ctm_must_have_hero', metadata, autoload=True)
+ctm_must_have_troop = Table('ctm_must_have_troop', metadata, autoload=True)
+ctm_must_have_spell = Table('ctm_must_have_spell', metadata, autoload=True)
+
+
+user_card_spells = Table('user_card_spells', metadata, autoload=True)
+user_hero_spells = Table('user_hero_spells', metadata, autoload=True)
+user_chakra_spells = Table('user_chakra_spells', metadata, autoload=True)
+
 
 class User(object): pass
 class Profile(object): pass
@@ -97,6 +106,14 @@ class BotMatchMaking(object): pass
 class CustomBot(object): pass
 class CustomBotTroop(object): pass
 
+class MustHaveHero(object): pass
+class MustHaveTroop(object): pass
+class MustHaveSpell(object): pass
+
+class UserCardSpell(object): pass
+class UserHeroSpell(object): pass
+class UserChakraSpell(object): pass
+
 
 mapper(User, users_table)
 mapper(Profile, profile)
@@ -142,3 +159,11 @@ mapper(BotMatchMaking, bot_match_making)
 
 mapper(CustomBot, custom_bots)
 mapper(CustomBotTroop, custom_bot_troops)
+
+mapper(MustHaveHero, ctm_must_have_hero)
+mapper(MustHaveTroop, ctm_must_have_troop)
+mapper(MustHaveSpell, ctm_must_have_spell)
+
+mapper(UserCardSpell, user_card_spells)
+mapper(UserHeroSpell, user_hero_spells)
+mapper(UserChakraSpell, user_chakra_spells)

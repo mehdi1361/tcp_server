@@ -83,7 +83,7 @@
       ]
     },
     "burn":{
-      "chance": 25,
+      "chance": 100,
       "duration": 3,
       "percent": 40,
       "target": [

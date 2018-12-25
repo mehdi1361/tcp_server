@@ -267,26 +267,28 @@ class Spell(Factory):
 
         if self.spell['params'] is not None:
             if 'normal' in self.spell['params']['base_spells'].keys():
-                owner_val = owner_val * self.spell['params']['base_spells']['normal']['percent'] / 100
-                round_increase = round(
-                                    random.uniform(
-                                        self.spell['params']['base_spells']['normal']['damage']['min']['base'],
-                                        self.spell['params']['base_spells']['normal']['damage']['max']['base']
-                                    ),
-                                    1
-                                )
-                owner_val = owner_val + int(owner_val * round_increase)
+                owner_val = int(owner_val * \
+                                (self.spell['params']['base_spells']['normal']['damage']['val'] +
+                                 (self.spell['level'] *
+                                  self.spell['params']['base_spells']['normal']['damage']['chg_amt'])))
 
             if 'true_damage' in self.spell['params']['base_spells'].keys():
-                owner_val = owner_val * self.spell['params']['base_spells']['true_damage']['percent'] / 100
                 round_increase = round(
-                                    random.uniform(
-                                        self.spell['params']['base_spells']['true_damage']['damage']['min']['base'],
-                                        self.spell['params']['base_spells']['true_damage']['damage']['max']['base']
-                                    ),
-                                    1
-                                )
-                owner_val = owner_val + int(owner_val * round_increase)
+                    random.uniform(
+                        self.spell['params']['base_spells']['true_damage']['min_dmg']['val'] +
+                        (
+                                self.spell['params']['base_spells']['true_damage']['min_dmg']['chg_amt'] *
+                                self.spell['level']
+                        ),
+                        self.spell['params']['base_spells']['true_damage']['max_dmg']['val'] +
+                        (
+                                self.spell['params']['base_spells']['true_damage']['max_dmg']['chg_amt'] *
+                                self.spell['level']
+                        )
+                    ),
+                    1
+                )
+                owner_val = int(owner_val * round_increase)
 
         for spell in self.player.player_client.battle.live_spells:
             if 'troop' in spell.keys() and spell['troop'][0]['id'] == troop['id'] \
@@ -330,7 +332,7 @@ class Spell(Factory):
         else:
             self.player.player_client.battle.live_spells.append(live_spell.serializer)
 
-    def normal(self, troop, player=None,  damage=None, effect=None, spell=None):
+    def normal(self, troop, player=None, damage=None, effect=None, spell=None):
         if not self.miss(troop):
             critical, damage = self.damage(damage=damage, troop=troop)
             damage = damage + damage * self.damage_multiplier(spell)
@@ -343,18 +345,19 @@ class Spell(Factory):
 
             self.critical = self.spell['params']['is_critical']
 
-    def true_damage(self, troop, player=None,  damage=None, effect=None, spell=None):
+    def true_damage(self, troop, player=None, damage=None, effect=None, spell=None):
         if not self.miss(troop):
             critical, damage = self.damage(damage=damage, troop=troop)
             damage = damage + damage * self.damage_multiplier(spell)
             damage -= self.calc_damage_reduction(troop)
-            action = TrueDamage(troop=troop, damage=damage, critical=critical, effect=effect, owner=self.owner, spell=spell)
+            action = TrueDamage(troop=troop, damage=damage, critical=critical, effect=effect, owner=self.owner,
+                                spell=spell)
 
             self.critical, effect = action.run()
             self.spell_effect_info_lst.append(effect)
             self.critical = self.spell['params']['is_critical']
 
-    def heal(self, troop, player=None,  damage=None, effect=None, spell=None):
+    def heal(self, troop, player=None, damage=None, effect=None, spell=None):
         heal = int(round(self.owner['health'] * spell['percent'] / 100))
         action = Heal(troop=troop, heal=heal, effect=effect, owner=self.owner, spell=spell)
 
@@ -420,7 +423,8 @@ class Spell(Factory):
                 damage = int(damage * item)
                 damage -= self.calc_damage_reduction(troop)
 
-                action = Normal(troop=troop, damage=damage, critical=critical, effect=effect, owner=self.owner, spell=spell)
+                action = Normal(troop=troop, damage=damage, critical=critical, effect=effect, owner=self.owner,
+                                spell=spell)
 
                 self.critical, effect_on_char = action.run()
                 self.spell_effect_info_lst.append(effect_on_char)
@@ -553,7 +557,7 @@ class Spell(Factory):
                     if attack is not None:
                         self.multi_actions.append(attack)
 
-    def shield(self, troop, player=None,  damage=None, effect=None, spell=None):
+    def shield(self, troop, player=None, damage=None, effect=None, spell=None):
         action = Shield(troop=troop, shield=spell['value'], effect=effect, owner=self.owner, spell=spell)
 
         self.critical, effect = action.run()
@@ -585,9 +589,8 @@ class Spell(Factory):
                 }
             )
 
-    def rage(self, troop, player=None,  damage=None, effect=None, spell=None):
+    def rage(self, troop, player=None, damage=None, effect=None, spell=None):
         if not self.miss(troop):
-
             diff_health = self.owner['maxHealth'] - self.owner['health']
             rage_damage = self.owner['attack'] + int(diff_health * spell['inc_dmg'])
             rage_damage = rage_damage + rage_damage * self.damage_multiplier(spell)
@@ -603,6 +606,23 @@ class Spell(Factory):
 
     def increase_damage(self, troop, player=None, damage=None, effect=None, spell=None):
         troop['attack'] += int(troop['attack'] * float(spell['increase']))
+        troop['health'] -= int(troop['maxHealth'] * float(spell['decrease_health']))
+
+        action = Stat(
+            troop=troop,
+            int_val=troop['attack'],
+            stat_change=SpellSingleStatChangeType.curDamageValChange,
+            effect=effect,
+            owner=self.owner,
+            spell=spell
+        )
+
+        self.critical, effect = action.run()
+        self.spell_effect_info_lst.append(effect)
+
+        self.critical = self.spell['params']['is_critical']
+
+    def decrease_health(self, troop, player=None, damage=None, effect=None, spell=None):
         troop['health'] -= int(troop['maxHealth'] * float(spell['decrease_health']))
 
         action = Stat(
@@ -653,7 +673,7 @@ class Spell(Factory):
                 self.spell_effect_info_lst.append(effect)
                 self.critical = self.spell['params']['is_critical']
 
-    def life_steal(self, troop, player=None,  damage=None, effect=None, spell=None):
+    def life_steal(self, troop, player=None, damage=None, effect=None, spell=None):
         if not self.miss(troop):
             critical, damage = self.damage(damage=damage, troop=troop)
             damage = damage + damage * self.damage_multiplier(spell)
@@ -877,11 +897,11 @@ class Spell(Factory):
                         self.different_troop(player, self.troop, enemy=enemy)
 
                     getattr(self, '{}'.format(spell[0]))(
-                                troop=self.troop,
-                                player=player,
-                                effect=spell_effect,
-                                spell=spell[1]
-                            )
+                        troop=self.troop,
+                        player=player,
+                        effect=spell_effect,
+                        spell=spell[1]
+                    )
 
                     self.check_troop_death(self.troop)
                     self.gen_action_point()
@@ -906,4 +926,3 @@ class Spell(Factory):
         }
 
         return message
-

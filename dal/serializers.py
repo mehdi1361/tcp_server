@@ -6,7 +6,7 @@ from common.utils import get_bot_name
 
 import settings
 from dal.controller import fetch_spell_info, fetch_unit_spell_info, fetch_chakra_spell_info, \
-    fetch_hero_items, fetch_hero_default_items, fetch_chest_info
+    fetch_hero_items, fetch_hero_default_items, fetch_chest_info, unit_spell_level, hero_spell_level, chakra_spell_level
 
 
 def player_info_serializer(player, bot=False):
@@ -39,7 +39,7 @@ def player_info_serializer(player, bot=False):
                                     settings.HERO_UPDATE[player.UserHero.level]['increase']))
                 if player.UserHero.level in settings.HERO_UPDATE.keys() else player.Hero.attack,
 
-                "spell": get_hero_spell_info(player.Hero),
+                "spell": get_hero_spell_info(player.Hero, player.User),
                 "is_active": str(True).encode('utf-8'),
                 "items": get_hero_item_info(player.User, moniker=player.Hero.moniker)
                 if get_hero_item_info(player.User, moniker=player.Hero.moniker) else "",
@@ -78,7 +78,7 @@ def player_info_serializer(player, bot=False):
                                 settings.HERO_UPDATE[player.UserHero.level]['increase']))
             if player.UserHero.level in settings.HERO_UPDATE.keys() else player.Hero.chakra_attack,
 
-            "spell": get_chakra_spell_info(player.Hero),
+            "spell": get_chakra_spell_info(player.Hero, player.User),
             "is_active": str(False).encode('utf-8'),
             "items": [],
             "crt_c": player.Hero.critical_chance,
@@ -92,7 +92,7 @@ def player_info_serializer(player, bot=False):
     return result
 
 
-def troop_serializer_info(troop, bot=False):
+def troop_serializer_info(troop, bot=False, user=None):
     result = {
         "id": str(uuid.uuid4().int >> 64)[:18],
         "moniker": str(troop.Unit.moniker).encode('utf-8'),
@@ -119,7 +119,7 @@ def troop_serializer_info(troop, bot=False):
                             settings.UNIT_UPDATE[troop.UserCard.level]['increase']))
         if troop.UserCard.level in settings.UNIT_UPDATE.keys() else troop.Unit.attack,
 
-        "spell": get_unit_spell_info(troop.Unit),
+        "spell": get_unit_spell_info(troop.Unit, user),
         "is_active": str(True).encode('utf-8'),
         "items": [],
         "crt_c": troop.Unit.critical_chance,
@@ -132,7 +132,18 @@ def troop_serializer_info(troop, bot=False):
     return result
 
 
-def spell_serializer_info(spell):
+def spell_serializer_info(spell, user, spell_owner='troop'):
+    level = 0
+
+    if spell_owner == "troop":
+        level = unit_spell_level(user, spell.id)
+
+    elif spell_owner == "hero":
+        level = hero_spell_level(user, spell.id)
+
+    elif spell_owner == "chakra":
+        level = chakra_spell_level(user, spell.id)
+
     result = {
         "id": spell.id,
         "name": str(spell.spell_name).encode('utf-8'),
@@ -140,7 +151,8 @@ def spell_serializer_info(spell):
         "gen_ap": spell.generated_action_point,
         "need_ap": spell.need_action_point,
         "index": spell.char_spells_index,
-        "params": spell.params if spell.params else {}
+        "params": spell.params if spell.params else {},
+        "level": level
     }
     return result
 
@@ -209,30 +221,30 @@ def user_chest_serializer(user_chest):
     return result
 
 
-def get_hero_spell_info(hero):
+def get_hero_spell_info(hero, user):
     spell_list = []
     spells = fetch_spell_info(hero)
     for spell in spells:
-        spell_list.append(spell_serializer_info(spell.HeroSpell))
+        spell_list.append(spell_serializer_info(spell.HeroSpell, user, spell_owner="hero"))
 
     return spell_list
 
 
-def get_unit_spell_info(unit):
+def get_unit_spell_info(unit, user):
     spell_list = []
     spells = fetch_unit_spell_info(unit)
 
     for spell in spells:
-        spell_list.append(spell_serializer_info(spell.UnitSpell))
+        spell_list.append(spell_serializer_info(spell.UnitSpell, user))
 
     return spell_list
 
 
-def get_chakra_spell_info(hero):
+def get_chakra_spell_info(hero, user):
     spell_list = []
     spells = fetch_chakra_spell_info(hero)
     for spell in spells:
-        spell_list.append(spell_serializer_info(spell.ChakraSpell))
+        spell_list.append(spell_serializer_info(spell.ChakraSpell, user, spell_owner="chakra"))
 
     return spell_list
 

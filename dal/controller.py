@@ -6,7 +6,9 @@ import settings
 from .models import User, Profile, UserHero, Hero, UserCard, Unit, \
     HeroSpell, UnitSpell, ChakraSpell, Item, UserChest, Chest, Battle, Bot, Leagues, \
     LeagueUser, CreatedLeagues, PlayOff, Claim, CTM, \
-    CTMHero, CTMUnit, Fakes, FakeDetail, BotMatchMaking, CustomBot, CustomBotTroop
+    CTMHero, CTMUnit, Fakes, FakeDetail, BotMatchMaking, CustomBot, CustomBotTroop, \
+    MustHaveHero, MustHaveTroop, MustHaveSpell, UserCardSpell, UserHeroSpell, UserChakraSpell
+
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import func
 from datetime import datetime, timedelta
@@ -810,6 +812,18 @@ def fetch_hero_moniker(character_id):
     return hero.moniker
 
 
+def fetch_unit_moniker(character_id):
+    query = session.query(
+        Unit
+    )
+
+    hero = query.filter(
+        Unit.id == character_id
+    ).first()
+
+    return hero.moniker
+
+
 def fetch_first_league():
     query = session.query(Leagues)
     league = query.filter(Leagues.league_name == settings.FIRST_LEAGUE_NAME).first()
@@ -935,3 +949,193 @@ def fetch_custom_bot():
 
     else:
         return None, None
+
+def fetch_lst_hero_name():
+    query = session.query(
+        Hero,
+    )
+
+    return [hero.moniker for hero in query.all()]
+
+def fetch_must_have_hero(ctm):
+    query = session.query(
+        CTM,
+        MustHaveHero,
+        Hero
+    )
+
+    must_have = query.filter(
+        CTM.id == MustHaveHero.ctm_id,
+        Hero.id == MustHaveHero.hero_id,
+        CTM.id == ctm.id
+    )
+
+    if must_have is None:
+        return []
+
+    return [i.Hero.moniker for i in must_have.all()]
+
+
+def fetch_must_have_troop(ctm):
+    query = session.query(
+        CTM,
+        MustHaveTroop,
+        Unit
+    )
+
+    must_have = query.filter(
+        CTM.id == MustHaveTroop.ctm_id,
+        Unit.id == MustHaveTroop.unit_id,
+        CTM.id == ctm.id
+    )
+
+    if must_have is None:
+        return []
+
+    return [i.Unit for i in must_have.all()]
+
+
+def fetch_must_have_spell(ctm):
+    query = session.query(
+        CTM,
+        MustHaveSpell,
+        UnitSpell
+    )
+
+    must_have = query.filter(
+        CTM.id == MustHaveSpell.ctm_id,
+        UnitSpell.id == MustHaveSpell.unitspell_id,
+        CTM.id == ctm.id
+    )
+
+    if must_have is None:
+        return []
+
+    return [i.UnitSpell for i in must_have.all()]
+
+def fetch_unlock_card(user, rarity):
+    query = session.query(
+        UserCard,
+        User,
+        Unit
+    )
+
+    unlock_cards = query.filter(
+        Unit.id == UserCard.character_id,
+        User.id == UserCard.user_id,
+        User.id == user.id,
+        Unit.rarity == rarity,
+        Unit.unlock == True
+    )
+
+    return [item.UserCard for item in unlock_cards]
+
+def fetch_user_hero(user):
+    query = session.query(
+        UserHero,
+        User,
+        Hero
+    )
+
+    user_heroes = query.filter(
+        Hero.id == UserHero.hero_id,
+        User.id == UserHero.user_id,
+        User.id == user.id
+    )
+
+    return [item.UserHero for item in user_heroes]
+
+def fetch_unit_spell(rarity):
+    query = session.query(
+        UnitSpell
+    )
+
+    spells = query.filter(
+        UnitSpell.rarity == rarity
+    ).all()
+
+    return spells
+
+def fetch_hero_spell(rarity):
+    query = session.query(
+        HeroSpell
+    )
+
+    spells = query.filter(
+        HeroSpell.rarity == rarity
+    ).all()
+
+    return spells
+
+def fetch_chakra_spell(rarity):
+    query = session.query(
+        ChakraSpell
+    )
+
+    spells = query.filter(
+        ChakraSpell.rarity == rarity
+    ).all()
+
+    return spells
+
+def unit_spell_level(user, spell_id):
+    query = session.query(
+        UnitSpell,
+        UserCardSpell,
+        UserCard,
+        Unit,
+        User
+    )
+
+    card = query.filter(
+        User.id == user.id,
+        Unit.id == UnitSpell.unit_id,
+        UserCard.character_id == Unit.id,
+        UserCard.user_id == User.id,
+        UserCardSpell.user_card_id == UserCard.id,
+        UnitSpell.id == spell_id
+    ).first()
+
+    return card.UserCardSpell.spell_level
+
+
+def hero_spell_level(user, spell_id):
+    query = session.query(
+        HeroSpell,
+        UserHeroSpell,
+        UserHero,
+        Hero,
+        User
+    )
+
+    card = query.filter(
+        User.id == user.id,
+        Hero.id == HeroSpell.hero_id,
+        UserHero.hero_id == Hero.id,
+        UserHero.user_id == User.id,
+        UserHeroSpell.user_hero_id == UserHero.id,
+        HeroSpell.id == spell_id
+    ).first()
+
+    return card.UserHeroSpell.spell_level
+
+
+def chakra_spell_level(user, spell_id):
+    query = session.query(
+        ChakraSpell,
+        UserChakraSpell,
+        UserHero,
+        Hero,
+        User
+    )
+
+    card = query.filter(
+        User.id == user.id,
+        Hero.id == ChakraSpell.hero_id,
+        UserHero.hero_id == Hero.id,
+        UserHero.user_id == User.id,
+        UserChakraSpell.user_hero_id == UserHero.id,
+        ChakraSpell.id == spell_id
+    ).first()
+
+    return card.UserChakraSpell.spell_level

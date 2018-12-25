@@ -1,0 +1,354 @@
+{
+   "is_critical": "true",
+   "base_spells": {
+      "multi_damage": {
+         "damages": [
+            {
+               "val": 0.8,
+               "chg_amt": 0.1
+            },
+            {
+               "val": 0.6,
+               "chg_amt": 0.05
+            }
+         ],
+         "target": [
+            "ally",
+            "enemy"
+         ],
+         "type": [
+            "single",
+            "splash",
+            "dual_attack"
+         ]
+      },
+      "ap_gen": {
+         "ap": {
+            "val": 1,
+            "chg_amt": 1
+         },
+         "target": [
+            "ally",
+            "enemy"
+         ],
+         "type": [
+            "single",
+            "splash",
+            "dual_attack"
+         ]
+      },
+      "rage_dmg": {
+         "inc_dmg": {
+            "val": 0.2,
+            "chg_amt": 0.02
+         },
+         "target": [
+            "ally",
+            "enemy"
+         ],
+         "type": [
+            "single",
+            "splash",
+            "dual_attack"
+         ]
+      },
+      "poison": {
+         "percent_dmg": {
+            "val": 20,
+            "chg_amt": 2
+         },
+         "chance": {
+            "val": 30,
+            "chg_amt": 5
+         },
+         "duration": 3,
+         "target": [
+            "ally",
+            "enemy"
+         ],
+         "type": [
+            "single",
+            "splash",
+            "dual_attack"
+         ]
+      },
+      "heal": {
+         "heal_perc": {
+            "val": 20,
+            "chg_amt": 2
+         },
+         "target": [
+            "ally",
+            "enemy"
+         ],
+         "type": [
+            "single",
+            "splash",
+            "dual_attack"
+         ]
+      },
+      "ap_dmg": {
+         "damage": {
+            "val": 1,
+            "chg_amt": 0.1
+         },
+         "ap_damage": {
+            "val": 20,
+            "chg_amt": 3
+         },
+         "target": [
+            "ally",
+            "enemy"
+         ],
+         "type": [
+            "single",
+            "splash",
+            "dual_attack"
+         ]
+      },
+      "burn": {
+         "chance": {
+            "val": 30,
+            "chg_amt": 5
+         },
+         "duration": 3,
+         "percent_dmg": {
+            "val": 20,
+            "chg_amt": 2
+         },
+         "target": [
+            "ally",
+            "enemy"
+         ],
+         "type": [
+            "single",
+            "splash",
+            "dual_attack"
+         ]
+      },
+      "protect": {
+         "duration": 4,
+         "target": [
+            "ally",
+            "enemy"
+         ],
+         "type": [
+            "single",
+            "splash",
+            "dual_attack"
+         ]
+      },
+      "multi_attack": {
+         "damage": {
+            "val": 1,
+            "chg_amt": 0.1
+         },
+         "second_chance": {
+            "val": 80,
+            "chg_amt": 2
+         },
+         "third_chance": {
+            "val": 25,
+            "chg_amt": 1
+         },
+         "target": "enemy",
+         "type": [
+            "single",
+            "splash",
+            "dual_attack"
+         ]
+      },
+      "taunt": {
+         "duration": 2,
+         "target": "ally",
+         "type": "single",
+         "reaction": {
+            "burn": {
+               "chance": 25,
+               "duration": 3,
+               "percent": 40,
+               "target": "enemy",
+               "type": "single"
+            }
+         }
+      },
+      "increase_damage": {
+         "inc_dmg": {
+            "val": 0.2,
+            "chg_amt": 0.05
+         },
+         "target": [
+            "ally",
+            "enemy"
+         ],
+         "type": [
+            "single",
+            "splash",
+            "dual_attack"
+         ]
+      },
+      "decrease_health": {
+         "dec_hp": {
+            "val": 0.15,
+            "chg_amt": 0.05
+         },
+         "target": [
+            "ally",
+            "enemy"
+         ],
+         "type": [
+            "single",
+            "splash",
+            "dual_attack"
+         ]
+      },
+      "kill_damage": {
+         "damage": {
+            "val": 1,
+            "chg_amt": 0.1
+         },
+         "increase": {
+            "val": 0.2,
+            "chg_amt": 0.1
+         },
+         "target": [
+            "ally",
+            "enemy"
+         ],
+         "type": [
+            "single",
+            "splash",
+            "dual_attack"
+         ]
+      },
+      "life_steal": {
+         "damage": {
+            "val": 1,
+            "chg_amt": 0.1
+         },
+         "steal_chance": {
+            "val": 100,
+            "chg_amt": 0
+         },
+         "steal_perc": {
+            "val": 0.2,
+            "chg_amt": 0.1
+         },
+         "target": [
+            "ally",
+            "enemy"
+         ],
+         "type": [
+            "single",
+            "splash",
+            "dual_attack"
+         ]
+      },
+      "true_damage": {
+         "target": "enemy",
+         "type": "single",
+         "min_dmg": {
+            "val": 1,
+            "chg_amt": 0.1
+         },
+         "max_dmg": {
+            "val": 1.3,
+            "chg_amt": 0.1
+         }
+      },
+      "normal": {
+         "target": "enemy",
+         "type": "single",
+         "damage": {
+            "val": 0.9,
+            "chg_amt": 0.1
+         }
+      },
+      "shield": {
+         "target": "ally",
+         "type": "single",
+         "value": {
+            "min": {
+               "base": 1.1,
+               "increase_by_level": 0.1
+            },
+            "max": {
+               "base": 1.7,
+               "increase_by_level": 0.1
+            }
+         },
+         "effect": "Buff"
+      },
+      "dual_attack": {
+         "damage": {
+            "val": 1,
+            "chg_amt": 0.1
+         },
+         "second_dmg": {
+            "val": 1,
+            "chg_amt": 0.1
+         },
+         "second_target": [
+            "hero",
+            "random"
+         ],
+         "target": [
+            "ally",
+            "enemy"
+         ],
+         "type": [
+            "single",
+            "splash",
+            "dual_attack"
+         ],
+         "action": 0
+      },
+      "confuse": {
+         "chance": {
+            "val": 30,
+            "chg_amt": 5
+         },
+         "duration": 3,
+         "target": [
+            "ally",
+            "enemy"
+         ],
+         "type": [
+            "single",
+            "splash",
+            "dual_attack"
+         ]
+      },
+      "heal_or_dmg": {
+         "heal_perc": {
+            "val": 20,
+            "chg_amt": 2
+         },
+         "damage": {
+            "val": 1,
+            "chg_amt": 0.1
+         },
+         "target": "all",
+         "type": "single"
+      },
+      "damage_reduction": {
+         "chance": 25,
+         "duration": 3,
+         "percent": 40,
+         "target": "ally",
+         "type": "single"
+      },
+      "range_dmg": {
+         "target": "enemy",
+         "type": "single",
+         "min_dmg": {
+            "val": 0.7,
+            "chg_amt": 0.1
+         },
+         "max_dmg": {
+            "val": 1.5,
+            "chg_amt": 0.1
+         }
+      }
+   }
+}

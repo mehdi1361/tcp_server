@@ -32,7 +32,7 @@ def get_troops_info(user, troops_lst, bot=False):
     troop_info_lst = fetch_troops_info(user, troops_lst)
 
     for info in troop_info_lst:
-        serializer = troop_serializer_info(info, bot)
+        serializer = troop_serializer_info(info, bot, user)
         troops_list.append(serializer)
 
     return troops_list
@@ -248,6 +248,36 @@ def get_rank(user):
 def get_selected_bot_troop():
     return fetch_selected_bot_troop()
 
-
 def get_custom_bot():
     return fetch_custom_bot()
+
+def get_lst_hero_name():
+    return fetch_lst_hero_name()
+
+def get_must_have_hero(ctm):
+    return fetch_must_have_hero(ctm)
+
+def get_must_have_troop(ctm):
+    return fetch_must_have_troop(ctm)
+
+
+def get_must_have_spell(ctm):
+    return fetch_must_have_spell(ctm)
+
+def get_unlock_card(user, rarity):
+    return fetch_unlock_card(user, rarity)
+
+def get_user_hero(user):
+    return fetch_user_hero(user)
+
+def get_unit_moniker(character_id):
+    return fetch_unit_moniker(character_id)
+
+def get_unit_spell(rarity):
+    return fetch_unit_spell(rarity)
+
+def get_hero_spell(rarity):
+    return fetch_hero_spell(rarity)
+
+def get_chakra_spell(rarity):
+    return fetch_chakra_spell(rarity)
