@@ -266,11 +266,21 @@ class Spell(Factory):
         dmg_dec = 0
 
         if self.spell['params'] is not None:
-            if 'normal' in self.spell['params']['base_spells'].keys():
+            if any(x in self.spell['params']['base_spells'].keys() for x in ['normal', 'kill_damage', 'heal_or_dmg']):
+
+                if 'heal_or_dmg' in self.spell['params']['base_spells'].keys():
+                    flag = 'heal_or_dmg'
+
+                elif 'kill_damage' in self.spell['params']['base_spells'].keys():
+                    flag = 'kill_damage'
+
+                else:
+                    flag = 'normal'
+
                 owner_val = int(owner_val * \
-                                (self.spell['params']['base_spells']['normal']['damage']['val'] +
+                                (self.spell['params']['base_spells'][flag]['damage']['val'] +
                                  (self.spell['level'] *
-                                  self.spell['params']['base_spells']['normal']['damage']['chg_amt'])))
+                                  self.spell['params']['base_spells'][flag]['damage']['chg_amt'])))
 
             if 'true_damage' in self.spell['params']['base_spells'].keys():
                 round_increase = round(
@@ -358,7 +368,9 @@ class Spell(Factory):
             self.critical = self.spell['params']['is_critical']
 
     def heal(self, troop, player=None, damage=None, effect=None, spell=None):
-        heal = int(round(self.owner['health'] * spell['percent'] / 100))
+        heal = int(round(self.owner['health'] *
+                         (spell['heal_perc']["val"] + spell['heal_perc']["chg_amt"] * self.spell['level']) / 100))
+
         action = Heal(troop=troop, heal=heal, effect=effect, owner=self.owner, spell=spell)
 
         self.critical, effect = action.run()
@@ -366,9 +378,9 @@ class Spell(Factory):
         self.critical = self.spell['params']['is_critical']
 
     def burn(self, troop, player=None, damage=None, effect=None, spell=None):
-        burn_chance = random.randint(0, 100)
+        if int(round(spell['chance']['val'] + spell['chance']['chg_amt'] * self.spell['level'])) \
+                >= random.randint(0, 100):
 
-        if spell['chance'] >= burn_chance:
             action = FlagChange(
                 troop=troop,
                 battle_flag=BattleFlags.Burn.value,
@@ -386,14 +398,16 @@ class Spell(Factory):
                 action=LiveSpellAction.burn.value,
                 params={
                     'turn_count': spell['duration'],
-                    'damage': int(self.owner['attack']) * int(spell['percent']) / 100
+                    'damage': int(self.owner['attack']) * int(
+                        spell['percent_dmg']['val'] + spell['percent_dmg']['chg_amt'] * self.spell['level']
+                    ) / 100
                 }
             )
 
     def poison(self, troop, player=None, damage=None, effect=None, spell=None):
-        poison_chance = random.randint(0, 100)
+        if int(round(spell['chance']['val'] + spell['chance']['chg_amt'] * self.spell['level'])) \
+                >= random.randint(0, 100):
 
-        if spell['chance'] >= poison_chance:
             action = FlagChange(
                 troop=troop,
                 battle_flag=BattleFlags.Poison.value,
@@ -565,9 +579,8 @@ class Spell(Factory):
         self.critical = self.spell['params']['is_critical']
 
     def confuse(self, troop, player=None, damage=None, effect=None, spell=None):
-        confuse_chance = random.randint(0, 100)
-
-        if spell['chance'] >= confuse_chance:
+        if int(round(spell['chance']['val'] + spell['chance']['chg_amt'] * self.spell['level'])) \
+                >= random.randint(0, 100):
             action = FlagChange(
                 troop=troop,
                 battle_flag=BattleFlags.Confuse.value,
@@ -648,7 +661,9 @@ class Spell(Factory):
 
         if ally is not None:
             if ally['health'] > 0:
-                heal = int(round(self.owner['health'] * spell['percent'] / 100))
+                heal = int(round(self.owner['health'] *
+                                 (spell['heal_perc']["val"] + spell['heal_perc']["chg_amt"] * self.spell[
+                                     'level']) / 100))
                 action = Heal(troop=ally, heal=heal, effect=SpellEffectOnChar.Burn.value, owner=self.owner, spell=spell)
 
                 self.critical, effect = action.run()
@@ -762,10 +777,14 @@ class Spell(Factory):
         self.critical = self.spell['params']['is_critical']
 
         if troop['health'] <= 0:
-            self.owner['attack'] += int(self.owner['attack'] * float(spell['increase']))
+            self.owner['attack'] += int(self.owner['attack'] * float(
+                spell['increase']['val'] + spell['increase']['chg_amt'] * self.spell['level']
+            ))
             player.party['party'][0]['troop'][-1]['attack'] += int(
                 self.player.party['party'][0]['troop'][-1]['attack']
-                * float(spell['increase'])
+                * float(
+                    spell['increase']['val'] + spell['increase']['chg_amt'] * self.spell['level']
+                )
             )
 
             action = Stat(

@@ -350,5 +350,14 @@
             "chg_amt": 0.1
          }
       }
-   }
+   },
+  "completed": ["normal",
+    "true",
+    "kill_damage",
+    "heal",
+    "heal_or_dmg",
+    "burn",
+    "poison",
+    "confuse"
+  ]
 }
